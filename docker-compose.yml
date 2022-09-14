@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  fastcart-api:
+    container_name: fastcart-api
+    restart: on-failure
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    command: yarn start:dev
+    env_file:
+      - .env
+    networks:
+      - fastcart-api
+    depends_on:
+      - postgres
+  
+  postgres:
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    container_name: 'postgres'
+    volumes:
+      - pg-data:/var/lib/postgres/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - fastcart-api
+    restart: always
+
+# CONTAINER DO SISTEMA GERENCIADOR DE BANCO DE DADOS (SGBD)
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - fastcart-api
+    depends_on:
+      - postgres
+
+networks:
+  fastcart-api:
+
+volumes:
+  pg-data:
