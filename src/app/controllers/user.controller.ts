@@ -1,15 +1,14 @@
-import { IController, IHttpRequest } from "@/domain/interfaces";
+import { Result, User } from "@/domain/entities";
 import { ICreateUser } from "@/domain/use-cases/user";
+import { UserModel } from "@/infra/models";
+import { ControllerRequest, IController } from "./controller.interface";
 
 export class UserController implements IController {
 
-  constructor(private readonly createUser: ICreateUser ){
+  constructor(private readonly createUser: ICreateUser) {
   }
-  async handle(request: IHttpRequest) {
-    const { method, path, data} = request
-    if(path === '/user' && method === 'POST'){
-      return await this.createUser.create(data)
-    }
-    return Promise.resolve('')
+  async handle(request: ControllerRequest): Promise<Result<UserModel>> {
+    const { body } = request
+    return await this.createUser.create(body)
   }
 }

@@ -1,27 +1,27 @@
-import { BaseError } from "./error.entity";
+import { BaseError, BaseErrorDTO } from "./error.entity"
 
 export class Result<T> {
-  public isSuccess: boolean;
+  public isSuccess: boolean
   public isFailure: boolean
-  public error?: string;
-  private _value?: T;
+  public error?: BaseErrorDTO
+  private _value?: T
 
-  private constructor(isSuccess: boolean, error?: string, value?: T) {
+  private constructor(isSuccess: boolean, error?: BaseErrorDTO, value?: T) {
     if (isSuccess && error) {
       throw new BaseError(500, `InvalidOperation: A result cannot be 
-        successful and contain an error`);
+        successful and contain an error`)
     }
     if (!isSuccess && !error) {
       throw new BaseError(500, `InvalidOperation: A failing result 
-        needs to contain an error message`);
+        needs to contain an error message`)
     }
 
-    this.isSuccess = isSuccess;
-    this.isFailure = !isSuccess;
-    this.error = error;
-    this._value = value;
+    this.isSuccess = isSuccess
+    this.isFailure = !isSuccess
+    this.error = error
+    this._value = value
 
-    Object.freeze(this);
+    Object.freeze(this)
   }
 
   public getValue(): T | undefined {
@@ -29,21 +29,21 @@ export class Result<T> {
       throw new BaseError(500, `Cant retrieve the value from a failed result.`)
     }
 
-    return this._value;
+    return this._value
   }
 
   public static ok<U>(value?: U): Result<U> {
-    return new Result<U>(true, undefined, value);
+    return new Result<U>(true, undefined, value)
   }
 
-  public static fail<U>(error: string): Result<U> {
-    return new Result<U>(false, error);
+  public static fail<U>(error: BaseErrorDTO): Result<U> {
+    return new Result<U>(false, error)
   }
 
   public static combine(results: Result<any>[]): Result<any> {
     for (let result of results) {
-      if (result.isFailure) return result;
+      if (result.isFailure) return result
     }
-    return Result.ok<any>();
+    return Result.ok<any>()
   }
 }

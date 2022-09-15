@@ -20,7 +20,7 @@
         "*"
       ],
       "@/tests/*": [
-        "../tests/*"
+        "/tests/*"
       ]
     },
     "noImplicitOverride": true,
