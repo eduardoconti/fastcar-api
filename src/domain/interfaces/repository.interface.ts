@@ -6,9 +6,9 @@ export type FindParams<IDatabaseModel> = {
 export type CreateParams<IDatabaseModel> = {
   data: Partial<IDatabaseModel>
 }
-export interface IRepository<IDatabaseModel> {
-  findUnique: (findParams: FindParams<IDatabaseModel>) => Promise<IDatabaseModel>
-  create: (createParams: CreateParams<IDatabaseModel>) => Promise<IDatabaseModel>
+export interface IRepository<T extends IDatabaseModel> {
+  findUnique: (findParams: FindParams<T>) => Promise<T>
+  create: (createParams: CreateParams<T>) => Promise<T>
 }
 
 export interface IRepositoryClientAdapter {

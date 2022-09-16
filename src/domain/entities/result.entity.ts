@@ -47,3 +47,11 @@ export class Result<T> {
     return Result.ok<any>()
   }
 }
+
+export const badRequestResultDTO = (detail?: string): BaseErrorDTO => {
+  return {
+    status: 400,
+    title: 'BadRequest',
+    detail: detail
+  }
+}

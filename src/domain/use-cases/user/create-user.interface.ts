@@ -1,8 +1,4 @@
-import { Result, User } from "@/domain/entities";
-import { UserModel } from "@/infra/models";
+import { User } from "@/domain/entities";
 
 export type CreateUserDTO = Omit<User, "id"> & { confirmPassword: string }
-
-export interface ICreateUser {
-  create(user: CreateUserDTO): Promise<Result<UserModel>>
-}
+export type CreateUserResponseDTO = Omit<User, "password">

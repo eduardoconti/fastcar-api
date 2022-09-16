@@ -10,7 +10,7 @@ export class Repository implements IRepositoryClientAdapter {
   constructor() {
     this.repository = new PrismaClient()
   }
-  adapt = (type: string): IRepository<IDatabaseModel> => {
+  adapt(type: string): IRepository<IDatabaseModel>{
     if (type === typeof User) {
       return this.repository.user as unknown as IRepository<UserModel>
     }

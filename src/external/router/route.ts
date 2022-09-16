@@ -2,7 +2,7 @@ import { IController } from "@/app/controllers"
 import { IRoute } from "../interfaces"
 
 export class Route implements IRoute{
-  controller!: IController
+  controller!: IController<any>
   path!: string
   method!: string
   middleware?: any[]
@@ -11,7 +11,7 @@ export class Route implements IRoute{
   constructor(
     path: string,
     method: string,
-    controller: IController,
+    controller: IController<any>,
     middleware?: any[]
   ){
     this.controller = controller

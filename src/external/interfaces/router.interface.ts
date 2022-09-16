@@ -5,6 +5,6 @@ export interface IRouter {
   routes?: IRoute[],
   execute(request: HttpRequest,
     response: HttpResponse): Promise<void>,
-  post(path: string, controller: IController): void
-  get(path: string, controller: IController): void
+  post<R>(path: string, controller: IController<R>): void
+  get<R>(path: string, controller: IController<R>): void
 }

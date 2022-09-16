@@ -30,7 +30,7 @@ export class User {
       throw new CreateUserException('name must be not empty')
     }
     if (name?.length < 2) {
-      throw new CreateUserException('name mus be a 2 caracteres')
+      throw new CreateUserException('name must be a 2 caracteres')
     }
   }
 

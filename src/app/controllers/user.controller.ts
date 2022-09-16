@@ -1,14 +1,13 @@
 import { Result, User } from "@/domain/entities";
-import { ICreateUser } from "@/domain/use-cases/user";
+import { CreateUser, CreateUserDTO } from "@/domain/use-cases/user";
 import { UserModel } from "@/infra/models";
 import { ControllerRequest, IController } from "./controller.interface";
 
-export class UserController implements IController {
+export class UserController implements IController<UserModel> {
 
-  constructor(private readonly createUser: ICreateUser) {
+  constructor(private readonly createUser: CreateUser) {
   }
-  async handle(request: ControllerRequest): Promise<Result<UserModel>> {
-    const { body } = request
-    return await this.createUser.create(body)
+  async handle(request?: ControllerRequest): Promise<Result<UserModel>> {
+    return await this.createUser.execute(request?.body as CreateUserDTO)
   }
 }

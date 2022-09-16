@@ -1,9 +1,11 @@
 
 import { createUserDtoMock, userModelMockData } from "@/../tests/infra/models/mocks"
-import { User } from "@/domain/entities"
+import { Result, User } from "@/domain/entities"
+import { IUseCase } from "@/domain/interfaces"
 import { CreateUser, FindUserParams, IUserRepository } from "@/domain/use-cases/user"
 import { IUuid } from "@/domain/use-cases/uuid"
 import { UserModel } from "@/infra/models"
+import { EncryptUseCase } from "../encrypt"
 
 const makeUuidGeneratorStub = (): IUuid => {
   class UuidGeneratorStub implements IUuid {
@@ -26,6 +28,15 @@ const makeUserRepositoryStub = (): IUserRepository => {
   return new MakeUserRepositoryStub()
 }
 
+const makeEncryptStub = (): EncryptUseCase => {
+  class MakeEncryptStub implements IUseCase<string, Result<string>> {
+    async execute(word: string): Promise<Result<string>> {
+      return Result.ok('asdf!@#')
+    }
+  }
+  return new MakeEncryptStub()
+}
+
 interface SutTypes {
   sut: CreateUser
   uuidGeneratorStub: IUuid
@@ -35,9 +46,11 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const uuidGeneratorStub = makeUuidGeneratorStub()
   const userRepositoryStub = makeUserRepositoryStub()
+  const encryptStub = makeEncryptStub()
   const sut = new CreateUser(
     uuidGeneratorStub,
-    userRepositoryStub
+    userRepositoryStub,
+    encryptStub
   )
   return {
     sut,
@@ -51,7 +64,7 @@ describe('Create user useCase', () => {
     jest.spyOn(uuidGeneratorStub, 'uuidV4').mockReturnValue('fakeUuid')
     jest.spyOn(userRepositoryStub, 'add').mockResolvedValue(userModelMockData)
     jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
-    const result = await sut.create(createUserDtoMock)
+    const result = await sut.execute(createUserDtoMock)
     expect(result.isSuccess).toBeTruthy()
     expect(uuidGeneratorStub.uuidV4).toBeCalledTimes(1)
     expect(userRepositoryStub.add).toBeCalledTimes(1)
@@ -62,7 +75,7 @@ describe('Create user useCase', () => {
   it('should fail to execute useCase when login already exists', async () => {
     const { sut, userRepositoryStub } = makeSut()
     jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(userModelMockData)
-    const result = await sut.create(createUserDtoMock)
+    const result = await sut.execute(createUserDtoMock)
 
     expect(result.isFailure).toBeTruthy()
     expect(userRepositoryStub.findOne).toBeCalledTimes(1)
@@ -72,7 +85,7 @@ describe('Create user useCase', () => {
   it('should fail to execute useCase when confirmPassword is null', async () => {
     const { sut, userRepositoryStub } = makeSut()
     jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
-    const result = await sut.create({...createUserDtoMock, confirmPassword: null} as any)
+    const result = await sut.execute({ ...createUserDtoMock, confirmPassword: null } as any)
     expect(result.isFailure).toBeTruthy()
     expect(userRepositoryStub.findOne).toBeCalledTimes(1)
     expect(result.error).toEqual({ status: 400, title: 'Bad Request', detail: 'confirmPassword should be not empty' })
