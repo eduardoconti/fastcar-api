@@ -1,16 +1,10 @@
-import { IDatabaseModel } from "./database-model.interface"
-
-export type FindParams<IDatabaseModel> = {
-  where?: Partial<IDatabaseModel>
+export type FindParams<E> = {
+  where?: Partial<E>
 }
-export type CreateParams<IDatabaseModel> = {
-  data: Partial<IDatabaseModel>
+export type CreateParams<E> = {
+  data: Partial<E>
 }
-export interface IRepository<T extends IDatabaseModel> {
-  findUnique: (findParams: FindParams<T>) => Promise<T>
-  create: (createParams: CreateParams<T>) => Promise<T>
-}
-
-export interface IRepositoryClientAdapter {
-  adapt: (entity: string) => IRepository<IDatabaseModel>
+export interface IRepository<E> {
+  findUnique: (findParams: FindParams<E>) => Promise<E> | E
+  create: (createParams: CreateParams<E>) => Promise<E> | E
 }

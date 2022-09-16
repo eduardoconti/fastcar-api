@@ -1,9 +1,15 @@
-import * as bcrypt from 'bcrypt';
 import { Result } from '@/domain/entities';
-import { IUseCase } from '@/domain/interfaces';
+import { IEncrypter, IUseCase } from '@/domain/interfaces';
+import { EncryptUseCaseInput, EncryptUseCaseOutput } from './encrypt.dto';
 
-export class EncryptUseCase implements IUseCase<string, Result<string>> {
-  async execute(text: string): Promise<Result<string>> {
-    return Result.ok(await bcrypt.hash(text, 15));
+const SALT = 15
+export class EncryptUseCase implements IUseCase<EncryptUseCaseInput, Result<EncryptUseCaseOutput>> {
+  constructor(
+    private readonly encrypter: IEncrypter
+  ) {
+
+  }
+  async execute(text: EncryptUseCaseInput): Promise<Result<EncryptUseCaseOutput>> {
+    return Result.ok(await this.encrypter.hash(text, SALT));
   }
 }

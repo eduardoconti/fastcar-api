@@ -1,11 +1,10 @@
 import { User } from "@/domain/entities";
-import { IRepository } from "@/domain/interfaces";
-import { FindUserParams, IUserRepository } from "@/domain/use-cases/user";
-import { UserModel } from "@/infra/models";
+import { FindUserParams, IRepository, IUserRepository } from "@/domain/interfaces";
 
+import { UserModel } from "@/infra/models";
 export class UserRepository implements IUserRepository {
 
-  constructor( private readonly repository: IRepository<UserModel>) {
+  constructor(private readonly repository: IRepository<UserModel>) {
   }
 
   async findOne(params: FindUserParams): Promise<UserModel> {

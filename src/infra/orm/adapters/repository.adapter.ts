@@ -1,11 +1,11 @@
 import { User } from "@/domain/entities";
 import { BaseError } from "@/domain/entities/error.entity";
-import { IRepository, IRepositoryClientAdapter } from "@/domain/interfaces";
+import { IAdapter, IRepository } from "@/domain/interfaces";
 import { IDatabaseModel } from "@/domain/interfaces/database-model.interface";
 import { UserModel } from "@/infra/models";
 import { PrismaClient } from "@prisma/client";
 
-export class Repository implements IRepositoryClientAdapter {
+export class Repository implements IAdapter<IRepository<IDatabaseModel>>{
   repository!: PrismaClient
   constructor() {
     this.repository = new PrismaClient()

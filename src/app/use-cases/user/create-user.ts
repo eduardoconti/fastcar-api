@@ -1,19 +1,18 @@
 import { badRequestResultDTO, Result, User } from "@/domain/entities";
 import { BaseErrorDTO } from "@/domain/entities/error.entity";
-import { IUseCase } from "@/domain/interfaces";
-import { CreateUserDTO, IUserRepository } from "@/domain/use-cases/user";
-import { IUuid } from "@/domain/use-cases/uuid";
-import { UserModel } from "@/infra/models";
+import { IUseCase, IUserRepository } from "@/domain/interfaces";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { EncryptUseCase } from "../encrypt";
+import { Uuid } from "../uuid";
 
-export class CreateUser implements IUseCase<CreateUserDTO, Result<UserModel>> {
+export class CreateUser implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
   constructor(
-    private readonly uuidGenerator: IUuid,
+    private readonly uuidGenerator: Uuid,
     private readonly userRepository: IUserRepository,
     private readonly encrypter: EncryptUseCase) {
   }
 
-  async execute(user: CreateUserDTO): Promise<Result<UserModel>> {
+  async execute(user: CreateUserInputDTO): Promise<Result<CreateUserOutputDTO>> {
     const userEntity = User.build(user)
     if (await this.userRepository.findOne({ login: user.login })) {
       return Result.fail(badRequestResultDTO('This login belongs to a user'))
@@ -29,10 +28,14 @@ export class CreateUser implements IUseCase<CreateUserDTO, Result<UserModel>> {
     if (passwordHashResult.isFailure) {
       return Result.fail(passwordHashResult.error as BaseErrorDTO)
     }
-    return Result.ok(await this.userRepository.add(User.build({
-      id: this.uuidGenerator.uuidV4(),
+    const userModel = await this.userRepository.add(User.build({
+      id: this.uuidGenerator.execute(),
       ...userEntity,
       password: passwordHashResult.getValue() as string
-    })))
+    }))
+
+    const { id, name, login } = userModel
+
+    return Result.ok({ id, name, login })
   }
 }

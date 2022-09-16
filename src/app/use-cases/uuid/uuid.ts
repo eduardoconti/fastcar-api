@@ -1,7 +1,12 @@
-import { IUuid } from "@/domain/use-cases/uuid";
-import * as crypto from "crypto"
-export class Uuid implements IUuid {
-  uuidV4() {
-    return crypto.randomUUID()
+import { IUseCase, IUuid } from "@/domain/interfaces";
+export class Uuid implements IUseCase<undefined, string> {
+
+  constructor(
+    private readonly uuidGenerator: IUuid
+  ){
+    
+  }
+  execute() {
+    return this.uuidGenerator.v4()
   }
 }
