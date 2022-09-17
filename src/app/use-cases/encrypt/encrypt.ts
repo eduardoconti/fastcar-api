@@ -5,7 +5,7 @@ import { EncryptUseCaseInput, EncryptUseCaseOutput } from './encrypt.dto';
 const SALT = 15
 export class EncryptUseCase implements IUseCase<EncryptUseCaseInput, Result<EncryptUseCaseOutput>> {
   constructor(
-    private readonly encrypter: IEncrypter
+    readonly encrypter: IEncrypter
   ) {
 
   }

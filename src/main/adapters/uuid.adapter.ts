@@ -22,7 +22,6 @@ export class UuidAdapter implements IAdapter<IUuid> {
   }
 
   private cryptoUuidGenerator(): IUuid {
-    // const { randomUUID: v4 } = crypto
     return { v4: randomUUID }
   }
 }

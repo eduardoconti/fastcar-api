@@ -1,5 +1,6 @@
+import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user"
 import { UserModel } from "@/infra/models"
-import { CreateUserDTO } from "@/domain/use-cases/user"
+
 export const userModelMockData: UserModel = {
   id: 'fakeUuid',
   name: 'fakeName',
@@ -7,9 +8,15 @@ export const userModelMockData: UserModel = {
   password: 'fakePassword'
 }
 
-export const createUserDtoMock: CreateUserDTO = {
+export const createUserDtoMock: CreateUserInputDTO = {
   name: 'fakeName',
   login: 'fakeLogin@123.com',
   password: 'fakePassword',
   confirmPassword: 'fakePassword'
+}
+
+export const createUserOutputMock: CreateUserOutputDTO = {
+  id: 'fakeUuid',
+  name: 'fakeName',
+  login: 'fakeLogin@123.com',
 }

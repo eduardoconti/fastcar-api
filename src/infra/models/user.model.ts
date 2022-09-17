@@ -1,7 +1,5 @@
-import { IDatabaseModel } from "@/domain/interfaces/database-model.interface"
 import { VeichleModel } from "./veichle.model"
-
-export interface UserModel extends IDatabaseModel {
+export interface UserModel {
   id: string
   name: string
   login: string

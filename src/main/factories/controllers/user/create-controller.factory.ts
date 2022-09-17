@@ -3,9 +3,10 @@ import { CreateUserUseCaseFactory } from "@/main/factories/use-cases/user"
 
 export class CreateUserControllerFactory {
 
-  static build(): CreateUserController {
+  build(): CreateUserController {
+    const createUser = CreateUserUseCaseFactory.build()
     return new CreateUserController(
-      CreateUserUseCaseFactory.build()
+      createUser
     )
   }
 }

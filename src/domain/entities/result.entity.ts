@@ -51,7 +51,7 @@ export class Result<T> {
 export const badRequestResultDTO = (detail?: string): BaseErrorDTO => {
   return {
     status: 400,
-    title: 'BadRequest',
+    title: 'Bad Request',
     detail: detail
   }
 }

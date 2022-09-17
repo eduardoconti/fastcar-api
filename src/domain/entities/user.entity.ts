@@ -2,7 +2,7 @@ import { CreateUserException } from "../exceptions"
 import { Veichle } from "./veichle.entity"
 
 export class User {
-  id?: string
+  id!: string
   name!: string
   login!: string
   password!: string
@@ -13,7 +13,7 @@ export class User {
     Object.assign(this, { id, name, login, password, veichles })
   }
 
-  static build(user: Partial<User>) {
+  static build(user: User) {
     this.validate(user)
     return new User(user)
   }
@@ -49,7 +49,7 @@ export class User {
     }
   }
 
-  private static validatePassword(password?: string){
+  private static validatePassword(password?: string) {
     if (!password) {
       throw new CreateUserException('password must be not empty')
     }

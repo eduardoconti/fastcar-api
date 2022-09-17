@@ -1,93 +1,139 @@
 
-import { createUserDtoMock, userModelMockData } from "@/../tests/infra/models/mocks"
+import { createUserDtoMock, createUserOutputMock, userModelMockData } from "@/../tests/infra/models/mocks"
 import { Result, User } from "@/domain/entities"
-import { IUseCase } from "@/domain/interfaces"
-import { CreateUser, FindUserParams, IUserRepository } from "@/domain/use-cases/user"
-import { IUuid } from "@/domain/use-cases/uuid"
-import { UserModel } from "@/infra/models"
+import { IEncrypter, IUseCase, IUuid, OrmClient } from "@/domain/interfaces"
+import { CreateUserUseCase } from "@/app/use-cases/user"
 import { EncryptUseCase } from "../encrypt"
+import { UuidUseCase } from "../uuid"
 
-const makeUuidGeneratorStub = (): IUuid => {
+const makeUuiduseCaseStub = (): UuidUseCase => {
+  class UuidUseCaseStub implements IUseCase<undefined, string> {
+    constructor(
+      readonly uuidGenerator: IUuid
+    ) {
+    }
+    execute(): string {
+      return this.uuidGenerator.v4()
+    }
+  }
   class UuidGeneratorStub implements IUuid {
-    uuidV4(): string {
+    v4(): string {
       return ''
     }
   }
-  return new UuidGeneratorStub()
+  return new UuidUseCaseStub(new UuidGeneratorStub())
 }
 
-const makeUserRepositoryStub = (): IUserRepository => {
-  class MakeUserRepositoryStub implements IUserRepository {
-    add(user: User): Promise<UserModel> {
+const makeUserRepositoryStub = (): OrmClient.IUserRepository => {
+  class MakeUserRepositoryStub implements OrmClient.IUserRepository {
+    create(params: OrmClient.CreateParams<User>): Promise<User> {
       return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
     }
-    findOne(params: FindUserParams): Promise<UserModel> {
+    findUnique(params: OrmClient.FindParams<User>): Promise<User | undefined> {
       return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
+    }
+    find(findParams?: OrmClient.FindParams<User> | undefined): Promise<User[] | undefined> {
+      return Promise.resolve([{ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' }])
     }
   }
   return new MakeUserRepositoryStub()
 }
 
-const makeEncryptStub = (): EncryptUseCase => {
-  class MakeEncryptStub implements IUseCase<string, Result<string>> {
+const makeEncryptUseCaseStub = (): EncryptUseCase => {
+  class MakeEncryptUseCaseStub implements IUseCase<string, Result<string>> {
+    constructor(
+      readonly encrypter: IEncrypter
+    ) {
+
+    }
     async execute(word: string): Promise<Result<string>> {
       return Result.ok('asdf!@#')
     }
   }
-  return new MakeEncryptStub()
+
+  class MakeEncryptStub implements IEncrypter {
+    async hash(text: string, salt: number): Promise<string> {
+      return Promise.resolve('')
+    }
+    async compare(text: string, hash: string): Promise<boolean> {
+      return Promise.resolve(true)
+    }
+  }
+  return new MakeEncryptUseCaseStub(new MakeEncryptStub())
 }
 
 interface SutTypes {
-  sut: CreateUser
-  uuidGeneratorStub: IUuid
-  userRepositoryStub: IUserRepository
+  sut: CreateUserUseCase
+  uuidUseCaseStub: UuidUseCase
+  userRepositoryStub: OrmClient.IUserRepository
+  encryptUseCaseStub: EncryptUseCase
 }
 
 const makeSut = (): SutTypes => {
-  const uuidGeneratorStub = makeUuidGeneratorStub()
+  const uuidUseCaseStub = makeUuiduseCaseStub()
   const userRepositoryStub = makeUserRepositoryStub()
-  const encryptStub = makeEncryptStub()
-  const sut = new CreateUser(
-    uuidGeneratorStub,
+  const encryptUseCaseStub = makeEncryptUseCaseStub()
+  const sut = new CreateUserUseCase(
+    uuidUseCaseStub,
     userRepositoryStub,
-    encryptStub
+    encryptUseCaseStub
   )
   return {
     sut,
-    uuidGeneratorStub,
+    uuidUseCaseStub,
     userRepositoryStub,
+    encryptUseCaseStub
   }
 }
 describe('Create user useCase', () => {
   it('should execute useCase', async () => {
-    const { sut, uuidGeneratorStub, userRepositoryStub } = makeSut()
-    jest.spyOn(uuidGeneratorStub, 'uuidV4').mockReturnValue('fakeUuid')
-    jest.spyOn(userRepositoryStub, 'add').mockResolvedValue(userModelMockData)
-    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
+    const { sut, uuidUseCaseStub, userRepositoryStub, encryptUseCaseStub } = makeSut()
+    jest.spyOn(uuidUseCaseStub, 'execute').mockReturnValue('fakeUuid')
+    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
+    jest.spyOn(encryptUseCaseStub, 'execute').mockResolvedValue(Result.ok('$%asdf/123'))
+    jest.spyOn(userRepositoryStub, 'create').mockResolvedValue(userModelMockData)
+    
     const result = await sut.execute(createUserDtoMock)
+   
     expect(result.isSuccess).toBeTruthy()
-    expect(uuidGeneratorStub.uuidV4).toBeCalledTimes(1)
-    expect(userRepositoryStub.add).toBeCalledTimes(1)
-    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
-    expect(result.getValue()).toEqual(userModelMockData)
+    expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(encryptUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.create).toBeCalledTimes(1)
+    expect(result.getValue()).toEqual(createUserOutputMock)
   })
 
   it('should fail to execute useCase when login already exists', async () => {
-    const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(userModelMockData)
+    const { sut, userRepositoryStub, uuidUseCaseStub } = makeSut()
+    jest.spyOn(uuidUseCaseStub, 'execute').mockReturnValue('fakeUuid')
+    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(userModelMockData)
     const result = await sut.execute(createUserDtoMock)
 
     expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
+    expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
     expect(result.error).toEqual({ status: 400, title: 'Bad Request', detail: 'This login belongs to a user' })
   })
 
   it('should fail to execute useCase when confirmPassword is null', async () => {
-    const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
+    const { sut, userRepositoryStub, uuidUseCaseStub } = makeSut()
+    jest.spyOn(uuidUseCaseStub, 'execute').mockReturnValue('fakeUuid')
+    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
     const result = await sut.execute({ ...createUserDtoMock, confirmPassword: null } as any)
     expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
+    expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
     expect(result.error).toEqual({ status: 400, title: 'Bad Request', detail: 'confirmPassword should be not empty' })
+  })
+
+  it('should fail to execute useCase when passwords do not match', async () => {
+    const { sut, userRepositoryStub, uuidUseCaseStub } = makeSut()
+    jest.spyOn(uuidUseCaseStub, 'execute').mockReturnValue('fakeUuid')
+    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
+    const result = await sut.execute({ ...createUserDtoMock, confirmPassword: 'lalala' } as any)
+    expect(result.isFailure).toBeTruthy()
+    expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(result.error).toEqual({ status: 400, title: 'Bad Request', detail: 'As senhas não coincidem' })
   })
 })

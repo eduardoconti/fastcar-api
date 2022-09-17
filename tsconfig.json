@@ -14,13 +14,13 @@
     ],
     "sourceMap": true,
     "moduleResolution": "node",
-    "baseUrl": "src",
+    //"baseUrl": ".",
     "paths": {
       "@/*": [
-        "*"
+        "./src/*"
       ],
       "@/tests/*": [
-        "/tests/*"
+        "./tests/*"
       ]
     },
     "noImplicitOverride": true,

@@ -1,9 +1,9 @@
 
-import { Uuid } from "@/app/use-cases/uuid";
+import { UuidUseCase } from "@/app/use-cases/uuid";
 import { UuidAdapter } from "@/main/adapters";
 export class UuidFactory {
 
-  static build(): Uuid {
-    return new Uuid(new UuidAdapter().adapt())
+  static build(): UuidUseCase {
+    return new UuidUseCase(new UuidAdapter().adapt())
   }
 }
