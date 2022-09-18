@@ -1,7 +1,7 @@
 
 import { createUserDtoMock, createUserOutputMock, userModelMockData } from "@/../tests/infra/models/mocks"
 import { Result, User } from "@/domain/entities"
-import { IEncrypter, IUseCase, IUuid, OrmClient } from "@/domain/interfaces"
+import { CreateParams, FindParams, IEncrypter, IUseCase, IUserRepository, IUuid } from "@/domain/interfaces"
 import { CreateUserUseCase } from "@/app/use-cases/user"
 import { EncryptUseCase } from "../encrypt"
 import { UuidUseCase } from "../uuid"
@@ -24,15 +24,15 @@ const makeUuiduseCaseStub = (): UuidUseCase => {
   return new UuidUseCaseStub(new UuidGeneratorStub())
 }
 
-const makeUserRepositoryStub = (): OrmClient.IUserRepository => {
-  class MakeUserRepositoryStub implements OrmClient.IUserRepository {
-    create(params: OrmClient.CreateParams<User>): Promise<User> {
+const makeUserRepositoryStub = (): IUserRepository => {
+  class MakeUserRepositoryStub implements IUserRepository {
+    create(params: CreateParams<User>): Promise<User> {
       return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
     }
-    findUnique(params: OrmClient.FindParams<User>): Promise<User | undefined> {
+    findUnique(params: FindParams<User>): Promise<User | undefined> {
       return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
     }
-    find(findParams?: OrmClient.FindParams<User> | undefined): Promise<User[] | undefined> {
+    find(findParams?: FindParams<User> | undefined): Promise<User[] | undefined> {
       return Promise.resolve([{ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' }])
     }
   }
@@ -65,7 +65,7 @@ const makeEncryptUseCaseStub = (): EncryptUseCase => {
 interface SutTypes {
   sut: CreateUserUseCase
   uuidUseCaseStub: UuidUseCase
-  userRepositoryStub: OrmClient.IUserRepository
+  userRepositoryStub: IUserRepository
   encryptUseCaseStub: EncryptUseCase
 }
 

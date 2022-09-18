@@ -1,6 +1,6 @@
 import { badRequestResultDTO, Result, User } from "@/domain/entities";
 import { BaseErrorDTO } from "@/domain/entities/error.entity";
-import { IUseCase, OrmClient } from "@/domain/interfaces";
+import { IUseCase, IUserRepository } from "@/domain/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { EncryptUseCase } from "../encrypt";
 import { UuidUseCase } from "../uuid";
@@ -8,7 +8,7 @@ import { UuidUseCase } from "../uuid";
 export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
   constructor(
     private readonly uuidGenerator: UuidUseCase,
-    private readonly userRepository: OrmClient.IUserRepository,
+    private readonly userRepository: IUserRepository,
     private readonly encrypter: EncryptUseCase) {
   }
 

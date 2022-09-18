@@ -1,10 +1,10 @@
 import { User } from "@/domain/entities";
-import { OrmClient } from "@/domain/interfaces";
-import { UserModel } from "@/infra/models";
+import { CreateParams, FindParams, IUserRepository } from "@/domain/interfaces";
+import { UserModel } from "@/infra/database/models";
 
 const users: UserModel[] = []
-export class UserMemoryRepository implements OrmClient.IUserRepository {
-  findUnique(findParams: OrmClient.FindParams<User>): User | undefined {
+export class UserMemoryRepository implements IUserRepository {
+  findUnique(findParams: FindParams<User>): User | undefined {
     const user = users.find((e) => {
       const { where } = findParams
       return (where?.login ? e.login === where?.login : true) &&
@@ -12,7 +12,7 @@ export class UserMemoryRepository implements OrmClient.IUserRepository {
     })
     return user
   }
-  create(createParams: OrmClient.CreateParams<User>): User {
+  create(createParams: CreateParams<User>): User {
     users.push(createParams.data)
     return createParams.data
   }

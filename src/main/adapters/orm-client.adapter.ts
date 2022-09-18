@@ -1,7 +1,8 @@
 import { Logger } from "@/app/use-cases/logger/logger";
 import { BaseError } from "@/domain/entities/error.entity";
-import { IAdapter, ILogger, IOrmClient } from "@/domain/interfaces";
-import { UserMemoryRepository } from "@/infra/orm/memory";
+import { IAdapter, ILogger } from "@/domain/interfaces";
+import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
+import { UserMemoryRepository } from "@/infra/database/orm/memory";
 import { PrismaClient } from "@prisma/client";
 type OrmSlug = 'prisma' | 'typeorm' | 'memory'
 export class OrmClientAdapter implements IAdapter<IOrmClient>{
