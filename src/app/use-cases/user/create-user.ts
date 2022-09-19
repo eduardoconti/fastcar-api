@@ -11,8 +11,8 @@ export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<Cr
     private readonly userRepository: IUserRepository,
     private readonly encrypter: EncryptUseCase) {
   }
-
   async execute(user: CreateUserInputDTO): Promise<Result<CreateUserOutputDTO>> {
+
     const userEntity = User.build({ id: this.uuidGenerator.execute(), ...user })
 
     if (await this.userRepository.findUnique({ where: { login: user.login } })) {

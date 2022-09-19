@@ -1,12 +1,9 @@
 
-import { ListUser, ListUserUseCase } from "@/app/use-cases/user";
-import {OrmClientAdapter } from "@/main/adapters";
-
+import { ListUserUseCase } from "@/app/use-cases/user";
+import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
 export class ListUserUseCaseFactory {
 
-  static build(): ListUserUseCase {
-    const orm = new OrmClientAdapter().adapt()
-
+  static build(orm: IOrmClient): ListUserUseCase {
     return new ListUserUseCase(
       orm.userRepository,
     )

@@ -52,12 +52,12 @@ export class Router implements IRouter {
 
   post<R>(path: string, controller: IController<R>): void {
     this.addRoute('POST', path, controller)
-    this.logger.info('Route: POST' + path)
+    this.logger.system('Mapped route POST' + path)
   }
 
   get<R>(path: string, controller: IController<R>): void {
     this.addRoute('GET', path, controller)
-    this.logger.info('Route: GET' + path)
+    this.logger.system('Mapped route GET' + path)
   }
 
   private handleResponse(request: Http.Request, response: Http.Response, result: Result<any>) {
