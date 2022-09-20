@@ -18,7 +18,8 @@ export class Router implements IRouter {
     response: Http.Response
   ) {
 
-   const parsedUrl = new URL(request.url as string, `https://${request.headers['host']}`)
+    const parsedUrl = new URL(request.url as string, `https://${request.headers['host']}`)
+
     const method = request.method
     const rout = this.routes?.find((e) => {
       return e.path === parsedUrl.pathname &&

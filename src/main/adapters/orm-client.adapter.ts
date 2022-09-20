@@ -27,7 +27,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
         this.logger.system('Using memory')
         return this.adaptMemory()
       default:
-        this.logger.system('Using prisma')
+        this.logger.system('Using default prisma')
         return this.adaptPrisma()
     }
   }

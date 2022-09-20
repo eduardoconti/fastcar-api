@@ -1,5 +1,5 @@
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user"
-import { UserModel } from "@/infra/models"
+import { UserModel } from "@/infra/database/models"
 
 export const userModelMockData: UserModel = {
   id: 'fakeUuid',

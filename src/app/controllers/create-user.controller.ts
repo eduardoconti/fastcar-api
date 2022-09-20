@@ -1,4 +1,3 @@
-import { Result } from "@/domain/entities";
 import { CreateUserUseCase } from "../use-cases/user";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "../use-cases/user";
 

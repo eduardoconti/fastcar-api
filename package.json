@@ -1,7 +1,7 @@
 {
   "name": "fastcar",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "src/main/server.ts",
   "author": "Eduardo <eduardo.conti@gazin.com.br>",
   "license": "MIT",
   "dependencies": {

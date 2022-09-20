@@ -92,9 +92,9 @@ describe('Create user useCase', () => {
     jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
     jest.spyOn(encryptUseCaseStub, 'execute').mockResolvedValue(Result.ok('$%asdf/123'))
     jest.spyOn(userRepositoryStub, 'create').mockResolvedValue(userModelMockData)
-    
+
     const result = await sut.execute(createUserDtoMock)
-   
+
     expect(result.isSuccess).toBeTruthy()
     expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
     expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
@@ -135,5 +135,17 @@ describe('Create user useCase', () => {
     expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
     expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
     expect(result.error).toEqual({ status: 400, title: 'Bad Request', detail: 'As senhas não coincidem' })
+  })
+
+  it('should fail to execute useCase when passwords not encrypted', async () => {
+    const { sut, userRepositoryStub, uuidUseCaseStub, encryptUseCaseStub } = makeSut()
+    jest.spyOn(uuidUseCaseStub, 'execute').mockReturnValue('fakeUuid')
+    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
+    jest.spyOn(encryptUseCaseStub, 'execute').mockResolvedValue(Result.fail({ status: 500 }))
+    const result = await sut.execute(createUserDtoMock)
+    expect(result.isFailure).toBeTruthy()
+    expect(uuidUseCaseStub.execute).toBeCalledTimes(1)
+    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(result.error).toEqual({ status: 500 })
   })
 })
