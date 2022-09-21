@@ -1,5 +1,6 @@
+import { IUserRepository } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
-import { IUseCase, IUserRepository } from "@/domain/interfaces";
+import { IUseCase } from "@/domain/interfaces";
 import { ListUser } from "./list-user.dto";
 
 export class ListUserUseCase implements IUseCase<ListUser.Input, Result<ListUser.Output[]>> {

@@ -1,5 +1,5 @@
+import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces";
 import { User } from "@/domain/entities";
-import { CreateParams, FindParams, IUserRepository } from "@/domain/interfaces";
 import { UserModel } from "@/infra/database/models";
 
 const users: UserModel[] = []

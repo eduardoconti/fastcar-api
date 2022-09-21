@@ -1,4 +1,4 @@
-import { IAdapter, IUuid } from "@/domain/interfaces";
+import { IAdapter, IUuid } from "@/app/interfaces"
 import {randomUUID} from "crypto"
 type SlugAdapter = 'crypto'
 export class UuidAdapter implements IAdapter<IUuid> {

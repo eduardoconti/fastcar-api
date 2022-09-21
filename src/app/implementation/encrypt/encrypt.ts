@@ -1,5 +1,6 @@
+import { IEncrypter } from '@/app/interfaces';
 import { Result } from '@/domain/entities';
-import { IEncrypter, IUseCase } from '@/domain/interfaces';
+import { IUseCase } from '@/domain/interfaces';
 import { EncryptUseCaseInput, EncryptUseCaseOutput } from './encrypt.dto';
 
 const SALT = 15

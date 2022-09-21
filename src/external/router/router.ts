@@ -1,10 +1,17 @@
 import { IController } from "@/app/controllers";
-import { Logger } from "@/app/use-cases/logger/logger";
+import { Logger } from "@/app/implementation/logger";
 import { Result } from "@/domain/entities";
 import { BaseError } from "@/domain/entities/error.entity";
 import { ILogger } from "@/domain/interfaces";
 import { Http, IRoute, IRouter } from "../interfaces";
 import { Route } from "./route";
+
+export type RouteParams<C> = {
+  path: string,
+  controller: IController<C>
+  auth?: Http.AuthenticationType
+}
+type AddRouteParams<C> = RouteParams<C> & { method: Http.Methods }
 
 export class Router implements IRouter {
   routes?: IRoute[];
@@ -51,14 +58,14 @@ export class Router implements IRouter {
     })
   }
 
-  post<R>(path: string, controller: IController<R>): void {
-    this.addRoute('POST', path, controller)
-    this.logger.system('Mapped route POST' + path)
+  post<R>(routeParams: RouteParams<R>): void {
+    this.addRoute({ method: 'POST', ...routeParams })
+    this.logger.system('Mapped route POST' + routeParams.path)
   }
 
-  get<R>(path: string, controller: IController<R>): void {
-    this.addRoute('GET', path, controller)
-    this.logger.system('Mapped route GET' + path)
+  get<R>(routeParams: RouteParams<R>): void {
+    this.addRoute({ method: 'GET', ...routeParams })
+    this.logger.system('Mapped route GET' + routeParams.path)
   }
 
   private handleResponse(request: Http.Request, response: Http.Response, result: Result<any>) {
@@ -74,7 +81,8 @@ export class Router implements IRouter {
     response.end()
   }
 
-  private addRoute(method: string, path: string, controller: IController) {
+  private addRoute<R>(addRouteParams: AddRouteParams<R>) {
+    const { path, controller, method } = addRouteParams
     const rout = this.routes?.find((e) => {
       return e.method === method && e.path === path
     })

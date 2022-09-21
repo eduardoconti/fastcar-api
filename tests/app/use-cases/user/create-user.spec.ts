@@ -1,10 +1,12 @@
 
 import { createUserDtoMock, createUserOutputMock, userModelMockData } from "@/../tests/infra/models/mocks"
 import { Result, User } from "@/domain/entities"
-import { CreateParams, FindParams, IEncrypter, IUseCase, IUserRepository, IUuid } from "@/domain/interfaces"
+import { IUseCase, } from "@/domain/interfaces"
 import { CreateUserUseCase } from "@/app/use-cases/user"
-import { EncryptUseCase } from "../encrypt"
-import { UuidUseCase } from "../uuid"
+import { EncryptUseCase } from "../../implementation/encrypt"
+import { UuidUseCase } from "@/app/implementation/uuid"
+import { CreateParams, FindParams, IEncrypter, IUserRepository, IUuid } from "@/app/interfaces"
+
 
 const makeUuiduseCaseStub = (): UuidUseCase => {
   class UuidUseCaseStub implements IUseCase<undefined, string> {

@@ -1,5 +1,5 @@
 
-import { UuidUseCase } from "@/app/use-cases/uuid";
+import { UuidUseCase } from "@/app/implementation/uuid";
 import { UuidAdapter } from "@/main/adapters";
 export class UuidFactory {
 

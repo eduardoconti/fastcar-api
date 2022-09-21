@@ -5,8 +5,9 @@ import { CreateUserControllerFactory, ListUserControllerFactory } from './factor
 import { Router } from '../external/router/router'
 import { Http } from '../external/interfaces'
 import { OrmClientAdapter } from './adapters'
-import { Logger } from '../app/use-cases/logger'
+
 import { HealthCheckControllerFactory } from './factories/controllers/health'
+import { Logger } from '@/app/implementation/logger'
 
 const routerManager = new Router()
 const orm = new OrmClientAdapter().adapt()
@@ -15,9 +16,9 @@ const createUserController = CreateUserControllerFactory.build(orm)
 const listUserController = ListUserControllerFactory.build(orm)
 const healthCheckController = HealthCheckControllerFactory.build()
 
-routerManager.post('/user', createUserController)
-routerManager.get('/user', listUserController)
-routerManager.get('/', healthCheckController)
+routerManager.post({ path: '/user', controller: createUserController })
+routerManager.get({ path: '/user', controller: listUserController })
+routerManager.get({ path: '/', controller: healthCheckController })
 
 const server = http.createServer(async (req: Http.Request, res: Http.Response) => {
   await routerManager.execute(req, res)

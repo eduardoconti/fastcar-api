@@ -1,4 +1,4 @@
-import { IController } from "@/app/controllers"
+import { RouteParams } from "../router"
 import { Http } from "./http"
 import { IRoute } from "./route.interface"
 
@@ -6,6 +6,6 @@ export interface IRouter {
   routes?: IRoute[],
   execute(request: Http.Request,
     response: Http.Response): Promise<void>,
-  post<R>(path: string, controller: IController<R>): void
-  get<R>(path: string, controller: IController<R>): void
+  post<R>(routeParams: RouteParams<R>): void
+  get<R>(routeParams: RouteParams<R>): void
 }

@@ -1,5 +1,6 @@
+import { IEncrypter } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
-import { IEncrypter, IUseCase } from "@/domain/interfaces";
+import { IUseCase } from "@/domain/interfaces";
 import { CompareHashUseCaseInput, CompareHashUseCaseOutput } from "./compare-hash.dto";
 export class CompareHashUseCase implements IUseCase<CompareHashUseCaseInput, Result<CompareHashUseCaseOutput>> {
 

@@ -1,4 +1,4 @@
-import { IAdapter, IEncrypter } from "@/domain/interfaces";
+import { IAdapter, IEncrypter } from '@/app/interfaces';
 import * as bcrypt from 'bcrypt';
 
 export class EncryptAdapter implements IAdapter<IEncrypter>{
