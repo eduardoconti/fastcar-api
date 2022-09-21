@@ -1,8 +1,10 @@
 import { IController } from "@/app/controllers";
-import { Logger } from "@/app/implementation/logger";
+
 import { Result } from "@/domain/entities";
 import { BaseError } from "@/domain/entities/error.entity";
 import { ILogger } from "@/domain/interfaces";
+import { JwtService } from "@/infra/jwt";
+import { Logger } from "@/infra/logger";
 import { Http, IRoute, IRouter } from "../interfaces";
 import { Route } from "./route";
 
@@ -33,8 +35,24 @@ export class Router implements IRouter {
         (e.method).toUpperCase() === method
     })
     if (!rout) {
-      this.handleResponse(request, response, Result.fail(new BaseError(404, 'Not found', 'Rota nao encontrada!')))
+      this.handleResponse(request, response, Result.fail(new BaseError(404, 'Not found', 'Rota não encontrada!')))
       return
+    }
+
+    if (rout?.auth) {
+      if (!request.headers['authorization']) {
+        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Token de requisição não encontrado!')))
+        return
+      }
+      const splitToken = request?.headers['authorization']?.split(' ')
+      if (splitToken[0] !== 'Bearer' || !splitToken[1]) {
+        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Token inválido!')))
+      }
+      const jwtService = new JwtService();
+
+      if (!await jwtService.verify(splitToken[1]))
+        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Falha de autenticação!')))
+
     }
 
     request.on('data', (body: any) => {
@@ -82,7 +100,7 @@ export class Router implements IRouter {
   }
 
   private addRoute<R>(addRouteParams: AddRouteParams<R>) {
-    const { path, controller, method } = addRouteParams
+    const { path, controller, method, auth } = addRouteParams
     const rout = this.routes?.find((e) => {
       return e.method === method && e.path === path
     })
@@ -91,7 +109,7 @@ export class Router implements IRouter {
       throw new BaseError(500, undefined, 'Duplicated route: ' + method + ' ' + path)
     }
 
-    this.routes?.push(new Route(path, method, controller))
+    this.routes?.push(new Route(path, method, controller, auth))
   }
 }
 

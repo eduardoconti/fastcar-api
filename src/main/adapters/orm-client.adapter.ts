@@ -1,4 +1,3 @@
-import { Logger } from "@/app/implementation/logger"
 import { IAdapter, IUserRepository } from "@/app/interfaces"
 import { BaseError } from "@/domain/entities/error.entity"
 import { ILogger} from "@/domain/interfaces"
@@ -6,6 +5,7 @@ import { UserModel } from "@/infra/database/models"
 import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface"
 import { UserMemoryRepository } from "@/infra/database/orm/memory"
 import { AppDataSource } from "@/infra/database/orm/typeorm/data-source"
+import { Logger } from "@/infra/logger"
 import { PrismaClient } from "@prisma/client"
 
 const DATABASE_CONNECTION_MESSAGE = 'Database connection initialized'

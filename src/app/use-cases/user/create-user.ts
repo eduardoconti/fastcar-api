@@ -3,8 +3,8 @@ import { BaseErrorDTO } from "@/domain/entities/error.entity";
 import { IUseCase} from "@/domain/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { IUserRepository } from "@/app/interfaces";
-import { UuidUseCase } from "@/app/implementation/uuid";
-import { EncryptUseCase } from "@/app/implementation/encrypt";
+import { EncryptUseCase } from "@/infra/encrypt";
+import { UuidUseCase } from "@/infra/uuid";
 
 export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
   constructor(

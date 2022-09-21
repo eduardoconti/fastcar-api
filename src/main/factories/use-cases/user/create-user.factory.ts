@@ -1,4 +1,4 @@
-import { EncryptUseCase } from "@/app/implementation/encrypt";
+import { EncryptUseCase } from "@/infra/encrypt";
 import { CreateUserUseCase } from "@/app/use-cases/user";
 import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
 import { EncryptAdapter } from "@/main/adapters";

@@ -7,7 +7,8 @@ import { Http } from '../external/interfaces'
 import { OrmClientAdapter } from './adapters'
 
 import { HealthCheckControllerFactory } from './factories/controllers/health'
-import { Logger } from '@/app/implementation/logger'
+import { Logger } from '@/infra/logger'
+
 
 const routerManager = new Router()
 const orm = new OrmClientAdapter().adapt()
@@ -18,7 +19,7 @@ const healthCheckController = HealthCheckControllerFactory.build()
 
 routerManager.post({ path: '/user', controller: createUserController })
 routerManager.get({ path: '/user', controller: listUserController })
-routerManager.get({ path: '/', controller: healthCheckController })
+routerManager.get({ path: '/', controller: healthCheckController, auth: 'bearer' })
 
 const server = http.createServer(async (req: Http.Request, res: Http.Response) => {
   await routerManager.execute(req, res)

@@ -3,9 +3,9 @@ import { createUserDtoMock, createUserOutputMock, userModelMockData } from "@/..
 import { Result, User } from "@/domain/entities"
 import { IUseCase, } from "@/domain/interfaces"
 import { CreateUserUseCase } from "@/app/use-cases/user"
-import { EncryptUseCase } from "../../implementation/encrypt"
-import { UuidUseCase } from "@/app/implementation/uuid"
 import { CreateParams, FindParams, IEncrypter, IUserRepository, IUuid } from "@/app/interfaces"
+import { UuidUseCase } from "@/infra/uuid"
+import { EncryptUseCase } from "@/infra/encrypt"
 
 
 const makeUuiduseCaseStub = (): UuidUseCase => {
