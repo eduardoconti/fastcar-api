@@ -1,3 +1,4 @@
+import { unauthorized } from "@/app/errors/errors";
 import { IEncrypter } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
@@ -14,7 +15,7 @@ export class CompareHashUseCase implements IUseCase<CompareHashUseCaseInput, Res
     const confirm = await this.encrypter.compare(text, hash);
 
     if (!confirm) {
-      Result.fail({ status: 404, title: 'Falha ao comparar hash' })
+      return Result.fail(unauthorized('Falha ao comparar hash'))
     }
     return Result.ok(confirm);
   }

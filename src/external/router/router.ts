@@ -1,4 +1,5 @@
 import { IController } from "@/app/controllers";
+import { internalServerError, notFound, unauthorized } from "@/app/errors/errors";
 
 import { Result } from "@/domain/entities";
 import { BaseError } from "@/domain/entities/error.entity";
@@ -35,23 +36,23 @@ export class Router implements IRouter {
         (e.method).toUpperCase() === method
     })
     if (!rout) {
-      this.handleResponse(request, response, Result.fail(new BaseError(404, 'Not found', 'Rota não encontrada!')))
-      return
+      return this.handleResponse(request, response, Result.fail(notFound('Rota não encontrada!')))
     }
 
     if (rout?.auth) {
       if (!request.headers['authorization']) {
-        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Token de requisição não encontrado!')))
-        return
+        return this.handleResponse(request, response, Result.fail(unauthorized('Token de requisição não encontrado!')))
+
       }
       const splitToken = request?.headers['authorization']?.split(' ')
       if (splitToken[0] !== 'Bearer' || !splitToken[1]) {
-        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Token inválido!')))
+        return this.handleResponse(request, response, Result.fail(unauthorized('Token inválido!')))
       }
+
       const jwtService = new JwtService();
 
       if (!await jwtService.verify(splitToken[1]))
-        this.handleResponse(request, response, Result.fail(new BaseError(401, 'Unauthorized', 'Falha de autenticação!')))
+        return this.handleResponse(request, response, Result.fail(unauthorized('Falha de autenticação!')))
 
     }
 
@@ -70,7 +71,7 @@ export class Router implements IRouter {
         if (error instanceof BaseError) {
           this.handleResponse(request, response, Result.fail(error));
         } else {
-          this.handleResponse(request, response, Result.fail(new BaseError(500, undefined, error?.message)))
+          this.handleResponse(request, response, Result.fail(internalServerError(error?.message)))
         }
       }
     })

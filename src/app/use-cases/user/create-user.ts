@@ -1,10 +1,11 @@
-import { badRequestResultDTO, Result, User } from "@/domain/entities";
+import { Result, User } from "@/domain/entities";
 import { BaseErrorDTO } from "@/domain/entities/error.entity";
 import { IUseCase} from "@/domain/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { IUserRepository } from "@/app/interfaces";
 import { EncryptUseCase } from "@/infra/encrypt";
 import { UuidUseCase } from "@/infra/uuid";
+import { badRequest } from "@/app/errors/errors";
 
 export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
   constructor(
@@ -17,15 +18,15 @@ export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<Cr
     const userEntity = User.build({ id: this.uuidGenerator.execute(), ...user })
 
     if (await this.userRepository.findUnique({ where: { login: user.login } })) {
-      return Result.fail(badRequestResultDTO('This login belongs to a user'))
+      return Result.fail(badRequest('This login belongs to a user'))
     }
 
     if (!user.confirmPassword) {
-      return Result.fail(badRequestResultDTO('confirmPassword should be not empty'))
+      return Result.fail(badRequest('confirmPassword should be not empty'))
     }
 
     if (user.confirmPassword !== user.password) {
-      return Result.fail(badRequestResultDTO('As senhas não coincidem'))
+      return Result.fail(badRequest('As senhas não coincidem'))
     }
 
     const passwordHashResult = await this.encrypter.execute(user.password)
