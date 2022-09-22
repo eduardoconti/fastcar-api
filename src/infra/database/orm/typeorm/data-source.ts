@@ -13,5 +13,4 @@ export const AppDataSource = new DataSource({
   entities: [UserModel],
   subscribers: [],
   migrations: [],
-  driver: 'postgres'
 })

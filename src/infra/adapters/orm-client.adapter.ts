@@ -1,12 +1,12 @@
-import { IAdapter, IUserRepository } from "@/app/interfaces"
+import { IAdapter } from "@/app/interfaces"
 import { BaseError } from "@/domain/entities/error.entity"
-import { ILogger} from "@/domain/interfaces"
-import { UserModel } from "@/infra/database/models"
-import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface"
+import { ILogger } from "@/domain/interfaces"
 import { UserMemoryRepository } from "@/infra/database/orm/memory"
-import { AppDataSource } from "@/infra/database/orm/typeorm/data-source"
 import { Logger } from "@/infra/logger"
 import { PrismaClient } from "@prisma/client"
+import { IOrmClient } from "../database/orm/interfaces/orm-client.interface"
+import { UserPrismaRepository } from "../database/orm/prisma"
+import { AppDataSource, UserTypeORMRepository } from "../database/orm/typeorm"
 
 const DATABASE_CONNECTION_MESSAGE = 'Database connection initialized'
 type OrmSlug = 'prisma' | 'typeorm' | 'memory'
@@ -17,7 +17,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
     this.logger = new Logger()
   }
   adapt(): IOrmClient {
-    switch (process.env.ORM_ADAPTER as OrmSlug) {
+    switch ('typeorm' as OrmSlug) {
       case 'prisma':
         this.logger.system('Using prisma')
         return this.adaptPrisma()
@@ -36,10 +36,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
   private adaptPrisma(): IOrmClient {
     const prisma = new PrismaClient()
     this.logger.system(DATABASE_CONNECTION_MESSAGE)
-    const { findUnique, create, findMany }: any = prisma.user
-    const userRepository = {
-      findUnique, create, find: findMany
-    }
+    const userRepository = new UserPrismaRepository(prisma)
     return { userRepository }
   }
 
@@ -49,19 +46,8 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
         this.logger.system(DATABASE_CONNECTION_MESSAGE)
       })
       .catch((error) => { throw new BaseError(500, 'Database exception', error?.message) })
-    const repository = AppDataSource.getRepository(UserModel)
+    const userRepository = new UserTypeORMRepository(AppDataSource)
 
-    const userRepository = {
-      findUnique(findParams) {
-        return repository.findOne({ where: findParams.where })
-      },
-      create(createParams) {
-        return repository.save(createParams.data)
-      },
-      find(findParams) {
-        return repository.find(findParams)
-      }
-    } as IUserRepository
     return { userRepository }
   }
 

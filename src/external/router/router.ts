@@ -4,7 +4,7 @@ import { internalServerError, notFound, unauthorized } from "@/app/errors/errors
 import { Result } from "@/domain/entities";
 import { BaseError } from "@/domain/entities/error.entity";
 import { ILogger } from "@/domain/interfaces";
-import { JwtService } from "@/infra/jwt";
+import { JwtAdapter } from "@/infra/adapters";
 import { Logger } from "@/infra/logger";
 import { Http, IRoute, IRouter } from "../interfaces";
 import { Route } from "./route";
@@ -49,7 +49,7 @@ export class Router implements IRouter {
         return this.handleResponse(request, response, Result.fail(unauthorized('Token inválido!')))
       }
 
-      const jwtService = new JwtService();
+      const jwtService = new JwtAdapter().adapt();
 
       if (!await jwtService.verify(splitToken[1]))
         return this.handleResponse(request, response, Result.fail(unauthorized('Falha de autenticação!')))

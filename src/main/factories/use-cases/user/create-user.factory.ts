@@ -1,21 +1,16 @@
-import { EncryptUseCase } from "@/infra/encrypt";
 import { CreateUserUseCase } from "@/app/use-cases/user";
-import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
-import { EncryptAdapter } from "@/main/adapters";
-import { UuidFactory } from "../uuid";
-
+import { EncryptAdapter, UuidAdapter } from "@/infra/adapters";
+import { IOrmClient } from "@/infra/database/orm/interfaces";
 export class CreateUserUseCaseFactory {
 
   static build(orm: IOrmClient): CreateUserUseCase {
-    const uuidUseCase = UuidFactory.build();
-    const encryptUseCase = new EncryptUseCase(
-      new EncryptAdapter().adapt()
-    )
+    const uuid = new UuidAdapter().adapt()
+    const encrypter = new EncryptAdapter().adapt();
 
     return new CreateUserUseCase(
-      uuidUseCase,
+      uuid,
       orm.userRepository,
-      encryptUseCase
+      encrypter
     )
   }
 }

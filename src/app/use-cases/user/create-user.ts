@@ -1,21 +1,18 @@
 import { Result, User } from "@/domain/entities";
-import { BaseErrorDTO } from "@/domain/entities/error.entity";
-import { IUseCase} from "@/domain/interfaces";
+import { IUseCase } from "@/domain/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
-import { IUserRepository } from "@/app/interfaces";
-import { EncryptUseCase } from "@/infra/encrypt";
-import { UuidUseCase } from "@/infra/uuid";
+import { IEncrypter, IUserRepository, IUuid } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
 
 export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
   constructor(
-    private readonly uuidGenerator: UuidUseCase,
+    private readonly uuidGenerator: IUuid,
     private readonly userRepository: IUserRepository,
-    private readonly encrypter: EncryptUseCase) {
+    private readonly encrypter: IEncrypter) {
   }
   async execute(user: CreateUserInputDTO): Promise<Result<CreateUserOutputDTO>> {
 
-    const userEntity = User.build({ id: this.uuidGenerator.execute(), ...user })
+    const userEntity = User.build({ id: this.uuidGenerator.v4(), ...user })
 
     if (await this.userRepository.findUnique({ where: { login: user.login } })) {
       return Result.fail(badRequest('This login belongs to a user'))
@@ -29,16 +26,13 @@ export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<Cr
       return Result.fail(badRequest('As senhas não coincidem'))
     }
 
-    const passwordHashResult = await this.encrypter.execute(user.password)
+    const passwordHashResult = await this.encrypter.hash(user.password, 15)
 
-    if (passwordHashResult.isFailure) {
-      return Result.fail(passwordHashResult.error as BaseErrorDTO)
-    }
 
     await this.userRepository.create({
       data: {
         ...userEntity,
-        password: passwordHashResult.getValue() as string
+        password: passwordHashResult
       }
     })
 

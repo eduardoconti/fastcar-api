@@ -1,26 +1,23 @@
 import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces";
 import { User } from "@/domain/entities";
-import { DataSource, Repository } from "typeorm";
-import { UserModel } from "../../models";
+import { PrismaClient } from "@prisma/client";
 
-export class UserTypeORMRepository implements IUserRepository {
-  protected ormRepository: Repository<UserModel>
-  constructor(dataSource: DataSource) {
-    this.ormRepository = dataSource.getRepository(UserModel)
+export class UserPrismaRepository implements IUserRepository {
+  constructor(private readonly prismaClient: PrismaClient) {
+
   }
-
   async findUnique(findParams: FindParams<User>): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne(findParams as any)
+    const user = await this.prismaClient.user.findUnique(findParams as any)
     if (user) {
       return User.build(user)
     }
   }
   async create(createParams: CreateParams<User>): Promise<User> {
-    await this.ormRepository.save(createParams.data as any)
+    await this.prismaClient.user.create(createParams.data as any)
     return createParams.data
   }
   async find(findParams?: FindParams<User>): Promise<User[] | undefined> {
-    const user = await this.ormRepository.find(findParams as any)
+    const user = await this.prismaClient.user.findMany(findParams as any)
     if (user) {
       return user.map((e) => {
         return User.build(e)
