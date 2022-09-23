@@ -28,7 +28,6 @@ export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<Cr
 
     const passwordHashResult = await this.encrypter.hash(user.password, 15)
 
-
     await this.userRepository.create({
       data: {
         ...userEntity,

@@ -1,7 +1,7 @@
 import { User } from "@/domain/entities"
 
 export type FindParams<E> = {
-  where?: Partial<E>
+  where: Partial<E>
 }
 export type CreateParams<E> = {
   data: E

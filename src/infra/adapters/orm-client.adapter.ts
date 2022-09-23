@@ -1,10 +1,10 @@
 import { IAdapter } from "@/app/interfaces"
-import { BaseError } from "@/domain/entities/error.entity"
+import { BaseError } from "@/domain/entities"
 import { ILogger } from "@/domain/interfaces"
 import { UserMemoryRepository } from "@/infra/database/orm/memory"
 import { Logger } from "@/infra/logger"
 import { PrismaClient } from "@prisma/client"
-import { IOrmClient } from "../database/orm/interfaces/orm-client.interface"
+import { IOrmClient } from "../database/orm/interfaces"
 import { UserPrismaRepository } from "../database/orm/prisma"
 import { AppDataSource, UserTypeORMRepository } from "../database/orm/typeorm"
 
@@ -17,7 +17,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
     this.logger = new Logger()
   }
   adapt(): IOrmClient {
-    switch ('typeorm' as OrmSlug) {
+    switch (process.env.ORM_ADAPTER as OrmSlug) {
       case 'prisma':
         this.logger.system('Using prisma')
         return this.adaptPrisma()

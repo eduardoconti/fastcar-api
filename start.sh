@@ -4,22 +4,9 @@
 # Script de automação de projeto
 # Requisitos: docker, docker-compose
 #
-# Autor: Jeyson Luiz Romualdo
-# Data: 09/08/2022
-# Descrição: Script de inicialização de projeto docker
-#
 # uso: bash start.sh   ou sh start.sh
 #
 #################################################################
-
-
-echo '  ____    _     ________ _   _ _        _    ____
- / ___|  / \   |__  /_ _| \ | | |      / \  | __ )
-| |  _  / _ \    / / | ||  \| | |     / _ \ |  _ \
-| |_| |/ ___ \  / /_ | || |\  | |___ / ___ \| |_) |
- \____/_/   \_\/____|___|_| \_|_____/_/   \_\____/'
-echo ''
-echo ''
 
 yarn
 

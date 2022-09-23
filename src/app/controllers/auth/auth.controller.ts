@@ -4,17 +4,11 @@ import { Result } from "@/domain/entities";
 import { ControllerRequest, IController } from "../controller.interface";
 
 type Request = Pick<ControllerRequest<AuthUseCase.Input>, 'body'>
-export class AuthController implements IController {
+export class AuthController implements IController<AuthUseCase.Output> {
   constructor(private readonly authUseCase: AuthUseCase) {
-
   }
-  async handle(request: Request) {
-    if (!request.body?.login) {
-      return Result.fail(badRequest('o campo login é obrigatório!'))
-    }
-    if (!request.body?.password) {
-      return Result.fail(badRequest('o campo password é obrigatório!'))
-    }
-    return await this.authUseCase.execute(request.body)
+  
+  async handle(request: Request): Promise<Result<AuthUseCase.Output>> {
+    return await this.authUseCase.execute(request.body as AuthUseCase.Input)
   }
 }

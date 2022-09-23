@@ -10,17 +10,17 @@ export class UserTypeORMRepository implements IUserRepository {
   }
 
   async findUnique(findParams: FindParams<User>): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne(findParams as any)
+    const user = await this.ormRepository.findOne(findParams)
     if (user) {
       return User.build(user)
     }
   }
   async create(createParams: CreateParams<User>): Promise<User> {
-    await this.ormRepository.save(createParams.data as any)
+    await this.ormRepository.save(createParams.data)
     return createParams.data
   }
   async find(findParams?: FindParams<User>): Promise<User[] | undefined> {
-    const user = await this.ormRepository.find(findParams as any)
+    const user = await this.ormRepository.find(findParams)
     if (user) {
       return user.map((e) => {
         return User.build(e)

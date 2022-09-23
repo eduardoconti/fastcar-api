@@ -1,7 +1,6 @@
-import { unauthorized } from "@/app/errors/errors";
+import { badRequest, unauthorized } from "@/app/errors/errors";
 import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
-import {  BaseErrorDTO } from "@/domain/entities/error.entity";
 import { IUseCase } from "@/domain/interfaces";
 
 
@@ -10,17 +9,23 @@ export class AuthUseCase implements IUseCase<AuthUseCase.Input, Result<AuthUseCa
   constructor(
     private readonly jwtService: IJwtService,
     private readonly userRepository: IUserRepository,
-    private readonly compareHash: IEncrypter) {
+    private readonly encripter: IEncrypter) {
 
   }
   async execute(request: AuthUseCase.Input): Promise<Result<AuthUseCase.Output>> {
+    if (!request.login) {
+      return Result.fail(badRequest('o campo login é obrigatório!'))
+    }
+    if (!request.password) {
+      return Result.fail(badRequest('o campo password é obrigatório!'))
+    }
     const user = await this.userRepository.findUnique({
       where: { login: request.login }
     })
     if (!user) {
       return Result.fail(unauthorized('Usuário não encontrado!'))
     }
-    const hashCompareResult = await this.compareHash.compare(
+    const hashCompareResult = await this.encripter.compare(
       request.password,
       user.password
     )

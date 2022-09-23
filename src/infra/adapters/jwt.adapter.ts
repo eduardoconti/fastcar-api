@@ -1,7 +1,7 @@
 import { IAdapter, IJwtService } from '@/app/interfaces';
 import jwt from 'jsonwebtoken'
 
-const SALT = 15
+const EXPIRATION = '1d'
 export class JwtAdapter implements IAdapter<IJwtService>{
   adapt(): IJwtService {
     const secret = process.env.JWT_SECRET as string
@@ -9,14 +9,16 @@ export class JwtAdapter implements IAdapter<IJwtService>{
     return {
       sign<T>(payload: T) {
         return sign(payload as Object, secret, {
-          expiresIn: '1d'
+          expiresIn: EXPIRATION
         })
       },
       verify(token: string) {
         try {
-          verify(token, secret)
-
+          verify(token, secret, {
+            ignoreExpiration: false
+          })
         } catch (error) {
+          console.log(error)
           return false
         }
         return true
