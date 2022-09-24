@@ -1,20 +1,13 @@
-import { IController } from "@/app/controllers";
 import { badRequest, internalServerError, notFound, unauthorized } from "@/app/errors/errors";
+import { BaseError, Result } from "@/domain/entities";
 
-import { Result } from "@/domain/entities";
-import { BaseError } from "@/domain/entities/error.entity";
 import { ILogger } from "@/domain/interfaces";
 import { JwtAdapter } from "@/infra/adapters";
+import { DuplicatedRouteException } from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";
-import { Http, IRoute, IRouter } from "../interfaces";
-import { Route } from "./route";
+import { BaseErrorToProblemDetailsMapper, BaseStatusToHttpMapper } from "@/infra/mapper";
+import { AddRouteParams, Http, IRoute, IRouter, RouteParams } from "../interfaces";
 
-export type RouteParams<C> = {
-  path: string,
-  controller: IController<C>
-  auth?: Http.AuthenticationType
-}
-type AddRouteParams<C> = RouteParams<C> & { method: Http.Methods }
 
 export class Router implements IRouter {
   routes?: IRoute[];
@@ -40,13 +33,13 @@ export class Router implements IRouter {
     }
 
     this.verifyAccessControl(route, request, response)
-    
+
     request.on('data', (body: any) => {
       Object.assign(request, { body: JSON.parse(body), params: parsedUrl.searchParams })
     })
 
     request.on('end', async () => {
-      if(method === 'POST' && !request?.body){
+      if (method === 'POST' && !request?.body) {
         this.handleResponse(request, response, Result.fail(badRequest('Corpo de requisição vazio!')))
       }
       try {
@@ -65,40 +58,40 @@ export class Router implements IRouter {
     })
   }
 
-  post<R>(routeParams: RouteParams<R>): void {
-    this.addRoute({ method: 'POST', ...routeParams })
+  post<C>(routeParams: RouteParams<C>): void {
+    this.addRoute({ ...routeParams, method: 'POST', })
     this.logger.system('Mapped route POST' + routeParams.path)
   }
 
-  get<R>(routeParams: RouteParams<R>): void {
-    this.addRoute({ method: 'GET', ...routeParams })
+  get<C>(routeParams: RouteParams<C>): void {
+    this.addRoute({ ...routeParams, method: 'GET', })
     this.logger.system('Mapped route GET' + routeParams.path)
   }
 
-  private handleResponse(request: Http.Request, response: Http.Response, result: Result<any>) {
+  private handleResponse(request: Http.Request, response: Http.Response, result: Result) {
     if (result.isSuccess && request.complete) {
-      response.writeHead(200, { "Content-Type": "application/json" })
+      response.writeHead(request.method === 'POST' ? 201 : 200, { "Content-Type": "application/json" })
       response.write(JSON.stringify(result.getValue()))
       this.logger.info(JSON.stringify({ body: request.body, headers: request.headers, response: result.getValue() }))
     } else {
-      response.writeHead(result.error?.status ?? 500, { "Content-Type": "application/problem+json" })
-      response.write(JSON.stringify(result.error))
+      response.writeHead(BaseStatusToHttpMapper.map(result.error?.status), { "Content-Type": "application/problem+json" })
+      response.write(JSON.stringify(BaseErrorToProblemDetailsMapper.map(result.error as BaseError)))
       this.logger.error(JSON.stringify({ body: request.body, headers: request.headers, response: result?.error }))
     }
     response.end()
   }
 
-  private addRoute<R>(addRouteParams: AddRouteParams<R>) {
+  private addRoute<C>(addRouteParams: AddRouteParams<C>) {
     const { path, controller, method, auth } = addRouteParams
     const route = this.routes?.find((e) => {
       return e.method === method && e.path === path
     })
 
     if (route) {
-      throw new BaseError(500, undefined, 'Duplicated route: ' + method + ' ' + path)
+      throw DuplicatedRouteException.build()
     }
 
-    this.routes?.push(new Route(path, method, controller, auth))
+    this.routes?.push({ path, method, controller, auth })
   }
 
   private verifyAccessControl(route: IRoute, request: Http.Request, response: Http.Response) {

@@ -1,18 +1,20 @@
-import { BaseError, BaseErrorDTO } from "./error.entity"
+import { AplicationError } from "../enums"
+import { ResultException } from "../exceptions"
+import { BaseError } from "./error.entity"
 
-export class Result<T> {
+export class Result<T = any> {
   public isSuccess: boolean
   public isFailure: boolean
-  public error?: BaseErrorDTO
+  public error?: BaseError
   private _value?: T
 
-  private constructor(isSuccess: boolean, error?: BaseErrorDTO, value?: T) {
+  private constructor(isSuccess: boolean, error?: BaseError, value?: T) {
     if (isSuccess && error) {
-      throw new BaseError(500, `InvalidOperation: A result cannot be 
+      throw ResultException.build(` A result cannot be 
         successful and contain an error`)
     }
     if (!isSuccess && !error) {
-      throw new BaseError(500, `InvalidOperation: A failing result 
+      throw ResultException.build(`A failing result 
         needs to contain an error message`)
     }
 
@@ -26,7 +28,7 @@ export class Result<T> {
 
   public getValue(): T | undefined {
     if (!this.isSuccess) {
-      throw new BaseError(500, `Cant retrieve the value from a failed result.`)
+      throw BaseError.build({ status: AplicationError.Status.INTERNAL_ERROR, title: `Cant retrieve the value from a failed result.` })
     }
 
     return this._value
@@ -36,7 +38,7 @@ export class Result<T> {
     return new Result<U>(true, undefined, value)
   }
 
-  public static fail<U>(error: BaseErrorDTO): Result<U> {
+  public static fail<U>(error: BaseError): Result<U> {
     return new Result<U>(false, error)
   }
 

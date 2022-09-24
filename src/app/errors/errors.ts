@@ -1,6 +1,7 @@
 import { BaseError } from "@/domain/entities";
+import { AplicationError } from "@/domain/enums";
 
-export const badRequest = (detail?: string) => new BaseError(400, 'Bad Request', detail)
-export const unauthorized = (detail?: string) => new BaseError(401, 'Unauthorized', detail)
-export const notFound = (detail?: string) => new BaseError(404, 'Not found', detail)
-export const internalServerError = (detail?: string) => new BaseError(500, 'Internal Server Error', detail)
+export const badRequest = (detail?: string) => BaseError.build({ status: AplicationError.Status.INVALID_REQUEST, title: AplicationError.Message.INVALID_REQUEST, detail })
+export const unauthorized = (detail?: string) => BaseError.build({ status: AplicationError.Status.UNAUTHORIZED, title: AplicationError.Message.UNAUTHORIZED, detail })
+export const notFound = (detail?: string) => BaseError.build({ status: AplicationError.Status.NOT_FOUND, title:  AplicationError.Message.NOT_FOUND, detail })
+export const internalServerError = (detail?: string) => BaseError.build({ status: AplicationError.Status.INTERNAL_ERROR, title:  AplicationError.Message.INTERNAL_ERROR, detail })

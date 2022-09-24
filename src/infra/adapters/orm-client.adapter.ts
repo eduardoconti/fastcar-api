@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client"
 import { IOrmClient } from "../database/orm/interfaces"
 import { UserPrismaRepository } from "../database/orm/prisma"
 import { AppDataSource, UserTypeORMRepository } from "../database/orm/typeorm"
+import { DataBaseException } from "../exceptions/database.exception"
 
 const DATABASE_CONNECTION_MESSAGE = 'Database connection initialized'
 type OrmSlug = 'prisma' | 'typeorm' | 'memory'
@@ -45,7 +46,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
       .then(() => {
         this.logger.system(DATABASE_CONNECTION_MESSAGE)
       })
-      .catch((error) => { throw new BaseError(500, 'Database exception', error?.message) })
+      .catch((error) => { throw DataBaseException.build(error?.message) })
     const userRepository = new UserTypeORMRepository(AppDataSource)
 
     return { userRepository }

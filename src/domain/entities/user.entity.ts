@@ -27,16 +27,16 @@ export class User {
 
   private static validateName(name?: string) {
     if (!name) {
-      throw new CreateUserException('name must be not empty')
+      throw CreateUserException.build('name must be not empty')
     }
     if (name?.length < 2) {
-      throw new CreateUserException('name must be a 2 caracteres')
+      throw CreateUserException.build('name must be a 2 caracteres')
     }
   }
 
   private static validateEmail(email?: string) {
     if (!email) {
-      throw new CreateUserException('email must be not empty')
+      throw CreateUserException.build('email must be not empty')
     }
     const string = String(email)
       .toLowerCase()
@@ -45,13 +45,13 @@ export class User {
       )
 
     if (!string) {
-      throw new CreateUserException('invalid email')
+      throw CreateUserException.build('invalid email')
     }
   }
 
   private static validatePassword(password?: string) {
     if (!password) {
-      throw new CreateUserException('password must be not empty')
+      throw CreateUserException.build('password must be not empty')
     }
   }
 }

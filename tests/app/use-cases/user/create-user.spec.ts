@@ -5,8 +5,6 @@ import { CreateUserUseCase } from "@/app/use-cases/user"
 import { CreateParams, FindParams, IEncrypter, IUserRepository, IUuid } from "@/app/interfaces"
 import { badRequest } from "@/app/errors/errors"
 
-
-
 const makeUuidStub = (): IUuid => {
   class UuidGeneratorStub implements IUuid {
     v4(): string {

@@ -2,13 +2,14 @@ import './config/module-alias'
 import 'reflect-metadata'
 import * as http from 'http'
 import { CreateUserControllerFactory, ListUserControllerFactory } from './factories/controllers/user'
-import { Router } from '../external/router/router'
-import { Http } from '../external/interfaces'
+import { Router } from '../infra/http/router/router'
+
 import { OrmClientAdapter } from '../infra/adapters'
 
 import { HealthCheckControllerFactory } from './factories/controllers/health'
 import { Logger } from '@/infra/logger'
 import { AuthControllerFactory } from './factories/controllers/auth'
+import { Http } from '@/infra/http/interfaces'
 
 
 const routerManager = new Router()
