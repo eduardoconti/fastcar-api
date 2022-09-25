@@ -1,8 +1,8 @@
 import { BaseError } from "../entities/error.entity";
-import { AplicationError } from "../enums";
+import { Aplication } from "../enums";
 
 export class ResultException {
   static build(detail: string) {
-    return BaseError.build({ status: AplicationError.Status.INTERNAL_ERROR, title: 'Invalid Operation', detail })
+    return BaseError.build({ status: Aplication.Status.INTERNAL_ERROR, title: 'Invalid Operation', detail })
   }
 }

@@ -1,4 +1,4 @@
-import { AplicationError } from "../enums"
+import { Aplication } from "../enums"
 import { ResultException } from "../exceptions"
 import { BaseError } from "./error.entity"
 
@@ -28,7 +28,7 @@ export class Result<T = any> {
 
   public getValue(): T | undefined {
     if (!this.isSuccess) {
-      throw BaseError.build({ status: AplicationError.Status.INTERNAL_ERROR, title: `Cant retrieve the value from a failed result.` })
+      throw BaseError.build({ status: Aplication.Status.INTERNAL_ERROR, title: `Cant retrieve the value from a failed result.` })
     }
 
     return this._value

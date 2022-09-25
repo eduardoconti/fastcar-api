@@ -1,6 +1,6 @@
-import { AuthController } from "@/app/controllers/auth/auth.controller";
-import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
-import { AuthUseCaseFactory } from "../../use-cases/auth";
+import { AuthController } from "@/app/controllers/auth";
+import { IOrmClient } from "@/infra/database/orm/interfaces";
+import { AuthUseCaseFactory } from "@/main/factories/use-cases/auth"
 
 export class AuthControllerFactory {
 

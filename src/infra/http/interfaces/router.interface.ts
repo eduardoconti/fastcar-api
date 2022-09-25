@@ -1,6 +1,5 @@
-import { IController } from "@/app/controllers"
+import { IController } from "@/app/interfaces"
 import { Http } from "./http"
-
 export interface IRouter {
   routes?: IRoute[],
   execute(request: Http.Request,

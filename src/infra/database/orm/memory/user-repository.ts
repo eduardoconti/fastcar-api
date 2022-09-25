@@ -10,16 +10,13 @@ export class UserMemoryRepository implements IUserRepository {
       return (where?.login ? e.login === where?.login : true) &&
         (where?.id ? e.id === where?.id : true)
     })
-    return user
+    if (user) return User.build(user)
   }
   create(createParams: CreateParams<User>): User {
     users.push(createParams.data)
     return createParams.data
   }
   find() {
-    return users.map((e) => {
-      return User.build(e)
-    })
+    return users.map((e) => User.build(e))
   }
-
 }

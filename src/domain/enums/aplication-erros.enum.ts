@@ -1,9 +1,9 @@
-export namespace AplicationError {
+export namespace Aplication {
   export enum Status {
     OK = 'OK',
     UNAUTHORIZED = 'UNAUTHORIZED',
     NOT_FOUND = 'NOT_FOUND',
-    INVALID_REQUEST = 'INVALID REQUEST',
+    INVALID_REQUEST = 'INVALID_REQUEST',
     INTERNAL_ERROR = 'INTERNAL_ERROR',
   }
   export enum Message {

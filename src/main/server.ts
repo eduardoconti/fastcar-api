@@ -3,14 +3,11 @@ import 'reflect-metadata'
 import * as http from 'http'
 import { CreateUserControllerFactory, ListUserControllerFactory } from './factories/controllers/user'
 import { Router } from '../infra/http/router/router'
-
 import { OrmClientAdapter } from '../infra/adapters'
-
 import { HealthCheckControllerFactory } from './factories/controllers/health'
 import { Logger } from '@/infra/logger'
 import { AuthControllerFactory } from './factories/controllers/auth'
 import { Http } from '@/infra/http/interfaces'
-
 
 const routerManager = new Router()
 const orm = new OrmClientAdapter().adapt()

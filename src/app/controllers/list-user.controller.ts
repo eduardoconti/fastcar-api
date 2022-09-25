@@ -1,7 +1,5 @@
+import { IController } from "../interfaces";
 import { ListUserUseCase, ListUser } from "../use-cases/user";
-
-
-import { IController } from "./controller.interface";
 
 export class ListUserController implements IController<ListUser.Output[]> {
 

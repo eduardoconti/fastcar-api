@@ -1,13 +1,11 @@
 import { badRequest, internalServerError, notFound, unauthorized } from "@/app/errors/errors";
 import { BaseError, Result } from "@/domain/entities";
-
 import { ILogger } from "@/domain/interfaces";
 import { JwtAdapter } from "@/infra/adapters";
 import { DuplicatedRouteException } from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";
 import { BaseErrorToProblemDetailsMapper, BaseStatusToHttpMapper } from "@/infra/mapper";
 import { AddRouteParams, Http, IRoute, IRouter, RouteParams } from "../interfaces";
-
 
 export class Router implements IRouter {
   routes?: IRoute[];
@@ -22,40 +20,15 @@ export class Router implements IRouter {
   ) {
 
     const parsedUrl = new URL(request.url as string, `https://${request.headers['host']}`)
+    const method = request.method as Http.Methods
+    const route = this.findRoute(parsedUrl.pathname, method)
 
-    const method = request.method
-    const route = this.routes?.find((e) => {
-      return e.path === parsedUrl.pathname &&
-        (e.method).toUpperCase() === method
-    })
-    if (!route) {
-      return this.handleResponse(request, response, Result.fail(notFound('Rota não encontrada!')))
-    }
+    if (!route) return this.handleResponse(request, response, Result.fail(notFound('Rota não encontrada!')))
 
     this.verifyAccessControl(route, request, response)
+    this.addCustomAtributesInRequest(request, parsedUrl.searchParams)
+    this.send(request, response, route, method)
 
-    request.on('data', (body: any) => {
-      Object.assign(request, { body: JSON.parse(body), params: parsedUrl.searchParams })
-    })
-
-    request.on('end', async () => {
-      if (method === 'POST' && !request?.body) {
-        this.handleResponse(request, response, Result.fail(badRequest('Corpo de requisição vazio!')))
-      }
-      try {
-        const result = await route.controller.handle({
-          body: request?.body,
-          params: request?.params
-        })
-        this.handleResponse(request, response, result);
-      } catch (error: any) {
-        if (error instanceof BaseError) {
-          this.handleResponse(request, response, Result.fail(error));
-        } else {
-          this.handleResponse(request, response, Result.fail(internalServerError(error?.message)))
-        }
-      }
-    })
   }
 
   post<C>(routeParams: RouteParams<C>): void {
@@ -111,6 +84,42 @@ export class Router implements IRouter {
         return this.handleResponse(request, response, Result.fail(unauthorized('Falha de autenticação!')))
 
     }
+  }
+
+  private addCustomAtributesInRequest(request: Http.Request, params: URLSearchParams) {
+    request.on('data', (body: any) => {
+      Object.assign(request, { body: JSON.parse(body), params })
+    })
+  }
+
+  private send(request: Http.Request, response: Http.Response, route: IRoute, method: Http.Methods) {
+    request.on('end', async () => {
+      if (method === 'POST' && !request?.body) {
+        this.handleResponse(request, response, Result.fail(badRequest('Corpo de requisição vazio!')))
+      }
+      try {
+        const result = await route.controller.handle({
+          body: request?.body,
+          params: request?.params
+        })
+        this.handleResponse(request, response, result);
+      } catch (error: any) {
+        if (error instanceof BaseError) {
+          this.handleResponse(request, response, Result.fail(error));
+        } else {
+          this.handleResponse(request, response, Result.fail(internalServerError(error?.message)))
+        }
+      }
+    })
+  }
+
+  private findRoute(path: string, method: string): IRoute | undefined {
+    const route = this.routes?.find((e) => {
+      return e.path === path &&
+        (e.method).toUpperCase() === method
+    })
+
+    return route
   }
 }
 

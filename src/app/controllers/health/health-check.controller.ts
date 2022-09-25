@@ -1,5 +1,6 @@
+import { IController } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
-import { IController } from "../controller.interface";
+
 type HealtCheck = {
   description: string,
   version: string,

@@ -1,12 +1,12 @@
-import { AplicationError } from "../enums"
+import { Aplication } from "../enums"
 export class BaseError extends Error {
-  status!: string
+  status!: Aplication.Status
   title!: string
   detail!: string
   type?: string
 
   private constructor(
-    status: string,
+    status: Aplication.Status,
     title: string,
     detail: string,
     type?: string
@@ -19,9 +19,9 @@ export class BaseError extends Error {
   }
 
   static build(dto: Partial<BaseError>) {
-    return new BaseError(dto.status ?? AplicationError.Status.INTERNAL_ERROR,
+    return new BaseError(dto.status ?? Aplication.Status.INTERNAL_ERROR,
       dto.title ??
-      AplicationError.Message.INTERNAL_ERROR,
+      Aplication.Message.INTERNAL_ERROR,
       dto.detail ?? 'An unexpected error ocurred!',
       dto.type);
   }

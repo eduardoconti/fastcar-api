@@ -1,6 +1,6 @@
 import { AuthUseCase } from "@/app/use-cases/auth";
-import { IOrmClient } from "@/infra/database/orm/interfaces/orm-client.interface";
 import { EncryptAdapter, JwtAdapter } from "@/infra/adapters";
+import { IOrmClient } from "@/infra/database/orm/interfaces";
 
 export class AuthUseCaseFactory {
   
