@@ -1,5 +1,5 @@
 import { IAdapter } from "@/app/interfaces"
-import { ILogger } from "@/domain/interfaces"
+import { ILogger } from "@/app/interfaces"
 import { UserMemoryRepository } from "@/infra/database/orm/memory"
 import { Logger } from "@/infra/logger"
 import { PrismaClient } from "@prisma/client"

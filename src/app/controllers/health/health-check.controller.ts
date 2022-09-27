@@ -14,7 +14,7 @@ export class HealthCheckController implements IController<HealtCheck> {
     return Result.ok({
       description: 'Fastcar',
       version: '1.0.0',
-      env: process.env.NODE_ENV ?? 'development'
+      env: process.env.NODE_ENV as string
     })
   }
 }

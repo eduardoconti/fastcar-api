@@ -4,7 +4,8 @@ import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { IEncrypter, IUserRepository, IUuid } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
 
-export class CreateUserUseCase implements IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> {
+export interface ICreateUserUseCase extends IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> { }
+export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
     private readonly uuidGenerator: IUuid,
     private readonly userRepository: IUserRepository,

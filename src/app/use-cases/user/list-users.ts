@@ -3,7 +3,8 @@ import { Result } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
 import { ListUser } from "./list-user.dto";
 
-export class ListUserUseCase implements IUseCase<ListUser.Input, Result<ListUser.Output[]>> {
+export interface IListUserUseCase extends IUseCase<ListUser.Input, Result<ListUser.Output[]>> { }
+export class ListUserUseCase implements IListUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository
   ) {

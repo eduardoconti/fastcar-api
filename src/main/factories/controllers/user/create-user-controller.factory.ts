@@ -1,4 +1,4 @@
-import { CreateUserController } from "@/app/controllers"
+import { CreateUserController } from "@/app/controllers/user"
 import { IOrmClient } from "@/infra/database/orm/interfaces"
 import { CreateUserUseCaseFactory } from "@/main/factories/use-cases/user"
 

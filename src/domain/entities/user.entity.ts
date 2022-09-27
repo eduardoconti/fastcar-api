@@ -8,14 +8,14 @@ export class User {
   password!: string
   veichles?: Veichle[]
 
-  private constructor(user: Partial<User>) {
+  private constructor(user: User) {
     const { id, name, login, password, veichles } = user
     Object.assign(this, { id, name, login, password, veichles })
   }
 
-  static build(user: User) {
+  static build(user: Partial<User>) {
     this.validate(user)
-    return new User(user)
+    return new User(user as User)
   }
 
   private static validate(user: Partial<User>) {

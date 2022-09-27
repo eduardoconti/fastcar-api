@@ -1,5 +1,5 @@
 
-import { ListUserController } from "@/app/controllers";
+import { ListUserController } from "@/app/controllers/user";
 import { IOrmClient } from "@/infra/database/orm/interfaces";
 import { ListUserUseCaseFactory } from "@/main/factories/use-cases/user";
 

@@ -10,7 +10,7 @@ export class Result<T = any> {
 
   private constructor(isSuccess: boolean, error?: BaseError, value?: T) {
     if (isSuccess && error) {
-      throw ResultException.build(` A result cannot be 
+      throw ResultException.build(`A result cannot be 
         successful and contain an error`)
     }
     if (!isSuccess && !error) {

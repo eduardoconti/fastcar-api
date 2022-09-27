@@ -1,6 +1,6 @@
 import { badRequest, internalServerError, notFound, unauthorized } from "@/app/errors/errors";
 import { BaseError, Result } from "@/domain/entities";
-import { ILogger } from "@/domain/interfaces";
+import { ILogger } from "@/app/interfaces";
 import { JwtAdapter } from "@/infra/adapters";
 import { DuplicatedRouteException } from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";

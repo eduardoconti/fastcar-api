@@ -3,15 +3,15 @@ import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
 import { Result } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
 
-
-export class AuthUseCase implements IUseCase<AuthUseCase.Input, Result<AuthUseCase.Output>>{
+export interface IAuthUseCase extends IUseCase<AuthUseCase.Input, Result<AuthUseCase.Output>> { }
+export class AuthUseCase implements IAuthUseCase {
 
   constructor(
     private readonly jwtService: IJwtService,
     private readonly userRepository: IUserRepository,
     private readonly encripter: IEncrypter) {
-
   }
+  
   async execute(request: AuthUseCase.Input): Promise<Result<AuthUseCase.Output>> {
     if (!request.login) {
       return Result.fail(badRequest('o campo login é obrigatório!'))

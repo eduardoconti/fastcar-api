@@ -18,7 +18,6 @@ export class JwtAdapter implements IAdapter<IJwtService>{
             ignoreExpiration: false
           })
         } catch (error) {
-          console.log(error)
           return false
         }
         return true
