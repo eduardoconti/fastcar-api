@@ -17,7 +17,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
     this.logger = new Logger()
   }
   adapt(): IOrmClient {
-    switch ('memory' as OrmSlug) {
+    switch (process.env.ORM_ADAPTER as OrmSlug) {
       case 'prisma':
         this.logger.system('Using prisma')
         return this.adaptPrisma()

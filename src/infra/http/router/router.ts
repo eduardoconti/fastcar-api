@@ -32,23 +32,27 @@ export class Router implements IRouter {
   }
 
   post<C>(routeParams: RouteParams<C>): void {
-    this.addRoute({ ...routeParams, method: 'POST', })
+    this.addRoute<C>({ ...routeParams, method: 'POST', })
     this.logger.system('Mapped route POST' + routeParams.path)
   }
 
   get<C>(routeParams: RouteParams<C>): void {
-    this.addRoute({ ...routeParams, method: 'GET', })
+    this.addRoute<C>({ ...routeParams, method: 'GET', })
     this.logger.system('Mapped route GET' + routeParams.path)
   }
 
   private handleResponse(request: Http.Request, response: Http.Response, result: Result) {
     if (result.isSuccess && request.complete) {
-      response.writeHead(request.method === 'POST' ? 201 : 200, { "Content-Type": "application/json" })
+      let statusCode = request.method === 'POST' ? Http.StatusCode.CREATED : Http.StatusCode.OK
+      response.writeHead(statusCode, { "Content-Type": "application/json" })
       response.write(JSON.stringify(result.getValue()))
+
       this.logger.info(JSON.stringify({ body: request.body, headers: request.headers, response: result.getValue() }))
     } else {
-      response.writeHead(BaseStatusToHttpMapper.map(result.error?.status), { "Content-Type": "application/problem+json" })
+      let statusCode = BaseStatusToHttpMapper.map(result.error?.status)
+      response.writeHead(statusCode, { "Content-Type": "application/problem+json" })
       response.write(JSON.stringify(BaseErrorToProblemDetailsMapper.map(result.error as BaseError)))
+      
       this.logger.error(JSON.stringify({ body: request.body, headers: request.headers, response: result?.error }))
     }
     response.end()

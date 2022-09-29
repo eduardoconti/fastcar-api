@@ -1,1 +1,1 @@
-export * from './aplication-erros.enum'
+export * from './aplication.enum'
