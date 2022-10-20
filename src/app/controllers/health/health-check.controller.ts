@@ -1,5 +1,5 @@
 import { IController } from "@/app/interfaces";
-import { Result } from "@/domain/entities";
+import { Result } from "@/domain/contracts";
 
 type HealtCheck = {
   description: string,

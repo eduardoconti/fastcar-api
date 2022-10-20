@@ -1,23 +1,25 @@
-import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces";
-import { User } from "@/domain/entities";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
+import { User, UserProps } from "@/domain/entities";
 import { PrismaClient } from "@prisma/client";
-
-export class UserPrismaRepository implements IUserRepository {
+export class UserPrismaRepository implements IUserRepository<User, UserProps> {
   constructor(private readonly prismaClient: PrismaClient) {
   }
 
-  async findUnique(findParams: FindParams<User>): Promise<User | undefined> {
-    const user = await this.prismaClient.user.findUnique(findParams)
-    if (user) return User.build(user)
+  async findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+    const user = await this.prismaClient.user.findUnique({ where: { id: params.id?.value, login: params?.login } })
+    if (user)
+      return User.build(user)
   }
 
-  async create(createParams: CreateParams<User>): Promise<User> {
-    await this.prismaClient.user.create({ data: createParams.data })
-    return createParams.data
+  async save(createParams: User): Promise<User> {
+    const { createdAt, updatedAt, ...rest } = createParams;
+    const user = await this.prismaClient.user.create({ data: { createdAt: createdAt.value, ...rest.props } })
+    return User.build(user)
   }
 
-  async find(findParams?: FindParams<User>): Promise<User[] | undefined> {
-    const user = await this.prismaClient.user.findMany(findParams)
-    if (user) return user.map((e) => User.build(e))
+  async findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
+    const users = await this.prismaClient.user.findMany({ where: { id: params?.id?.value, login: params?.login } })
+    if (users)
+      return users.map((e) => User.build(e))
   }
 }

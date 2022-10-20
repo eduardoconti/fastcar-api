@@ -1,22 +1,22 @@
-import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces";
-import { User } from "@/domain/entities";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
+import { User, UserProps } from "@/domain/entities";
 import { UserModel } from "@/infra/database/models";
 
 const users: UserModel[] = []
-export class UserMemoryRepository implements IUserRepository {
-  findUnique(findParams: FindParams<User>): User | undefined {
+export class UserMemoryRepository implements IUserRepository<User, UserProps> {
+  findOne(params: QueryParams<UserProps>): User | undefined {
     const user = users.find((e) => {
-      const { where } = findParams
-      return (where?.login ? e.login === where?.login : true) &&
-        (where?.id ? e.id === where?.id : true)
+      return (params?.login ? e.login === params?.login : true) &&
+        (params?.id ? e.id === params?.id : true)
     })
     if (user) return User.build(user)
   }
-  create(createParams: CreateParams<User>): User {
-    users.push(createParams.data)
-    return createParams.data
+  save(entity: User): User {
+    const { id, props: { name, login, password } } = entity
+    users.push({ id, name, login, password })
+    return entity
   }
-  find() {
+  findMany(): User[] {
     return users.map((e) => User.build(e))
   }
 }

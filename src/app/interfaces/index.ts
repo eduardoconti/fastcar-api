@@ -1,4 +1,3 @@
-export * from './repository.interface'
 export * from './encrypter.interface'
 export * from './adapter.interface'
 export * from './uuid.interface'

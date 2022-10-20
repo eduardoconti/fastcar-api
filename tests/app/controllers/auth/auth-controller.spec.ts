@@ -1,8 +1,8 @@
 
 import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth"
-import { Result } from "@/domain/entities"
 import { AuthController } from "@/app/controllers/auth"
 import { authInputMock, authOutputMock } from "../../use-cases/auth/mocks"
+import { Result } from "@/domain/contracts"
 
 const makeAuthUseCaseStub = (): IAuthUseCase => {
   class AuthUseCaseStub implements IAuthUseCase {

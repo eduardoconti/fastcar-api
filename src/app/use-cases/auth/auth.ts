@@ -1,37 +1,40 @@
 import { badRequest, unauthorized } from "@/app/errors/errors";
-import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
-import { Result } from "@/domain/entities";
+import { IEncrypter, IJwtService } from "@/app/interfaces";
+import { IUserRepository, Result } from "@/domain/contracts";
+import { User, UserProps } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
 
-export interface IAuthUseCase extends IUseCase<AuthUseCase.Input, Result<AuthUseCase.Output>> { }
+export interface IAuthUseCase extends IUseCase<AuthUseCase.Input, AuthUseCase.Output> { }
 export class AuthUseCase implements IAuthUseCase {
 
   constructor(
     private readonly jwtService: IJwtService,
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: IUserRepository<User, UserProps>,
     private readonly encripter: IEncrypter) {
   }
-  
+
   async execute(request: AuthUseCase.Input): Promise<Result<AuthUseCase.Output>> {
-    if (!request.login) {
+    if (!request.login)
       return Result.fail(badRequest('o campo login é obrigatório!'))
-    }
-    if (!request.password) {
+
+    if (!request.password)
       return Result.fail(badRequest('o campo password é obrigatório!'))
-    }
-    const user = await this.userRepository.findUnique({
-      where: { login: request.login }
+
+    const user = await this.userRepository.findOne({
+      login: request.login
     })
-    if (!user) {
+
+    if (!user)
       return Result.fail(unauthorized('Usuário não encontrado!'))
-    }
+
     const hashCompareResult = await this.encripter.compare(
       request.password,
-      user.password
+      user.props.password
     )
-    if (!hashCompareResult) {
+
+    if (!hashCompareResult)
       return Result.fail(unauthorized('Falha de autenticação!'))
-    }
+
     return Result.ok({
       token: await this.jwtService.sign<AuthUseCase.TokenPayload>({
         userId: user.id
@@ -41,11 +44,14 @@ export class AuthUseCase implements IAuthUseCase {
 }
 
 export namespace AuthUseCase {
+
   export type Input = {
     login: string,
     password: string
   }
+
   export type Output = { token: string }
+
   export type TokenPayload = {
     userId: string,
   }

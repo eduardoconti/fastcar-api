@@ -1,6 +1,6 @@
 import { Aplication } from "../enums"
 import { ResultException } from "../exceptions"
-import { BaseError } from "./error.entity"
+import { BaseError } from "../entities/error.entity"
 
 export class Result<T = any> {
   public isSuccess: boolean

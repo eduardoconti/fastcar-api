@@ -1,6 +1,6 @@
 import { ControllerRequest, IController } from "@/app/interfaces";
 import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth";
-import { Result } from "@/domain/entities";
+import { Result } from "@/domain/contracts";
 
 type Request = Pick<ControllerRequest<AuthUseCase.Input>, 'body'>
 export class AuthController implements IController<AuthUseCase.Output> {

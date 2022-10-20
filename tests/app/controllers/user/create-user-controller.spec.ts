@@ -1,6 +1,6 @@
 
 import { createUserDtoMock, userModelMockData } from "@/../tests/infra/models/mocks"
-import { Result, User } from "@/domain/entities"
+import { Result } from "@/domain/contracts"
 import { CreateUserInputDTO, CreateUserOutputDTO, ICreateUserUseCase } from "@/app/use-cases/user"
 import { CreateUserController } from "@/app/controllers/user"
 

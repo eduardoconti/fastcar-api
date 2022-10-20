@@ -1,11 +1,12 @@
 import { badRequest, internalServerError, notFound, unauthorized } from "@/app/errors/errors";
-import { BaseError, Result } from "@/domain/entities";
+import { BaseError } from "@/domain/entities";
 import { ILogger } from "@/app/interfaces";
 import { JwtAdapter } from "@/infra/adapters";
 import { DuplicatedRouteException } from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";
 import { BaseErrorToProblemDetailsMapper, BaseStatusToHttpMapper } from "@/infra/mapper";
 import { AddRouteParams, Http, IRoute, IRouter, RouteParams } from "../interfaces";
+import { Guard, Result } from "@/domain/contracts";
 
 export class Router implements IRouter {
   routes?: IRoute[];
@@ -43,7 +44,13 @@ export class Router implements IRouter {
 
   private handleResponse(request: Http.Request, response: Http.Response, result: Result) {
     if (result.isSuccess && request.complete) {
-      let statusCode = request.method === 'POST' ? Http.StatusCode.CREATED : Http.StatusCode.OK
+
+      let statusCode = Http.StatusCode.OK
+      if (request.method === 'POST')
+        statusCode = Http.StatusCode.CREATED
+      if (request.method === 'GET' && Guard.isEmpty(result.getValue()))
+        statusCode = Http.StatusCode.NO_CONTENT
+
       response.writeHead(statusCode, { "Content-Type": "application/json" })
       response.write(JSON.stringify(result.getValue()))
 
@@ -52,7 +59,7 @@ export class Router implements IRouter {
       let statusCode = BaseStatusToHttpMapper.map(result.error?.status)
       response.writeHead(statusCode, { "Content-Type": "application/problem+json" })
       response.write(JSON.stringify(BaseErrorToProblemDetailsMapper.map(result.error as BaseError)))
-      
+
       this.logger.error(JSON.stringify({ body: request.body, headers: request.headers, response: result?.error }))
     }
     response.end()

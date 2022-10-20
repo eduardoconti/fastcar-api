@@ -1,6 +1,5 @@
 import { IController } from "@/app/interfaces";
-import { IListUserUseCase, ListUser, ListUserUseCase } from "@/app/use-cases/user";
-
+import { IListUserUseCase, ListUser } from "@/app/use-cases/user";
 
 export class ListUserController implements IController<ListUser.Output[]> {
 

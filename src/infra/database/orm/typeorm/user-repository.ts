@@ -1,26 +1,29 @@
-import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces";
-import { User } from "@/domain/entities";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
+import { User, UserProps } from "@/domain/entities";
 import { DataSource, Repository } from "typeorm";
 import { UserModel } from "../../models";
 
-export class UserTypeORMRepository implements IUserRepository {
+export class UserTypeORMRepository implements IUserRepository<User, UserProps> {
   protected ormRepository: Repository<UserModel>
   constructor(dataSource: DataSource) {
     this.ormRepository = dataSource.getRepository(UserModel)
   }
 
-  async findUnique(findParams: FindParams<User>): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne(findParams)
-    if (user) return User.build(user)
+  async findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({ where: { id: params.id?.value, login: params?.login } })
+    if (user)
+      return User.build(user)
   }
 
-  async create(createParams: CreateParams<User>): Promise<User> {
-    await this.ormRepository.save(createParams.data)
-    return createParams.data
+  async save(createParams: User): Promise<User> {
+    const { createdAt, updatedAt, ...rest } = createParams;
+    const user = await this.ormRepository.save({ ...rest.props, createdAt: createdAt.value })
+    return User.build(user)
   }
 
-  async find(findParams?: FindParams<User>): Promise<User[] | undefined> {
-    const users = await this.ormRepository.find(findParams)
-    if (users) return users.map((e) => User.build(e))
+  async findMany(params: QueryParams<UserProps>): Promise<User[] | undefined> {
+    const users = await this.ormRepository.find({ where: { id: params.id?.value, login: params?.login } })
+    if (users)
+      return users.map((e) => { return User.build(e) })
   }
 }

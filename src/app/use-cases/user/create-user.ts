@@ -1,43 +1,35 @@
-import { Result, User } from "@/domain/entities";
+import { User, UserProps } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
-import { IEncrypter, IUserRepository, IUuid } from "@/app/interfaces";
+import { IEncrypter } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
+import { IUserRepository, Result } from "@/domain/contracts";
 
-export interface ICreateUserUseCase extends IUseCase<CreateUserInputDTO, Result<CreateUserOutputDTO>> { }
+export interface ICreateUserUseCase extends IUseCase<CreateUserInputDTO, CreateUserOutputDTO> { }
 export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
-    private readonly uuidGenerator: IUuid,
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: IUserRepository<User, UserProps>,
     private readonly encrypter: IEncrypter) {
   }
   async execute(user: CreateUserInputDTO): Promise<Result<CreateUserOutputDTO>> {
+    const { name, login, password, confirmPassword } = user
+    const userEntity = User.build({ name, login, password })
 
-    const userEntity = User.build({ id: this.uuidGenerator.v4(), ...user })
-
-    if (await this.userRepository.findUnique({ where: { login: user.login } })) {
-      return Result.fail(badRequest('This login belongs to a user'))
-    }
-
-    if (!user.confirmPassword) {
+    if (!confirmPassword)
       return Result.fail(badRequest('confirmPassword should be not empty'))
-    }
 
-    if (user.confirmPassword !== user.password) {
+    if (await this.userRepository.findOne({ login }))
+      return Result.fail(badRequest('This login belongs to a user'))
+
+    if (confirmPassword !== password)
       return Result.fail(badRequest('As senhas não coincidem'))
-    }
 
-    const passwordHashResult = await this.encrypter.hash(user.password, 15)
+    const passwordHashResult = await this.encrypter.hash(password)
 
-    await this.userRepository.create({
-      data: {
-        ...userEntity,
-        password: passwordHashResult
-      }
-    })
+    userEntity.updatePassword(passwordHashResult)
 
-    const { id, name, login } = userEntity
+    await this.userRepository.save(userEntity)
 
-    return Result.ok({ id, name, login })
+    return Result.ok({ id: userEntity.id, name, login })
   }
 }

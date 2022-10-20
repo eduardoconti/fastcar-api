@@ -1,5 +1,3 @@
-import { User } from "@/domain/entities"
-
 export type FindParams<E> = {
   where: Partial<E>
 }
@@ -12,4 +10,4 @@ export interface IRepository<E> {
   find: (findParams?: FindParams<E>) => Promise<E[] | undefined> | E[] | undefined
 }
 
-export type IUserRepository = Pick<IRepository<User>, 'create' | 'findUnique' | 'find'>
+export type IUserRepository<Model> = Pick<IRepository<Model>, 'create' | 'findUnique' | 'find'>

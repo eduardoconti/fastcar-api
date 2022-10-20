@@ -1,19 +1,20 @@
 
 import { userModelMockData } from "@/../tests/infra/models/mocks"
-import { User } from "@/domain/entities"
+import { User, UserProps } from "@/domain/entities"
 import { ListUserUseCase, } from "@/app/use-cases/user"
-import { CreateParams, FindParams, IUserRepository } from "@/app/interfaces"
+import { IUserRepository, QueryParams } from "@/domain/contracts"
+import { userEntityMock } from "@/../tests/domain/user/mocks"
 
-const makeUserRepositoryStub = (): IUserRepository => {
-  class MakeUserRepositoryStub implements IUserRepository {
-    create(params: CreateParams<User>): Promise<User> {
-      return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
+const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
+  class MakeUserRepositoryStub implements IUserRepository<User, UserProps> {
+    save(entity: User): Promise<User> {
+      return Promise.resolve(userEntityMock)
     }
-    findUnique(params: FindParams<User>): Promise<User | undefined> {
-      return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
+    findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+      return Promise.resolve(userEntityMock)
     }
-    find(findParams?: FindParams<User> | undefined): Promise<User[] | undefined> {
-      return Promise.resolve([{ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' }])
+    findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
+      return Promise.resolve([userEntityMock])
     }
   }
   return new MakeUserRepositoryStub()
@@ -21,7 +22,7 @@ const makeUserRepositoryStub = (): IUserRepository => {
 
 interface SutTypes {
   sut: ListUserUseCase
-  userRepositoryStub: IUserRepository
+  userRepositoryStub: IUserRepository<User, UserProps>
 }
 
 const makeSut = (): SutTypes => {
@@ -37,13 +38,13 @@ const makeSut = (): SutTypes => {
 describe('List user useCase', () => {
   it('should execute useCase', async () => {
     const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'find').mockResolvedValue([{...userModelMockData}])
+    jest.spyOn(userRepositoryStub, 'findMany').mockResolvedValue([userEntityMock])
 
     const result = await sut.execute()
 
     expect(result.isSuccess).toBeTruthy()
-    expect(userRepositoryStub.find).toBeCalledTimes(1)
-    expect(result.getValue()).toEqual([{...userModelMockData, password: undefined}])
+    expect(userRepositoryStub.findMany).toBeCalledTimes(1)
+    expect(result.getValue()).toEqual([{...userModelMockData, id: userEntityMock.id, password: undefined}])
   })
 
 })

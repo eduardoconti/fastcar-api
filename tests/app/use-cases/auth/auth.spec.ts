@@ -1,15 +1,17 @@
 
 import { userModelMockData } from "@/../tests/infra/models/mocks"
-import { User } from "@/domain/entities"
+import { User, UserProps } from "@/domain/entities"
 import { AuthUseCase } from "@/app/use-cases/auth"
-import { CreateParams, FindParams, IEncrypter, IUserRepository, IJwtService } from "@/app/interfaces"
+import {IEncrypter, IJwtService } from "@/app/interfaces"
 import { badRequest, unauthorized } from "@/app/errors/errors"
 import { authInputMock, authOutputMock } from "./mocks"
+import { IUserRepository, QueryParams } from "@/domain/contracts"
+import { userEntityMock } from "@/../tests/domain/user/mocks"
 
 const makeJwtServiceStub = (): IJwtService => {
   class JwtServiceStub implements IJwtService {
     sign<T = any>(payload: T): string {
-      return 'fakeUuid'
+      return 'jwt token'
     }
     verify(token: string): boolean {
       return true
@@ -18,26 +20,27 @@ const makeJwtServiceStub = (): IJwtService => {
   return new JwtServiceStub()
 }
 
-const makeUserRepositoryStub = (): IUserRepository => {
-  class MakeUserRepositoryStub implements IUserRepository {
-    create(params: CreateParams<User>): Promise<User> {
-      return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
+const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
+  class MakeUserRepositoryStub implements IUserRepository<User, UserProps> {
+    save(entity: User): Promise<User> {
+      return Promise.resolve(userEntityMock)
     }
-    findUnique(params: FindParams<User>): Promise<User | undefined> {
-      return Promise.resolve({ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' })
+    findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+      return Promise.resolve(userEntityMock)
     }
-    find(findParams?: FindParams<User> | undefined): Promise<User[] | undefined> {
-      return Promise.resolve([{ id: 'fake', name: 'fakeName', login: 'fakeLogin', password: 'fakePassword' }])
+    findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
+      return Promise.resolve([userEntityMock])
     }
   }
   return new MakeUserRepositoryStub()
 }
 
+
 const makeEncryptStub = (): IEncrypter => {
 
   class MakeEncryptStub implements IEncrypter {
     async hash(text: string, salt: number): Promise<string> {
-      return Promise.resolve('')
+      return Promise.resolve('hash')
     }
     async compare(text: string, compare: string): Promise<boolean> {
       return Promise.resolve(true)
@@ -49,7 +52,7 @@ const makeEncryptStub = (): IEncrypter => {
 interface SutTypes {
   sut: AuthUseCase
   jwtServiceStub: IJwtService
-  userRepositoryStub: IUserRepository
+  userRepositoryStub: IUserRepository<User, UserProps>
   encryptUseCaseStub: IEncrypter
 }
 
@@ -69,17 +72,17 @@ const makeSut = (): SutTypes => {
     encryptUseCaseStub
   }
 }
-describe('Create user useCase', () => {
+describe('Auth useCase', () => {
   it('should execute useCase', async () => {
     const { sut, jwtServiceStub, userRepositoryStub, encryptUseCaseStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(userModelMockData)
-    jest.spyOn(encryptUseCaseStub, 'compare').mockResolvedValue(true)
-    jest.spyOn(jwtServiceStub, 'sign').mockReturnValue('jwt token')
+    jest.spyOn(userRepositoryStub, 'findOne')
+    jest.spyOn(encryptUseCaseStub, 'compare')
+    jest.spyOn(jwtServiceStub, 'sign')
 
     const result = await sut.execute(authInputMock)
 
     expect(result.isSuccess).toBeTruthy()
-    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
     expect(jwtServiceStub.sign).toBeCalledTimes(1)
     expect(encryptUseCaseStub.compare).toBeCalledTimes(1)
     expect(result.getValue()).toEqual(authOutputMock)
@@ -105,24 +108,24 @@ describe('Create user useCase', () => {
 
   it('should fail to execute useCase when not found user', async () => {
     const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(undefined)
+    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
 
     const result = await sut.execute(authInputMock)
 
     expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
     expect(result.error).toEqual(unauthorized('Usuário não encontrado!'))
   })
 
   it('should fail to execute useCase when compare hash is failed', async () => {
     const { sut, userRepositoryStub, encryptUseCaseStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findUnique').mockResolvedValue(userModelMockData)
+    jest.spyOn(userRepositoryStub, 'findOne')
     jest.spyOn(encryptUseCaseStub, 'compare').mockResolvedValue(false)
 
     const result = await sut.execute(authInputMock)
 
     expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findUnique).toBeCalledTimes(1)
+    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
     expect(result.error).toEqual(unauthorized('Falha de autenticação!'))
   })
 
