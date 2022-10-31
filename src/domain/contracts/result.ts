@@ -1,20 +1,19 @@
 import { Aplication } from "../enums"
-import { ResultException } from "../exceptions"
-import { BaseError } from "../entities/error.entity"
+import { ArgumentInvalidException, BaseException } from "../exceptions"
 
 export class Result<T = any> {
   public isSuccess: boolean
   public isFailure: boolean
-  public error?: BaseError
+  public error?: BaseException
   private _value?: T
 
-  private constructor(isSuccess: boolean, error?: BaseError, value?: T) {
+  private constructor(isSuccess: boolean, error?: BaseException, value?: T) {
     if (isSuccess && error) {
-      throw ResultException.build(`A result cannot be 
+      throw  new ArgumentInvalidException(`A result cannot be 
         successful and contain an error`)
     }
     if (!isSuccess && !error) {
-      throw ResultException.build(`A failing result 
+      throw  new ArgumentInvalidException(`A failing result 
         needs to contain an error message`)
     }
 
@@ -28,7 +27,7 @@ export class Result<T = any> {
 
   public getValue(): T | undefined {
     if (!this.isSuccess) {
-      throw BaseError.build({ status: Aplication.Status.INTERNAL_ERROR, title: `Cant retrieve the value from a failed result.` })
+      throw  new ArgumentInvalidException(`Cant retrieve the value from a failed result.`)
     }
 
     return this._value
@@ -38,7 +37,7 @@ export class Result<T = any> {
     return new Result<U>(true, undefined, value)
   }
 
-  public static fail<U>(error: BaseError): Result<U> {
+  public static fail<U>(error: BaseException): Result<U> {
     return new Result<U>(false, error)
   }
 

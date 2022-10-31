@@ -1,15 +1,15 @@
 import { badRequest, unauthorized } from "@/app/errors/errors";
-import { IEncrypter, IJwtService } from "@/app/interfaces";
-import { IUserRepository, Result } from "@/domain/contracts";
-import { User, UserProps } from "@/domain/entities";
+import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
+import { Result } from "@/domain/contracts";
 import { IUseCase } from "@/domain/interfaces";
+import { Email } from "@/domain/value-objects/user";
 
 export interface IAuthUseCase extends IUseCase<AuthUseCase.Input, AuthUseCase.Output> { }
 export class AuthUseCase implements IAuthUseCase {
 
   constructor(
     private readonly jwtService: IJwtService,
-    private readonly userRepository: IUserRepository<User, UserProps>,
+    private readonly userRepository: IUserRepository,
     private readonly encripter: IEncrypter) {
   }
 
@@ -21,7 +21,7 @@ export class AuthUseCase implements IAuthUseCase {
       return Result.fail(badRequest('o campo password é obrigatório!'))
 
     const user = await this.userRepository.findOne({
-      login: request.login
+      login: new Email(request.login)
     })
 
     if (!user)
@@ -29,7 +29,7 @@ export class AuthUseCase implements IAuthUseCase {
 
     const hashCompareResult = await this.encripter.compare(
       request.password,
-      user.props.password
+      user.props.password.value
     )
 
     if (!hashCompareResult)
@@ -37,7 +37,7 @@ export class AuthUseCase implements IAuthUseCase {
 
     return Result.ok({
       token: await this.jwtService.sign<AuthUseCase.TokenPayload>({
-        userId: user.id
+        userId: user.id.value
       })
     })
   }

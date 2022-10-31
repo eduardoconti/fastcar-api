@@ -15,6 +15,12 @@ export class UserModel {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createdAt?: Date;
+  createdAt!: Date;
+  @Column({
+    name: 'updatedAt',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt?: Date;
   veichles?: VeichleModel[]
 }

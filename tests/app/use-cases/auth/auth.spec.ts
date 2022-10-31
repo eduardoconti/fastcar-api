@@ -2,10 +2,10 @@
 import { userModelMockData } from "@/../tests/infra/models/mocks"
 import { User, UserProps } from "@/domain/entities"
 import { AuthUseCase } from "@/app/use-cases/auth"
-import {IEncrypter, IJwtService } from "@/app/interfaces"
+import {IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces"
 import { badRequest, unauthorized } from "@/app/errors/errors"
 import { authInputMock, authOutputMock } from "./mocks"
-import { IUserRepository, QueryParams } from "@/domain/contracts"
+import { QueryParams } from "@/domain/contracts"
 import { userEntityMock } from "@/../tests/domain/user/mocks"
 
 const makeJwtServiceStub = (): IJwtService => {
@@ -20,8 +20,8 @@ const makeJwtServiceStub = (): IJwtService => {
   return new JwtServiceStub()
 }
 
-const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
-  class MakeUserRepositoryStub implements IUserRepository<User, UserProps> {
+const makeUserRepositoryStub = (): IUserRepository => {
+  class MakeUserRepositoryStub implements IUserRepository {
     save(entity: User): Promise<User> {
       return Promise.resolve(userEntityMock)
     }
@@ -52,7 +52,7 @@ const makeEncryptStub = (): IEncrypter => {
 interface SutTypes {
   sut: AuthUseCase
   jwtServiceStub: IJwtService
-  userRepositoryStub: IUserRepository<User, UserProps>
+  userRepositoryStub: IUserRepository
   encryptUseCaseStub: IEncrypter
 }
 

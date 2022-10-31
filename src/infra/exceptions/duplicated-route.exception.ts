@@ -1,8 +1,9 @@
-import { BaseError } from "@/domain/entities";
 import { Aplication } from "@/domain/enums";
+import { BaseException } from "@/domain/exceptions";
 
-export class DuplicatedRouteException {
-  static build() {
-    return BaseError.build({ status: Aplication.Status.INTERNAL_ERROR, title: 'Router map error', detail: 'Duplicated route' })
+export class DuplicatedRouteException extends BaseException{
+  readonly code = Aplication.Status.INTERNAL_ERROR;
+  constructor(metadata?: unknown){
+    super('Duplicated route', metadata)
   }
 }

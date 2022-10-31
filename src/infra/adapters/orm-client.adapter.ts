@@ -45,7 +45,7 @@ export class OrmClientAdapter implements IAdapter<IOrmClient>{
       .then(() => {
         this.logger.system(DATABASE_CONNECTION_MESSAGE)
       })
-      .catch((error) => { throw DataBaseException.build(error?.message) })
+      .catch((error) => { throw new DataBaseException(error?.message) })
     const userRepository = new UserTypeORMRepository(AppDataSource)
 
     return { userRepository }

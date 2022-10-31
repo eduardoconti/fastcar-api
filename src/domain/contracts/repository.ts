@@ -3,8 +3,8 @@ import { DeepPartial } from '../types';
 import { ID } from '../value-objects/id.value-object';
 import { BaseEntityProps } from './entity';
 
-type RepositorySingleResult<T> = Promise<T | undefined> | T | undefined
-type RepositoryManyResult<T> = Promise<T[] | undefined> | T[] | undefined
+export type RepositorySingleResult<T> = Promise<T | undefined> | T | undefined
+export type RepositoryManyResult<T> = Promise<T[] | undefined> | T[] | undefined
 
 export type QueryParams<EntityProps> = DeepPartial<
   BaseEntityProps & EntityProps
@@ -61,10 +61,4 @@ export interface IFindManyPaginated<Entity, EntityProps> {
 
 export interface IDeleteOne<Entity> {
   delete(entity: Entity): Promise<Entity>;
-}
-
-export interface IUserRepository<Entity, EntityProps>
-  extends ISave<Entity>,
-  IFindOne<Entity, EntityProps>,
-  IFindMany<Entity, EntityProps> {
 }

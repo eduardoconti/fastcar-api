@@ -1,5 +1,5 @@
 import { DomainPrimitive, ValueObject } from "@/domain/contracts/value-object";
-import { CreateUserException } from "@/domain/exceptions";
+import { ArgumentInvalidException } from "@/domain/exceptions";
 
 export class Password extends ValueObject<string> {
 
@@ -13,7 +13,7 @@ export class Password extends ValueObject<string> {
 
   protected validate({ value }: DomainPrimitive<string>): void {
     if (value === undefined || value === null || value.length <= 2 || value.length > 100) {
-      throw CreateUserException.build('password must be greater than 2 chars and less than 100.')
+      throw new ArgumentInvalidException('password must be greater than 2 chars and less than 100.')
     }
   }
 }

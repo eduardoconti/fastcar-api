@@ -44,12 +44,12 @@ export abstract class Entity<EntityProps> {
     return this._createdAt
   }
 
-  get updatedAt(): DateVO | undefined {
+  get updatedAt(): DateVO {
     return this._updatedAt
   }
 
-  get id(): UniqueEntityID {
-    return this._id.value
+  get id(): ID {
+    return this._id
   }
 
   public equals(object?: Entity<EntityProps>): boolean {

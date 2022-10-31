@@ -1,31 +1,21 @@
-import { Entity } from "../contracts"
+import { AggregateRoot } from "../contracts"
 import { UUID } from "../value-objects"
 import { Email, Name, Password } from "../value-objects/user"
-import { Veichle } from "./veichle.entity"
 
 export type UserProps = {
-  name: string
-  login: string
-  password: string
-  veichles?: Veichle[]
+  name: Name
+  login: Email
+  password: Password
 }
-export class User extends Entity<UserProps>{
+export class User extends AggregateRoot<UserProps>{
   protected readonly _id!: UUID;
 
-  static build(user: UserProps) {
-    this.validate(user)
+  static create(user: UserProps) {
     const id = UUID.generate()
     return new User({ id, props: user })
   }
 
-  private static validate(user: UserProps) {
-    const { name, login, password } = user
-    new Name(name)
-    new Email(login)
-    new Password(password)
-  }
-
   updatePassword(password: string) {
-    this.props.password = password
+    this.props.password = new Password(password)
   }
 }

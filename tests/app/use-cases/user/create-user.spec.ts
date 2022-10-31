@@ -2,14 +2,14 @@
 import { createUserDtoMock, createUserOutputMock } from "@/../tests/infra/models/mocks"
 import { User, UserProps } from "@/domain/entities"
 import { CreateUserUseCase } from "@/app/use-cases/user"
-import { IEncrypter } from "@/app/interfaces"
+import { IEncrypter, IUserRepository } from "@/app/interfaces"
 import { badRequest } from "@/app/errors/errors"
-import { IUserRepository, QueryParams } from "@/domain/contracts"
+import { QueryParams } from "@/domain/contracts"
 import { userEntityMock } from "@/../tests/domain/user/mocks"
 
 
-const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
-  class MakeUserRepositoryStub implements IUserRepository<User, UserProps> {
+const makeUserRepositoryStub = (): IUserRepository => {
+  class MakeUserRepositoryStub implements IUserRepository {
     save(entity: User): Promise<User> {
       return Promise.resolve(userEntityMock)
     }
@@ -38,7 +38,7 @@ const makeEncryptStub = (): IEncrypter => {
 
 interface SutTypes {
   sut: CreateUserUseCase
-  userRepositoryStub: IUserRepository<User, UserProps>
+  userRepositoryStub: IUserRepository
   encryptUseCaseStub: IEncrypter
 }
 

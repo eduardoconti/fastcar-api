@@ -2,11 +2,12 @@
 import { userModelMockData } from "@/../tests/infra/models/mocks"
 import { User, UserProps } from "@/domain/entities"
 import { ListUserUseCase, } from "@/app/use-cases/user"
-import { IUserRepository, QueryParams } from "@/domain/contracts"
+import { QueryParams } from "@/domain/contracts"
 import { userEntityMock } from "@/../tests/domain/user/mocks"
+import { IUserRepository } from "@/app/interfaces"
 
-const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
-  class MakeUserRepositoryStub implements IUserRepository<User, UserProps> {
+const makeUserRepositoryStub = (): IUserRepository => {
+  class MakeUserRepositoryStub implements IUserRepository {
     save(entity: User): Promise<User> {
       return Promise.resolve(userEntityMock)
     }
@@ -22,7 +23,7 @@ const makeUserRepositoryStub = (): IUserRepository<User, UserProps> => {
 
 interface SutTypes {
   sut: ListUserUseCase
-  userRepositoryStub: IUserRepository<User, UserProps>
+  userRepositoryStub: IUserRepository
 }
 
 const makeSut = (): SutTypes => {

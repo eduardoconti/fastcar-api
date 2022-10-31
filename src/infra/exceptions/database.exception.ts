@@ -1,8 +1,9 @@
-import { BaseError } from "@/domain/entities";
 import { Aplication } from "@/domain/enums";
+import { BaseException } from "@/domain/exceptions";
 
-export class DataBaseException {
-  static build(detail?: string) {
-    return BaseError.build({ status: Aplication.Status.INTERNAL_ERROR, title: 'Database Error', detail })
+export class DataBaseException extends BaseException {
+  readonly code = Aplication.Status.INTERNAL_ERROR;
+  constructor(metadata?: unknown){
+    super('Database error', metadata)
   }
 }

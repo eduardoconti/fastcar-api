@@ -1,5 +1,5 @@
 import { DomainPrimitive, ValueObject } from "@/domain/contracts/value-object";
-import { CreateUserException } from "@/domain/exceptions";
+import { ArgumentInvalidException } from "@/domain/exceptions";
 
 export class Email extends ValueObject<string> {
 
@@ -13,7 +13,7 @@ export class Email extends ValueObject<string> {
 
   protected validate({ value }: DomainPrimitive<string>): void {
     if (!value) {
-      throw CreateUserException.build('email must be not empty')
+      throw new ArgumentInvalidException('email must be not empty')
     }
     const string = String(value)
       .toLowerCase()
@@ -22,7 +22,7 @@ export class Email extends ValueObject<string> {
       )
 
     if (!string) {
-      throw CreateUserException.build('invalid email')
+      throw new ArgumentInvalidException('invalid email')
     }
   }
 }
