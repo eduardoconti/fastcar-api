@@ -1,12 +1,10 @@
-
-import { userModelMockData } from "@/../tests/infra/models/mocks"
 import { User, UserProps } from "@/domain/entities"
 import { AuthUseCase } from "@/app/use-cases/auth"
 import {IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces"
 import { badRequest, unauthorized } from "@/app/errors/errors"
-import { authInputMock, authOutputMock } from "./mocks"
 import { QueryParams } from "@/domain/contracts"
-import { userEntityMock } from "@/../tests/domain/user/mocks"
+import { userEntityMock } from "@/domain/entities/mocks"
+import { authInputMock, authOutputMock } from "@/presentation/controllers/mocks"
 
 const makeJwtServiceStub = (): IJwtService => {
   class JwtServiceStub implements IJwtService {

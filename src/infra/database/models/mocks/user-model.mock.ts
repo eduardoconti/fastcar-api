@@ -5,7 +5,9 @@ export const userModelMockData: UserModel = {
   id: 'fakeUuid',
   name: 'fakeName',
   login: 'fakeLogin@123.com',
-  password: 'fakePassword'
+  password: 'fakePassword',
+  status: "DISABLED",
+  createdAt: new Date("2022-02-02")
 }
 
 export const createUserDtoMock: CreateUserInputDTO = {

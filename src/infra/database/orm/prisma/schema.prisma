@@ -5,13 +5,19 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl"]
 }
 
-model User {
-  id        String    @id @unique
-  createdAt DateTime  @default(now())
+model user {
+  id        String    @id
   login     String    @unique
   name      String
   password  String
+  status    userStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum userStatus {
+  ACTIVATED
+  DISABLED
 }

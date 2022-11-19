@@ -25,7 +25,7 @@ export class AuthUseCase implements IAuthUseCase {
     })
 
     if (!user)
-      return Result.fail(unauthorized('Usuário não encontrado!'))
+      return Result.fail(badRequest('Usuário não encontrado!'))
 
     const hashCompareResult = await this.encripter.compare(
       request.password,

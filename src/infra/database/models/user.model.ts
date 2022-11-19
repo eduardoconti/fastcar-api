@@ -23,4 +23,8 @@ export class UserModel {
   })
   updatedAt?: Date;
   veichles?: VeichleModel[]
+  @Column()
+  status!: UserStatus
 }
+
+type UserStatus = "ACTIVATED" | "DISABLED"

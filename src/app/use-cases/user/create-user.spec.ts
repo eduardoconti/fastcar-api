@@ -1,11 +1,11 @@
 
-import { createUserDtoMock, createUserOutputMock } from "@/../tests/infra/models/mocks"
 import { User, UserProps } from "@/domain/entities"
 import { CreateUserUseCase } from "@/app/use-cases/user"
 import { IEncrypter, IUserRepository } from "@/app/interfaces"
 import { badRequest } from "@/app/errors/errors"
 import { QueryParams } from "@/domain/contracts"
-import { userEntityMock } from "@/../tests/domain/user/mocks"
+import { userEntityMock } from "@/domain/entities/mocks"
+import { createUserDtoMock, createUserOutputMock } from "@/infra/database/models/mocks"
 
 
 const makeUserRepositoryStub = (): IUserRepository => {

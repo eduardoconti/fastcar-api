@@ -1,11 +1,12 @@
 import { AggregateRoot } from "../contracts"
 import { UUID } from "../value-objects"
-import { Email, Name, Password } from "../value-objects/user"
+import { Email, Name, Password, UserStatus } from "../value-objects/user"
 
 export type UserProps = {
   name: Name
   login: Email
   password: Password
+  status: UserStatus
 }
 export class User extends AggregateRoot<UserProps>{
   protected readonly _id!: UUID;

@@ -34,7 +34,7 @@ export class Router implements IRouter {
       request.url as string,
       `https://${request.headers["host"]}`
     );
-    console.log(parsedUrl);
+
     const method = request.method as Http.Methods;
     const route = this.findRoute(parsedUrl.pathname, method);
 

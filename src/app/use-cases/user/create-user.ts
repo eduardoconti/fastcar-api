@@ -4,7 +4,7 @@ import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
 import { IEncrypter, IUserRepository } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
 import { Result } from "@/domain/contracts";
-import { Email, Name, Password } from "@/domain/value-objects/user";
+import { Email, Name, Password, UserStatus, UserStatusEnum } from "@/domain/value-objects/user";
 import { UserModel } from "@/infra/database/models";
 
 export interface ICreateUserUseCase extends IUseCase<CreateUserInputDTO, CreateUserOutputDTO> { }
@@ -20,7 +20,8 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       {
         name: new Name(name),
         login: loginVO,
-        password: new Password(password)
+        password: new Password(password),
+        status: new UserStatus(UserStatusEnum.DISABLED)
       })
 
     if (!confirmPassword)

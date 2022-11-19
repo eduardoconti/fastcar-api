@@ -14,7 +14,6 @@ export class UserPrismaRepository implements IUserRepository {
   }
 
   async save(entity: User): Promise<User> {
-    console.log(UserOrmMapper.toModel(entity))
     await this.prismaClient.user.create({
       data: UserOrmMapper.toModel(entity),
     });

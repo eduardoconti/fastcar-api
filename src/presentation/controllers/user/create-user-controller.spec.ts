@@ -1,8 +1,8 @@
 
-import { createUserDtoMock, userModelMockData } from "@/../tests/infra/models/mocks"
 import { Result } from "@/domain/contracts"
 import { CreateUserInputDTO, CreateUserOutputDTO, ICreateUserUseCase } from "@/app/use-cases/user"
-import { CreateUserController } from "@/app/controllers/user"
+import { createUserDtoMock, userModelMockData } from "@/infra/database/models/mocks"
+import { CreateUserController } from "./create-user.controller"
 
 
 const makeCreateUserUseCaseStub = (): ICreateUserUseCase => {
