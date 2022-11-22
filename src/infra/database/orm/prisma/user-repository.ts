@@ -26,4 +26,12 @@ export class UserPrismaRepository implements IUserRepository {
     });
     if (users) return users.map((user) => UserOrmMapper.toEntity(user));
   }
+
+  async update(entity: User): Promise<User> {
+    await this.prismaClient.user.update({
+      data: UserOrmMapper.toModel(entity),
+      where: { id: entity.id.value },
+    });
+    return entity;
+  }
 }

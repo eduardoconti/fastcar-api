@@ -14,7 +14,12 @@ export interface IRoute<C = any> {
   method: Http.Methods
   middleware?: any[]
   auth?: Http.AuthenticationType
+  atributes?: Atributes
 }
 
 export type RouteParams<C> = Omit<IRoute<C>, 'method'>
 export type AddRouteParams<C> = IRoute<C>
+
+export interface Atributes {
+  [key: string]: string;
+}

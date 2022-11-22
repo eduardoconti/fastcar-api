@@ -3,7 +3,6 @@ import { ListUserUseCase } from "@/app/use-cases/user";
 import { QueryParams } from "@/domain/contracts";
 import { IUserRepository } from "@/app/interfaces";
 import { userEntityMock } from "@/domain/entities/mocks";
-import { userModelMockData } from "@/infra/database/models/mocks";
 
 const makeUserRepositoryStub = (): IUserRepository => {
   class MakeUserRepositoryStub implements IUserRepository {
@@ -15,6 +14,9 @@ const makeUserRepositoryStub = (): IUserRepository => {
     }
     findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
       return Promise.resolve([userEntityMock]);
+    }
+    update(entity: User): Promise<User> {
+      return Promise.resolve(userEntityMock)
     }
   }
   return new MakeUserRepositoryStub();

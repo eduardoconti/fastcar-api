@@ -32,4 +32,9 @@ export class UserTypeORMRepository implements IUserRepository {
         return UserOrmMapper.toEntity(user);
       });
   }
+
+  async update(entity: User): Promise<User> {
+    await this.ormRepository.save(UserOrmMapper.toModel(entity));
+    return entity;
+  }
 }

@@ -6,7 +6,9 @@ import {
 } from "@/app/errors/errors";
 import { ILogger } from "@/app/interfaces";
 import { JwtAdapter } from "@/infra/adapters";
-import { DuplicatedRouteException } from "@/infra/exceptions";
+import {
+  DuplicatedRouteException,
+} from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";
 import {
   BaseErrorToProblemDetailsMapper,
@@ -14,6 +16,7 @@ import {
 } from "@/infra/mapper";
 import {
   AddRouteParams,
+  Atributes,
   Http,
   IRoute,
   IRouter,
@@ -27,7 +30,7 @@ export class Router implements IRouter {
   logger!: ILogger;
   constructor() {
     this.routes = [];
-    this.logger = new Logger();
+    this.logger = new Logger('Router');
   }
   async execute(request: Http.Request, response: Http.Response) {
     const parsedUrl = new URL(
@@ -46,7 +49,12 @@ export class Router implements IRouter {
       );
 
     this.verifyAccessControl(route, request, response);
-    this.addCustomAtributesInRequest(request, parsedUrl.searchParams);
+    const params: Atributes = {};
+    parsedUrl.searchParams.forEach((value, param) => {
+      params[param] = value;
+    });
+
+    this.addCustomAtributesInRequest(request, params);
     this.send(request, response, route, method);
   }
 
@@ -72,15 +80,17 @@ export class Router implements IRouter {
         statusCode = Http.StatusCode.NO_CONTENT;
 
       response.writeHead(statusCode, { "Content-Type": "application/json" });
-      response.write(JSON.stringify(result.getValue()));
+      if (statusCode !== Http.StatusCode.NO_CONTENT) {
+        response.write(JSON.stringify(result.getValue()));
 
-      this.logger.info(
-        JSON.stringify({
-          body: request.body,
-          headers: request.headers,
-          response: result.getValue(),
-        })
-      );
+        this.logger.info(
+          JSON.stringify({
+            body: request?.body,
+            headers: request.headers,
+            response: result.getValue(),
+          })
+        );
+      }
     } else {
       let statusCode = BaseStatusToHttpMapper.map(result.error?.code);
       response.writeHead(statusCode, {
@@ -105,6 +115,7 @@ export class Router implements IRouter {
 
   private addRoute<C>(addRouteParams: AddRouteParams<C>) {
     const { path, controller, method, auth } = addRouteParams;
+   
     const route = this.routes?.find((e) => {
       return e.method === method && e.path === path;
     });
@@ -113,7 +124,12 @@ export class Router implements IRouter {
       throw new DuplicatedRouteException();
     }
 
-    this.routes?.push({ path, method, controller, auth });
+    this.routes?.push({
+      path,
+      method,
+      controller,
+      auth,
+    });
   }
 
   private verifyAccessControl(
@@ -151,10 +167,15 @@ export class Router implements IRouter {
 
   private addCustomAtributesInRequest(
     request: Http.Request,
-    params: URLSearchParams
+    params: Atributes
   ) {
+    Object.assign(request, {
+      params,
+    });
     request.on("data", (body: any) => {
-      Object.assign(request, { body: JSON.parse(body), params });
+      Object.assign(request, {
+        body: JSON.parse(body),
+      });
     });
   }
 
@@ -177,6 +198,7 @@ export class Router implements IRouter {
           body: request?.body,
           params: request?.params,
         });
+
         this.handleResponse(request, response, result);
       } catch (error: any) {
         if (error instanceof BaseException) {
