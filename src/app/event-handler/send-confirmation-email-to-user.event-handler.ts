@@ -14,13 +14,13 @@ export class SendConfirmationEmailToUserEventHandler extends DomainEventHandler 
     this.logger.info(JSON.stringify(event));
     const { login, name, aggregateId } = event;
     await this.emailService.send({
-      to: process.env.MAILER_USER as string,
-      from: login,
+      to: login,
+      from: process.env.MAILER_USER as string,
       subject: "Email Confirmation",
       body: `<h1>Email Confirmation</h1>
       <h2>Hello ${name}</h2>
       <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-      <a href=${process.env.HOST}/user/confirm?id=${aggregateId}> Click here</a>
+      <a href=${process.env.HOST}/user/${aggregateId}/confirm> Click here</a>
       </div>`,
       context: "USER CONFIRMATION",
     });

@@ -1,7 +1,8 @@
 import { ControllerRequest, IController } from "@/app/interfaces";
 import { CreateUserInputDTO, CreateUserOutputDTO, ICreateUserUseCase } from "@/app/use-cases/user";
 
-export class CreateUserController implements IController<CreateUserOutputDTO> {
+export type ICreateUserController = IController<CreateUserOutputDTO> 
+export class CreateUserController implements ICreateUserController {
 
   constructor(private readonly createUser: ICreateUserUseCase) {
   }

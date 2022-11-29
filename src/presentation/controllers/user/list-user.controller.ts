@@ -1,11 +1,10 @@
 import { IController } from "@/app/interfaces";
 import { IListUserUseCase, ListUser } from "@/app/use-cases/user";
 
-export class ListUserController implements IController<ListUser.Output[]> {
-
-  constructor(private readonly listUserUseCase: IListUserUseCase) {
-  }
+export type IListUserController = IController<ListUser.Output[]>;
+export class ListUserController implements IListUserController {
+  constructor(private readonly listUserUseCase: IListUserUseCase) {}
   async handle() {
-    return await this.listUserUseCase.execute()
+    return await this.listUserUseCase.execute();
   }
 }

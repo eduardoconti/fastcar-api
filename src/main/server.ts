@@ -1,69 +1,37 @@
 import "./config/module-alias";
 import "reflect-metadata";
 import * as http from "http";
-import {
-  CreateUserControllerFactory,
-  ListUserControllerFactory,
-} from "./factories/controllers/user";
-import { Router } from "../infra/http/router/router";
 import { OrmClientAdapter } from "../infra/adapters";
-import { HealthCheckControllerFactory } from "./factories/controllers/health";
 import { Logger } from "@/infra/logger";
-import { AuthControllerFactory } from "./factories/controllers/auth";
 import { Atributes, Http } from "@/infra/http/interfaces";
 import { SendConfirmationEmailToUserEventHandlerFactory } from "./factories/event-handler";
-import { ConfirmUserRegistrationControllerFactory } from "./factories/controllers/user";
 import { RouterManager } from "@/infra/http/router/router-manager";
-import { HealthCheckRouter } from "@/presentation/controllers/health/health-check.router";
+import { HealthCheckRouter } from "@/presentation/controllers/health";
+import { AuthRouter } from "@/presentation/controllers/auth";
+import {
+  ConfirmUserRegistrationRoute,
+  CreateUserRoute,
+  ListUserRoute,
+} from "@/presentation/controllers/user";
 
-const routerManager = new Router();
 const orm = new OrmClientAdapter().adapt();
 const logger = new Logger();
-const createUserController = CreateUserControllerFactory.build(orm);
-const listUserController = ListUserControllerFactory.build(orm);
-const healthCheckController = HealthCheckControllerFactory.build();
-const authController = AuthControllerFactory.build(orm);
-const ConfirmUserRegistrationController =
-  ConfirmUserRegistrationControllerFactory.build(orm);
+
 //Register domain events handlers
 SendConfirmationEmailToUserEventHandlerFactory.build().listen();
 
 //Register routes
-routerManager.post({ path: "/login", controller: authController });
-routerManager.post({
-  path: "/user",
-  controller: createUserController,
-  auth: "bearer",
-});
-routerManager.get({
-  path: "/user",
-  controller: listUserController,
-  auth: "bearer",
-});
-routerManager.get({ path: "/", controller: healthCheckController });
-routerManager.get({
-  path: "/user/confirm",
-  controller: ConfirmUserRegistrationController,
-});
+HealthCheckRouter.create();
+AuthRouter.create({ ormClient: orm });
+ConfirmUserRegistrationRoute.create({ ormClient: orm });
+CreateUserRoute.create({ ormClient: orm });
+ListUserRoute.create({ ormClient: orm });
 
 const server = http.createServer(
-  async (req: Http.Request, res: Http.Response) => {
-    req.on("data", (body: any) => {
-      Object.assign(req, {
-        body: JSON.parse(body),
-      });
-    });
-    const { searchParams, pathname } = parseUrl(req);
-    const params: Atributes = {};
-    searchParams.forEach((value, param) => {
-      params[param] = value;
-    });
-
-    Object.assign(req, {
-      params,
-      pathName: pathname,
-    });
-    await routerManager.execute(req, res);
+  async (req: http.IncomingMessage, res: Http.Response) => {
+    await insertBodyInRequest(req);
+    insertUrlParamsInRequest(req);
+    await RouterManager.execute(req as Http.Request, res);
   }
 );
 
@@ -71,6 +39,28 @@ server.listen(process.env.PORT, () => {
   logger.system(`server started on port: ${process.env.PORT}`);
 });
 
-const parseUrl = (request: Http.Request): URL => {
+const parseUrl = (request: http.IncomingMessage): URL => {
   return new URL(request.url as string, `https://${request.headers["host"]}`);
+};
+
+const insertUrlParamsInRequest = (request: http.IncomingMessage): void => {
+  const { searchParams, pathname } = parseUrl(request);
+  const params: Atributes = {};
+  searchParams.forEach((value, param) => {
+    params[param] = value;
+  });
+  Object.assign(request, {
+    params,
+    pathName: pathname,
+  });
+};
+
+const insertBodyInRequest = async (
+  request: http.IncomingMessage
+): Promise<void> => {
+  await request.on("data", (body: any) => {
+    Object.assign(request, {
+      body: JSON.parse(body),
+    });
+  });
 };

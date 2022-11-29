@@ -1,6 +1,6 @@
 import { badRequest, unauthorized } from "@/app/errors/errors";
-import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
-import { Result } from "@/domain/contracts";
+import { IEncrypter, IJwtService } from "@/app/interfaces";
+import { IUserRepository, Result } from "@/domain/contracts";
 import { IUseCase } from "@/domain/interfaces";
 import { Email } from "@/domain/value-objects/user";
 

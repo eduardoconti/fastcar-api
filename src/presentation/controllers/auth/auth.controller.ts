@@ -3,7 +3,8 @@ import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth";
 import { Result } from "@/domain/contracts";
 
 type Request = Pick<ControllerRequest<AuthUseCase.Input>, "body">;
-export class AuthController implements IController<AuthUseCase.Output> {
+export type IAuthController = IController<AuthUseCase.Output>
+export class AuthController implements IAuthController {
   constructor(private readonly authUseCase: IAuthUseCase) {}
 
   async handle(request: Request): Promise<Result<AuthUseCase.Output>> {

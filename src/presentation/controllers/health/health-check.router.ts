@@ -8,7 +8,7 @@ export class HealthCheckRouter extends Route {
     const controller = HealthCheckControllerFactory.build();
     return new HealthCheckRouter({
       method: 'GET',
-      path: '/',
+      path: 'health',
       controller,
     })
   }

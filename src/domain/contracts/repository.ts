@@ -1,4 +1,5 @@
 
+import { User, UserProps } from '../entities';
 import { DeepPartial } from '../types';
 import { ID } from '../value-objects/id.value-object';
 import { BaseEntityProps } from './entity';
@@ -62,3 +63,11 @@ export interface IFindManyPaginated<Entity, EntityProps> {
 export interface IDeleteOne<Entity> {
   delete(entity: Entity): Promise<Entity>;
 }
+
+export interface IUserRepository
+  extends ISave<User>,
+    IFindOne<User, UserProps>,
+    IFindMany<User, UserProps> {
+  update(user: User): Promise<User> | User;
+}
+

@@ -1,5 +1,4 @@
-
-import { HealthCheckController } from "@/app/controllers/health"
+import { HealthCheckController } from "./health-check.controller"
 
 interface SutTypes {
   sut: HealthCheckController

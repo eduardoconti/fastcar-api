@@ -1,4 +1,5 @@
-import { IUserRepository } from "@/app/interfaces";
+import { IUserRepository } from "@/domain/contracts"
+
 export interface IOrmClient {
   userRepository: IUserRepository
   connect?(): Promise<void>;

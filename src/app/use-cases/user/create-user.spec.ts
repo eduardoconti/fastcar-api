@@ -1,9 +1,9 @@
 
 import { User, UserProps } from "@/domain/entities"
 import { CreateUserUseCase } from "@/app/use-cases/user"
-import { IEncrypter, IUserRepository } from "@/app/interfaces"
+import { IEncrypter } from "@/app/interfaces"
 import { badRequest } from "@/app/errors/errors"
-import { QueryParams } from "@/domain/contracts"
+import { IUserRepository, QueryParams } from "@/domain/contracts"
 import { userEntityMock } from "@/domain/entities/mocks"
 import { createUserDtoMock, createUserOutputMock } from "@/infra/database/models/mocks"
 
@@ -86,21 +86,4 @@ describe('Create user useCase', () => {
     expect(result.error).toEqual(badRequest('This login belongs to a user'))
   })
 
-  it('should fail to execute useCase when confirmPassword is null', async () => {
-    const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
-    const result = await sut.execute({ ...createUserDtoMock, confirmPassword: null } as any)
-    expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findOne).not.toBeCalled()
-    expect(result.error).toEqual(badRequest('confirmPassword should be not empty'))
-  })
-
-  it('should fail to execute useCase when passwords do not match', async () => {
-    const { sut, userRepositoryStub } = makeSut()
-    jest.spyOn(userRepositoryStub, 'findOne').mockResolvedValue(undefined)
-    const result = await sut.execute({ ...createUserDtoMock, confirmPassword: 'lalala' } as any)
-    expect(result.isFailure).toBeTruthy()
-    expect(userRepositoryStub.findOne).toBeCalledTimes(1)
-    expect(result.error).toEqual(badRequest('As senhas não coincidem'))
-  })
 })

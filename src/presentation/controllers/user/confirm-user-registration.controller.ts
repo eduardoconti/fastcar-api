@@ -6,21 +6,22 @@ import {
 } from "@/app/use-cases/user";
 import { ArgumentInvalidException, BaseException } from "@/domain/exceptions";
 
+export type IConfirmUserRegistrationController =
+  IController<ConfirmUserRegistrationOutputDTO>;
 export class ConfirmUserRegistrationController
-  implements IController<ConfirmUserRegistrationOutputDTO>
+  implements IConfirmUserRegistrationController
 {
   constructor(
     private readonly confirmUserRegistration: IConfirmUserRegistrationUseCase
   ) {}
   async handle(
-    request: ControllerRequest<undefined, ConfirmUserRegistrationInputDTO>
+    request: ControllerRequest<undefined, undefined, ConfirmUserRegistrationInputDTO>
   ) {
-    console.log(request.params)
-    if (!request.params?.id) {
-      throw new ArgumentInvalidException("Invalid controller params");
+    if (!request.atributes?.id) {
+      throw new ArgumentInvalidException("Invalid controller atributes");
     }
     return await this.confirmUserRegistration.execute({
-      id: request.params?.id,
+      id: request.atributes?.id,
     });
   }
 }

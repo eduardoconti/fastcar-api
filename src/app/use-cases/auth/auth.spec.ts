@@ -1,8 +1,8 @@
 import { User, UserProps } from "@/domain/entities";
 import { AuthUseCase } from "@/app/use-cases/auth";
-import { IEncrypter, IJwtService, IUserRepository } from "@/app/interfaces";
+import { IEncrypter, IJwtService } from "@/app/interfaces";
 import { badRequest, unauthorized } from "@/app/errors/errors";
-import { QueryParams } from "@/domain/contracts";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
 import { userEntityMock } from "@/domain/entities/mocks";
 import {
   authInputMock,
@@ -24,15 +24,18 @@ const makeJwtServiceStub = (): IJwtService => {
 const makeUserRepositoryStub = (): IUserRepository => {
   class MakeUserRepositoryStub implements IUserRepository {
     save(entity: User): Promise<User> {
+      userEntityMock.confirmRegistration()
       return Promise.resolve(userEntityMock);
     }
     findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+      userEntityMock.confirmRegistration()
       return Promise.resolve(userEntityMock);
     }
     findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
       return Promise.resolve([userEntityMock]);
     }
     update(entity: User): Promise<User> {
+      userEntityMock.confirmRegistration()
       return Promise.resolve(userEntityMock);
     }
   }

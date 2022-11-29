@@ -1,8 +1,7 @@
 import { User, UserProps } from "@/domain/entities";
 import { ConfirmUserRegistrationUseCase } from "@/app/use-cases/user";
-import { IEncrypter, IUserRepository } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
-import { QueryParams } from "@/domain/contracts";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
 import { userEntityMock } from "@/domain/entities/mocks";
 import { DateVO, UUID } from "@/domain/value-objects";
 import {

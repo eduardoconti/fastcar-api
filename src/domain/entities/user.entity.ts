@@ -1,3 +1,4 @@
+import { createLogicalNot } from "typescript";
 import { AggregateRoot } from "../contracts";
 import { UserRegisteredDomainEvent } from "../events/user-registered.domain-event";
 import { UUID } from "../value-objects";
@@ -15,12 +16,28 @@ export type UserProps = {
   password: Password;
   status: UserStatus;
 };
+
+export type UserPrimitivesProps = {
+  name: string;
+  login: string;
+  password: string;
+  status: string;
+};
 export class User extends AggregateRoot<UserProps> {
   protected readonly _id!: UUID;
 
-  static create(user: UserProps) {
+  static create(user: Omit<UserPrimitivesProps, 'status'>) {
     const id = UUID.generate();
-    const userAgg = new User({ id, props: user });
+    const { name, login, password } = user;
+    const userAgg = new User({
+      id,
+      props: {
+        name: new Name(name),
+        login: new Email(login),
+        password: new Password(password),
+        status: new UserStatus(UserStatusEnum.DISABLED),
+      },
+    });
     userAgg.addEvent(
       new UserRegisteredDomainEvent({
         aggregateId: userAgg.id.value,
@@ -40,11 +57,11 @@ export class User extends AggregateRoot<UserProps> {
     this.props.status = new UserStatus(UserStatusEnum.ACTIVATED);
   }
 
-  isDisabled(): boolean{
-    return this.props.status.value === UserStatusEnum.DISABLED
+  isDisabled(): boolean {
+    return this.props.status.value === UserStatusEnum.DISABLED;
   }
 
-  inactivateUser(){
+  inactivateUser() {
     this.props.status = new UserStatus(UserStatusEnum.DISABLED);
   }
 }

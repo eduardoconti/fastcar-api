@@ -1,4 +1,4 @@
-import { IUserRepository } from "@/app/interfaces";
+import { IUserRepository } from "@/domain/contracts"
 import { Result } from "@/domain/contracts";
 import { IUseCase } from "@/domain/interfaces";
 import { ListUser } from "./list-user.dto";

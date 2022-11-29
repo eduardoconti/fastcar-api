@@ -1,5 +1,5 @@
-import { IUserRepository } from "@/app/interfaces/repository.interface";
-import { QueryParams } from "@/domain/contracts";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
+import { DomainEvents } from "@/domain/domain-events";
 import { User, UserProps } from "@/domain/entities";
 import { PrismaClient } from "@prisma/client";
 import { UserOrmMapper } from "../mapper";
@@ -17,6 +17,8 @@ export class UserPrismaRepository implements IUserRepository {
     await this.prismaClient.user.create({
       data: UserOrmMapper.toModel(entity),
     });
+
+    await DomainEvents.publishEvents(entity.id);
     return entity;
   }
 
@@ -32,6 +34,7 @@ export class UserPrismaRepository implements IUserRepository {
       data: UserOrmMapper.toModel(entity),
       where: { id: entity.id.value },
     });
+    await DomainEvents.publishEvents(entity.id);
     return entity;
   }
 }

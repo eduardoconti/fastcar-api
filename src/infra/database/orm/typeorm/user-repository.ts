@@ -1,5 +1,4 @@
-import { IUserRepository } from "@/app/interfaces/repository.interface";
-import { QueryParams } from "@/domain/contracts";
+import { IUserRepository, QueryParams } from "@/domain/contracts";
 import { User, UserProps } from "@/domain/entities";
 import { DataSource, Repository } from "typeorm";
 import { UserModel } from "../../models";

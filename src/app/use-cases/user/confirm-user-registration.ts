@@ -3,9 +3,8 @@ import {
   ConfirmUserRegistrationInputDTO,
   ConfirmUserRegistrationOutputDTO,
 } from "@/app/use-cases/user";
-import { IUserRepository } from "@/app/interfaces";
 import { badRequest } from "@/app/errors/errors";
-import { Result } from "@/domain/contracts";
+import { IUserRepository, Result } from "@/domain/contracts";
 import { DomainEvents } from "@/domain/domain-events";
 import { UUID } from "@/domain/value-objects";
 

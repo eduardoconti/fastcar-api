@@ -1,7 +1,7 @@
 import { User, UserProps } from "@/domain/entities";
 import { ListUserUseCase } from "@/app/use-cases/user";
 import { QueryParams } from "@/domain/contracts";
-import { IUserRepository } from "@/app/interfaces";
+import { IUserRepository } from "@/domain/contracts"
 import { userEntityMock } from "@/domain/entities/mocks";
 
 const makeUserRepositoryStub = (): IUserRepository => {
