@@ -1,7 +1,7 @@
 
 import { Result } from "@/domain/contracts"
 import { CreateUserInputDTO, CreateUserOutputDTO, ICreateUserUseCase } from "@/app/use-cases/user"
-import { createUserDtoMock, userModelMockData } from "@/infra/database/models/mocks"
+import { ceateUserControllerInput, createUserDtoMock, userModelMockData } from "@/infra/database/models/mocks"
 import { CreateUserController } from "./create-user.controller"
 
 
@@ -38,7 +38,7 @@ describe('Create user controller', () => {
     const { sut, createUserUseCaseStub } = makeSut()
     jest.spyOn(createUserUseCaseStub, 'execute').mockReturnValue(Result.ok(userModelMockData))
 
-    const result = await sut.handle({ body: createUserDtoMock })
+    const result = await sut.handle({ body: ceateUserControllerInput })
 
     expect(result.isSuccess).toBeTruthy()
     expect(createUserUseCaseStub.execute).toBeCalledTimes(1)

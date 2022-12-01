@@ -1,5 +1,5 @@
 import { AggregateRoot } from "../contracts";
-import { UserRegisteredDomainEvent } from "../events/user-registered.domain-event";
+import { UserRegisteredDomainEvent } from "../events";
 import { UUID } from "../value-objects";
 import {
   Email,
