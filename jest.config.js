@@ -6,6 +6,8 @@ module.exports = {
     '!<rootDir>/src/**/*.interface.ts',
     '!<rootDir>/src/main/config/**',
     '!<rootDir>/src/main/server.ts',
+    '!<rootDir>/src/**/*.dto.ts',
+    '!<rootDir>/src/infra/**',
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

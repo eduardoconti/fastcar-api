@@ -3,7 +3,7 @@ import { UserModel } from "@/infra/database/models"
 import { CreateUserControllerInput } from "@/presentation/controllers/user/create-user.controller.dto"
 
 export const userModelMockData: UserModel = {
-  id: 'fakeUuid',
+  id: '58daf3da-aa8d-4dab-b226-b41d10091348',
   name: 'fakeName',
   login: 'fakeLogin@123.com',
   password: 'fakePassword',
@@ -18,7 +18,7 @@ export const createUserDtoMock: CreateUserInputDTO = {
 }
 
 export const createUserOutputMock: CreateUserOutputDTO = {
-  id: 'fakeUuid',
+  id: '58daf3da-aa8d-4dab-b226-b41d10091348',
   name: 'fakeName',
   login: 'fakeLogin@123.com',
 }

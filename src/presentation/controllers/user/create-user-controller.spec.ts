@@ -1,7 +1,7 @@
 
 import { Result } from "@/domain/contracts"
 import { CreateUserInputDTO, CreateUserOutputDTO, ICreateUserUseCase } from "@/app/use-cases/user"
-import { ceateUserControllerInput, createUserDtoMock, userModelMockData } from "@/infra/database/models/mocks"
+import { ceateUserControllerInput, userModelMockData } from "@/infra/database/models/mocks"
 import { CreateUserController } from "./create-user.controller"
 
 
