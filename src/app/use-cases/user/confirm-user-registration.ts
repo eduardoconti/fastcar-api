@@ -5,7 +5,6 @@ import {
 } from "@/app/use-cases/user";
 import { badRequest } from "@/app/errors/errors";
 import { IUserRepository, Result } from "@/domain/contracts";
-import { DomainEvents } from "@/domain/domain-events";
 import { UUID } from "@/domain/value-objects";
 
 export interface IConfirmUserRegistrationUseCase
@@ -33,7 +32,6 @@ export class ConfirmUserRegistrationUseCase
     userEntity.confirmRegistration();
 
     await this.userRepository.update(userEntity);
-    await DomainEvents.publishEvents(userEntity.id);
     return Result.ok();
   }
 }

@@ -5,7 +5,7 @@ import {
   HandleControllerException,
   InvalidRouteException,
 } from "@/infra/exceptions";
-import { Atributes, Http } from "../interfaces";
+import { Atributes, Http, IMiddleware } from "../interfaces";
 import { RouterManager } from "./router-manager";
 
 export type RouteProps = {
@@ -19,6 +19,7 @@ export type CreateRouteProps = {
   method: Http.Methods;
   controller: IController;
   auth?: Http.AuthenticationType;
+  middlewares?: IMiddleware[];
 };
 export abstract class Route {
   protected abstract _controller: IController;
@@ -27,12 +28,14 @@ export abstract class Route {
   protected _regex!: RegExp;
   protected _path!: string;
   protected _atributes?: string[];
+  protected _middlewares?: IMiddleware[];
 
   constructor(props: CreateRouteProps) {
     this.validate(props);
     this._method = props.method;
     this._authenticationType = props.auth;
     this._path = props.path;
+    this._middlewares = props.middlewares;
     this.setControler(props.controller);
     this.buildRegexToMatchRoute(props.path);
     RouterManager.register(this);
@@ -104,6 +107,22 @@ export abstract class Route {
 
   get regex(): RegExp {
     return this._regex;
+  }
+
+  async executeMiddlewares(
+    req: Http.Request,
+    res: Http.Response
+  ): Promise<Result<any>[]> {
+    if (!this._middlewares) {
+      return [Result.ok()];
+    }
+
+    return await Promise.all(
+      this._middlewares?.map((e) => {
+        const result = e.execute(req, res);
+        return result;
+      })
+    );
   }
 
   private extractAtributesFromPath(urlPath: string): Atributes | undefined {

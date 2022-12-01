@@ -14,13 +14,15 @@ export class RouterManager {
   private static jwtService: IJwtService = new JwtAdapter().adapt();
 
   static register(route: Route) {
-    if(this.routes.find((e)=>{
-      return e.method === route.method && e.path === route.path
-    })){
-      throw new DuplicatedRouteException(route)
+    if (
+      this.routes.find((e) => {
+        return e.method === route.method && e.path === route.path;
+      })
+    ) {
+      throw new DuplicatedRouteException(route);
     }
-    this.logger.system(`mapped route: ${route.method} ${route.path}`);
     this.routes.push(route);
+    this.logger.system(`mapped route: ${route.method} ${route.path} ${route.regex}`);
   }
 
   static async execute(request: Http.Request, response: Http.Response) {
@@ -37,13 +39,19 @@ export class RouterManager {
     if (accessResult.isFailure)
       return HttpResponseHandler.send(request, response, accessResult);
 
+    const resultMiddlewares = await route.executeMiddlewares(request, response);
+    if (resultMiddlewares) {
+      const combine = Result.combine(resultMiddlewares);
+      if (combine.isFailure)
+        return HttpResponseHandler.send(request, response, combine);
+    }
     const result = await route.handleController(request);
     return HttpResponseHandler.send(request, response, result);
   }
 
   private static findRoute(path: string, method: string): Route | undefined {
-    const route = this.routes?.find((e) => {
-      return e.method.toUpperCase() === method && path.match(e.regex);
+    const route = this.routes?.find((route) => {
+      return route.method.toUpperCase() === method && path.match(route.regex);
     });
 
     return route;

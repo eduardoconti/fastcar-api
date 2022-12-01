@@ -13,7 +13,8 @@ export class Name extends ValueObject<string> {
   protected validate({ value }: DomainPrimitive<string>): void {
     if (value.length <= 2 || value.length > 100) {
       throw new ArgumentInvalidException(
-        "User must be greater than 2 chars and less than 100."
+        "User must be greater than 2 chars and less than 100.",
+        value
       );
     }
   }

@@ -21,7 +21,7 @@ export class Email extends ValueObject<string> {
       );
 
     if (!string) {
-      throw new ArgumentInvalidException("invalid email");
+      throw new ArgumentInvalidException("invalid email", value);
     }
   }
 }

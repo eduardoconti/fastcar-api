@@ -1,4 +1,3 @@
-import { createLogicalNot } from "typescript";
 import { AggregateRoot } from "../contracts";
 import { UserRegisteredDomainEvent } from "../events/user-registered.domain-event";
 import { UUID } from "../value-objects";
