@@ -22,7 +22,7 @@ export class RouterManager {
       throw new DuplicatedRouteException(route);
     }
     this.routes.push(route);
-    this.logger.system(`mapped route: ${route.method} ${route.path} ${route.regex}`);
+    this.logger.system(`mapped route: ${route.method} ${route.path} ${route.regex} atributes: ${route.atributes}`);
   }
 
   static async execute(request: Http.Request, response: Http.Response) {
@@ -74,5 +74,9 @@ export class RouterManager {
         return Result.fail(unauthorized("Falha de autenticação!"));
     }
     return Result.ok();
+  }
+
+  static clearRoutes(){
+    this.routes = []
   }
 }

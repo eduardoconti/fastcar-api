@@ -8,12 +8,6 @@ import {
 import { Atributes, Http, IMiddleware } from "../interfaces";
 import { RouterManager } from "./router-manager";
 
-export type RouteProps = {
-  path: string;
-  method: Http.Methods;
-  auth?: Http.AuthenticationType;
-};
-
 export type CreateRouteProps = {
   path: string;
   method: Http.Methods;
@@ -24,9 +18,9 @@ export type CreateRouteProps = {
 export abstract class Route {
   protected abstract _controller: IController;
   protected _method!: string;
-  protected _authenticationType?: string;
   protected _regex!: RegExp;
   protected _path!: string;
+  protected _authenticationType?: string;
   protected _atributes?: string[];
   protected _middlewares?: IMiddleware[];
 
@@ -36,6 +30,7 @@ export abstract class Route {
     this._authenticationType = props.auth;
     this._path = props.path;
     this._middlewares = props.middlewares;
+    this._atributes = [];
     this.setControler(props.controller);
     this.buildRegexToMatchRoute(props.path);
     RouterManager.register(this);
@@ -45,9 +40,13 @@ export abstract class Route {
     this._controller = controller;
   }
 
-  private validate(props: RouteProps) {
+  private validate(props: CreateRouteProps) {
     const { path } = props;
-    if (!Guard.isEmpty(path.match(/^\/|[0-9]|[$%?!@()-+*\\]/g))) {
+    if (
+      !Guard.isEmpty(
+        path.match(/^\/|[0-9]|[$%?!@()-+*\\]|[\/]{2,}|[^\w]$|[:]{2,}/g)
+      )
+    ) {
       throw new InvalidRouteException({
         route: this.constructor.name,
         path,
@@ -74,23 +73,16 @@ export abstract class Route {
   private buildRegexToMatchRoute(path: string) {
     const arrayPath = path.split("/");
     let result = "";
-    let quantityAtributes = 0;
-    arrayPath.forEach((e, i) => {
-      if (!Guard.isEmpty(e.match(/^:/g))) {
-        result += `(.*)`;
-        quantityAtributes++;
+    arrayPath.forEach((pathName, i) => {
+      if (!Guard.isEmpty(pathName.match(/^:/g))) {
+        result += `([a-zA-Z0-9-]+)`;
+        this._atributes?.push(pathName.replace(":", ""));
       } else {
-        result += `${e}\\b`;
+        result += `${pathName}\\b`;
       }
       if (i < arrayPath.length - 1) result += `\/`;
     });
-    this._regex = new RegExp(result, "gm");
-    if (quantityAtributes > 0) {
-      this._atributes = path
-        .replace(this._regex, this.replaceValue(quantityAtributes))
-        .split(",")
-        .map((e) => e.replace(":", ""));
-    }
+    this._regex = new RegExp(`${result}$`, "gm");
   }
 
   get method(): string {
@@ -107,6 +99,10 @@ export abstract class Route {
 
   get regex(): RegExp {
     return this._regex;
+  }
+
+  get atributes(): string[] | undefined {
+    return this._atributes;
   }
 
   async executeMiddlewares(
@@ -129,18 +125,9 @@ export abstract class Route {
     const regexResult = this._regex.exec(urlPath);
     if (!regexResult) return;
     let atributes: Atributes = {};
-    this?._atributes?.forEach((e, i) => {
-      atributes[e] = regexResult[i + 1];
+    this?._atributes?.forEach((atribute, i) => {
+      atributes[atribute] = regexResult[i + 1];
     });
     return atributes;
-  }
-
-  private replaceValue(quantity: number): string {
-    let replace = "";
-    for (let i = 1; i <= quantity; i++) {
-      replace += `$${i}`;
-      if (i < quantity) replace += ",";
-    }
-    return replace;
   }
 }
