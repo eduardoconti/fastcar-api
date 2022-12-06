@@ -15,7 +15,7 @@ services:
     env_file:
       - .env
     networks:
-      - fastcar-api
+      - fastcar
     depends_on:
       - postgres
   
@@ -30,7 +30,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     networks:
-      - fastcar-api
+      - fastcar
     restart: always
 
 # CONTAINER DO SISTEMA GERENCIADOR DE BANCO DE DADOS (SGBD)
@@ -39,12 +39,12 @@ services:
     ports:
       - 8080:8080
     networks:
-      - fastcar-api
+      - fastcar
     depends_on:
       - postgres
 
 networks:
-  fastcar-api:
+  fastcar:
 
 volumes:
   pg-data:
