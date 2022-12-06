@@ -1,6 +1,7 @@
 import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth";
 import { Result } from "@/domain/contracts";
 import { Http } from "@/infra/http/interfaces";
+import { RouterManager } from "@/infra/http/router/router-manager";
 import { authInputMock, authOutputMock } from "../mocks";
 import { AuthControllerInput, IAuthController } from "./auth.controller";
 import { AuthRouter } from "./auth.router";
@@ -32,7 +33,9 @@ const makeSut = (): SutTypes => {
   };
 };
 describe("auth router", () => {
-
+  beforeEach(() => {
+    RouterManager.clearRoutes();
+  });
   it("should shoud be defined", async () => {
     const { sut } = makeSut();
     expect(sut).toBeDefined();
