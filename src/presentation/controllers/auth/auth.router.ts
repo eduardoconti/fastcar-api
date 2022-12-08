@@ -1,11 +1,11 @@
 import { IOrmClient } from "@/infra/database/orm/interfaces";
-import { Route } from "@/infra/http/router/route";
+import { ValidateBodyMiddleware, Route } from "@/infra/http/router";
 import { AuthControllerFactory } from "@/main/factories/controllers/auth";
-import { IAuthController } from "./auth.controller";
+import { AuthControllerInput, IAuthController } from "./";
 
 export type CreateAuthRouterProps = {
-  ormClient: IOrmClient
-}
+  ormClient: IOrmClient;
+};
 export class AuthRouter extends Route {
   protected _controller!: IAuthController;
   static create({ ormClient }: CreateAuthRouterProps) {
@@ -14,6 +14,7 @@ export class AuthRouter extends Route {
       method: "POST",
       path: "auth",
       controller,
+      middlewares: [new ValidateBodyMiddleware(AuthControllerInput)],
     });
   }
 }

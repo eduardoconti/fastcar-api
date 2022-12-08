@@ -3,13 +3,13 @@ import { Result } from "@/domain/contracts";
 import { Http } from "@/infra/http/interfaces";
 import { RouterManager } from "@/infra/http/router/router-manager";
 import { authInputMock, authOutputMock } from "../mocks";
-import { AuthControllerInput, IAuthController } from "./auth.controller";
+import { AuthControllerRequest, IAuthController } from "./auth.controller";
 import { AuthRouter } from "./auth.router";
 
 const makeAuthControllerStub = (): IAuthController => {
   class AuthControllerStub implements IAuthController {
     async handle(
-      input: AuthControllerInput
+      input: AuthControllerRequest
     ): Promise<Result<AuthUseCase.Output>> {
       return Result.ok(authOutputMock);
     }

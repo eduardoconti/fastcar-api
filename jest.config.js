@@ -8,6 +8,7 @@ module.exports = {
     '!<rootDir>/src/main/server.ts',
     '!<rootDir>/src/**/*.dto.ts',
     '!<rootDir>/src/infra/adapters/**',
+    '!<rootDir>/src/domain/types/**'
   ],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',

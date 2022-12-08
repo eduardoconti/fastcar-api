@@ -33,18 +33,7 @@ services:
       - fastcar
     restart: always
 
-# CONTAINER DO SISTEMA GERENCIADOR DE BANCO DE DADOS (SGBD)
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    networks:
-      - fastcar
-    depends_on:
-      - postgres
-
 networks:
   fastcar:
-
 volumes:
   pg-data:

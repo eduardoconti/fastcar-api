@@ -1,7 +1,7 @@
 import { User, UserProps } from "@/domain/entities";
 import { AuthUseCase } from "@/app/use-cases/auth";
 import { IEncrypter, IJwtService } from "@/app/interfaces";
-import { badRequest, unauthorized } from "@/app/errors/errors";
+import { unauthorized } from "@/app/errors/errors";
 import { IUserRepository, QueryParams } from "@/domain/contracts";
 import { userEntityMock } from "@/domain/entities/mocks";
 import {
@@ -24,18 +24,18 @@ const makeJwtServiceStub = (): IJwtService => {
 const makeUserRepositoryStub = (): IUserRepository => {
   class MakeUserRepositoryStub implements IUserRepository {
     save(entity: User): Promise<User> {
-      userEntityMock.confirmRegistration()
+      userEntityMock.confirmRegistration();
       return Promise.resolve(userEntityMock);
     }
     findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
-      userEntityMock.confirmRegistration()
+      userEntityMock.confirmRegistration();
       return Promise.resolve(userEntityMock);
     }
     findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
       return Promise.resolve([userEntityMock]);
     }
     update(entity: User): Promise<User> {
-      userEntityMock.confirmRegistration()
+      userEntityMock.confirmRegistration();
       return Promise.resolve(userEntityMock);
     }
   }
@@ -92,30 +92,6 @@ describe("Auth useCase", () => {
     expect(jwtServiceStub.sign).toBeCalledTimes(1);
     expect(encryptUseCaseStub.compare).toBeCalledTimes(1);
     expect(result.getValue()).toEqual(authOutputMock);
-  });
-
-  it("should fail to execute useCase when login is null", async () => {
-    const { sut } = makeSut();
-
-    const result = await sut.execute({
-      ...authInputMock,
-      login: undefined,
-    } as any);
-
-    expect(result.isFailure).toBeTruthy();
-    expect(result.error).toEqual(badRequest("o campo login é obrigatório!"));
-  });
-
-  it("should fail to execute useCase when password is null", async () => {
-    const { sut } = makeSut();
-
-    const result = await sut.execute({
-      ...authInputMock,
-      password: undefined,
-    } as any);
-
-    expect(result.isFailure).toBeTruthy();
-    expect(result.error).toEqual(badRequest("o campo password é obrigatório!"));
   });
 
   it("should fail to execute useCase when not found user", async () => {

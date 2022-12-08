@@ -297,7 +297,7 @@ describe("test router manager", () => {
     headers["authorization"] =
       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0ZSI6InRlc3RlIiwiaWF0IjoxNjYzNzMwNDQ2fQ._92FNVoWxKMzvtT1LXh8Hq18npDV_SEvZQ_MPpzI0Ao";
 
-    it("should be send success", () => {
+    it("should be send PUT success", () => {
       expect(() =>
         HttpResponseHandler.send(
           {
@@ -317,7 +317,7 @@ describe("test router manager", () => {
       ).not.toThrowError();
     });
 
-    it("should be send success", () => {
+    it("should be send POST success", () => {
       expect(() =>
         HttpResponseHandler.send(
           {
@@ -326,6 +326,25 @@ describe("test router manager", () => {
             on: (data: any) => {},
             headers: headers,
             body: { teste: "123" },
+          } as unknown as Http.Request,
+          {
+            write: (data: any) => {},
+            writeHead: (status: any, data: any) => {},
+            end: () => {},
+          } as unknown as Http.Response,
+          Result.ok()
+        )
+      ).not.toThrowError();
+    });
+
+    it("should be send GET success", () => {
+      expect(() =>
+        HttpResponseHandler.send(
+          {
+            pathName: "/teste",
+            method: "GET",
+            on: (data: any) => {},
+            headers: headers,
           } as unknown as Http.Request,
           {
             write: (data: any) => {},

@@ -6,7 +6,7 @@ export class NodeMailer implements IEmailService {
     private readonly transporter: Transporter,
     private readonly logger: ILogger
   ) {}
-  async send(data: SendEmailProps): Promise<void> {
+  send(data: SendEmailProps): void {
     const { from, to, subject, body } = data;
     this.logger.info(
       `sending email ${data.context}: ${JSON.stringify({

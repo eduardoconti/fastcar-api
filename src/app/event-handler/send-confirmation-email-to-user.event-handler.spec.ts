@@ -1,25 +1,27 @@
 import { UserStatusEnum } from "@/domain/value-objects/user";
 import { Logger } from "@/infra/logger";
 import { IEmailService, SendEmailProps } from "../interfaces";
+import { ISendConfirmationEmailService, SendConfirmationEmailProps } from "../services";
 import { SendConfirmationEmailToUserEventHandler } from "./send-confirmation-email-to-user.event-handler";
 
-const makeEmailServiceStub = (): IEmailService => {
-  class MakeEmailServiceStub implements IEmailService {
-    async send(data: SendEmailProps): Promise<void> {
+const makeSendConfirmationEmailServiceStub = (): ISendConfirmationEmailService => {
+  class MakeSendConfirmationEmailServiceStub implements ISendConfirmationEmailService {
+    async sendConfirmationEmail(data: SendConfirmationEmailProps): Promise<void> {
       Promise.resolve();
     }
   }
-  return new MakeEmailServiceStub();
+  return new MakeSendConfirmationEmailServiceStub();
 };
 
 interface SutTypes {
   sut: SendConfirmationEmailToUserEventHandler;
-  emailServiceStub: IEmailService;
+  emailServiceStub: ISendConfirmationEmailService;
 }
 
 const makeSut = (): SutTypes => {
-  const emailServiceStub = makeEmailServiceStub();
+  const emailServiceStub = makeSendConfirmationEmailServiceStub();
   const sut = new SendConfirmationEmailToUserEventHandler(emailServiceStub, new Logger());
+  sut.listen()
   return {
     sut,
     emailServiceStub,
@@ -35,7 +37,7 @@ describe("SendConfirmationEmailToUserEventHandler", () => {
 
   it("should execute successfully", async () => {
     const { sut, emailServiceStub } = makeSut();
-    jest.spyOn(emailServiceStub, 'send').mockResolvedValue()
+    jest.spyOn(emailServiceStub, 'sendConfirmationEmail').mockResolvedValue()
     await sut.handle({
       aggregateId: "fake_id",
       correlationId: "fake_correlation",
@@ -45,6 +47,6 @@ describe("SendConfirmationEmailToUserEventHandler", () => {
       name: "user_name",
       status: UserStatusEnum.DISABLED,
     });
-    expect(emailServiceStub.send).toBeCalled();
+    expect(emailServiceStub.sendConfirmationEmail).toBeCalled();
   });
 });

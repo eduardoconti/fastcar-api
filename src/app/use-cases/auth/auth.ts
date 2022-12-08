@@ -16,11 +16,6 @@ export class AuthUseCase implements IAuthUseCase {
   async execute(
     request: AuthUseCase.Input
   ): Promise<Result<AuthUseCase.Output>> {
-    if (!request.login)
-      return Result.fail(badRequest("o campo login é obrigatório!"));
-
-    if (!request.password)
-      return Result.fail(badRequest("o campo password é obrigatório!"));
 
     const user = await this.userRepository.findOne({
       login: new Email(request.login),
