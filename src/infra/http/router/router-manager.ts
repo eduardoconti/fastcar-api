@@ -1,8 +1,12 @@
 import { notFound, unauthorized } from "@/app/errors";
 import { IJwtService, ILogger } from "@/app/interfaces";
 import { Result } from "@/domain/contracts";
+import { BaseException } from "@/domain/exceptions";
 import { JwtAdapter } from "@/infra/adapters";
-import { DuplicatedRouteException } from "@/infra/exceptions";
+import {
+  DuplicatedRouteException,
+  ExecuteMiddlewareException,
+} from "@/infra/exceptions";
 import { Logger } from "@/infra/logger";
 import { Http } from "../interfaces";
 import { HttpResponseHandler } from "./http-response-handler";
@@ -22,7 +26,7 @@ export class RouterManager {
       throw new DuplicatedRouteException(route);
     }
     this.routes.push(route);
-    this.logger.system(`mapped route: ${route.method} ${route.path} ${route.regex} atributes: ${route.atributes}`);
+    this.logger.system(`route: ${route.method} ${route.path} | ${route.regex}`);
   }
 
   static async execute(request: Http.Request, response: Http.Response) {
@@ -32,19 +36,34 @@ export class RouterManager {
       return HttpResponseHandler.send(
         request,
         response,
-        Result.fail(notFound("Rota não encontrada!"))
+        Result.fail(notFound("Rout not found!"))
       );
     }
     const accessResult = this.verifyAccessControl(route, request);
     if (accessResult.isFailure)
       return HttpResponseHandler.send(request, response, accessResult);
 
-    const resultMiddlewares = await route.executeMiddlewares(request, response);
-    if (resultMiddlewares) {
-      const combine = Result.combine(resultMiddlewares);
-      if (combine.isFailure)
-        return HttpResponseHandler.send(request, response, combine);
+    try {
+      const resultMiddlewares = await route.executeMiddlewares(
+        request,
+        response
+      );
+      if (resultMiddlewares) {
+        const combine = Result.combine(resultMiddlewares);
+        if (combine.isFailure)
+          return HttpResponseHandler.send(request, response, combine);
+      }
+    } catch (error: any) {
+      if (error instanceof BaseException) {
+        return HttpResponseHandler.send(request, response, Result.fail(error));
+      }
+      return HttpResponseHandler.send(
+        request,
+        response,
+        Result.fail(new ExecuteMiddlewareException(error))
+      );
     }
+
     const result = await route.handleController(request);
     return HttpResponseHandler.send(request, response, result);
   }
@@ -63,20 +82,20 @@ export class RouterManager {
   ): Result {
     if (route?.authenticationType) {
       if (!request.headers["authorization"]) {
-        return Result.fail(unauthorized("Token de requisição não encontrado!"));
+        return Result.fail(unauthorized("Token not found!"));
       }
       const splitToken = request?.headers["authorization"]?.split(" ");
       if (splitToken[0] !== "Bearer" || !splitToken[1]) {
-        return Result.fail(unauthorized("Token inválido!"));
+        return Result.fail(unauthorized("Invalid token!"));
       }
 
       if (!this.jwtService.verify(splitToken[1]))
-        return Result.fail(unauthorized("Falha de autenticação!"));
+        return Result.fail(unauthorized("Authentication failed!"));
     }
     return Result.ok();
   }
 
-  static clearRoutes(){
-    this.routes = []
+  static clearRoutes() {
+    this.routes = [];
   }
 }

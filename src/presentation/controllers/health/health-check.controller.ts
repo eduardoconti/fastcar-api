@@ -1,16 +1,16 @@
 import { IController } from "@/app/interfaces";
 import { Result } from "@/domain/contracts";
 
-type HealtCheck = {
+export type HealtCheckOutput = {
   description: string;
   version: string;
   env: string;
 };
 
-export type IHealthCheckController = IController<HealtCheck>;
+export type IHealthCheckController = IController<HealtCheckOutput>;
 export class HealthCheckController implements IHealthCheckController {
   constructor() {}
-  handle(): Result<HealtCheck> {
+  handle(): Result<HealtCheckOutput> {
     return Result.ok({
       description: "Fastcar",
       version: "1.0.0",
