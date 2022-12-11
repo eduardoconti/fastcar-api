@@ -1,50 +1,55 @@
-import { Aplication } from "../enums"
-import { ArgumentInvalidException, BaseException } from "../exceptions"
+import { Aplication } from "../enums";
+import { ArgumentInvalidException, BaseException } from "../exceptions";
 
 export class Result<T = any> {
-  public isSuccess: boolean
-  public isFailure: boolean
-  public error?: BaseException
-  private _value?: T
+   public isSuccess: boolean;
 
-  private constructor(isSuccess: boolean, error?: BaseException, value?: T) {
-    if (isSuccess && error) {
-      throw  new ArgumentInvalidException(`A result cannot be 
-        successful and contain an error`)
-    }
-    if (!isSuccess && !error) {
-      throw  new ArgumentInvalidException(`A failing result 
-        needs to contain an error message`)
-    }
+   public isFailure: boolean;
 
-    this.isSuccess = isSuccess
-    this.isFailure = !isSuccess
-    this.error = error
-    this._value = value
+   public error?: BaseException;
 
-    Object.freeze(this)
-  }
+   private _value?: T;
 
-  public getValue(): T | undefined {
-    if (!this.isSuccess) {
-      throw  new ArgumentInvalidException(`Cant retrieve the value from a failed result.`)
-    }
+   private constructor(isSuccess: boolean, error?: BaseException, value?: T) {
+      if (isSuccess && error) {
+         throw new ArgumentInvalidException(`A result cannot be 
+        successful and contain an error`);
+      }
+      if (!isSuccess && !error) {
+         throw new ArgumentInvalidException(`A failing result 
+        needs to contain an error message`);
+      }
 
-    return this._value
-  }
+      this.isSuccess = isSuccess;
+      this.isFailure = !isSuccess;
+      this.error = error;
+      this._value = value;
 
-  public static ok<U>(value?: U): Result<U> {
-    return new Result<U>(true, undefined, value)
-  }
+      Object.freeze(this);
+   }
 
-  public static fail<U>(error: BaseException): Result<U> {
-    return new Result<U>(false, error)
-  }
+   public getValue(): T | undefined {
+      if (!this.isSuccess) {
+         throw new ArgumentInvalidException(
+            "Cant retrieve the value from a failed result.",
+         );
+      }
 
-  public static combine(results: Result<any>[]): Result<any> {
-    for (let result of results) {
-      if (result.isFailure) return result
-    }
-    return Result.ok<any>()
-  }
+      return this._value;
+   }
+
+   public static ok<U>(value?: U): Result<U> {
+      return new Result<U>(true, undefined, value);
+   }
+
+   public static fail<U>(error: BaseException): Result<U> {
+      return new Result<U>(false, error);
+   }
+
+   public static combine(results: Result<any>[]): Result<any> {
+      for (const result of results) {
+         if (result.isFailure) return result;
+      }
+      return Result.ok<any>();
+   }
 }

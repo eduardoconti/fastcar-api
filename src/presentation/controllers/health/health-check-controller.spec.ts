@@ -1,21 +1,21 @@
-import { HealthCheckController } from "./health-check.controller"
+import { HealthCheckController } from "./health-check.controller";
 
 interface SutTypes {
-  sut: HealthCheckController
+   sut: HealthCheckController;
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new HealthCheckController()
-  return {
-    sut,
-  }
-}
-describe('health controller', () => {
-  it('should execute controller', async () => {
-    const { sut } = makeSut()
+   const sut = new HealthCheckController();
+   return {
+      sut,
+   };
+};
+describe("health controller", () => {
+   it("should execute controller", async () => {
+      const { sut } = makeSut();
 
-    const result = await sut.handle()
+      const result = await sut.handle();
 
-    expect(result.isSuccess).toBeTruthy()
-  })
-})
+      expect(result.isSuccess).toBeTruthy();
+   });
+});

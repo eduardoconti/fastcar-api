@@ -1,34 +1,31 @@
-import { Logger } from "@/infra/logger"
+import { Logger } from "@/infra/logger";
 
 interface SutTypes {
-  sut: Logger
+   sut: Logger;
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new Logger()
-  return {
-    sut,
-  }
-}
-describe('Logger', () => {
-  it('should execute logger.info', () => {
-    const { sut } = makeSut()
+   const sut = new Logger();
+   return {
+      sut,
+   };
+};
+describe("Logger", () => {
+   it("should execute logger.info", () => {
+      const { sut } = makeSut();
 
-    expect(sut.info('should execute logger.info')
-    ).toBeCalled
-  })
+      expect(sut.info("should execute logger.info")).toBeCalled;
+   });
 
-  it('should execute logger.error', () => {
-    const { sut } = makeSut()
+   it("should execute logger.error", () => {
+      const { sut } = makeSut();
 
-    expect(sut.error('should execute logger.error')
-    ).toBeCalled
-  })
+      expect(sut.error("should execute logger.error")).toBeCalled;
+   });
 
-  it('should execute logger.system', () => {
-    const { sut } = makeSut()
+   it("should execute logger.system", () => {
+      const { sut } = makeSut();
 
-    expect(sut.system('should execute logger.system')
-    ).toBeCalled
-  })
-})
+      expect(sut.system("should execute logger.system")).toBeCalled;
+   });
+});

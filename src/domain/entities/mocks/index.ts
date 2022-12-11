@@ -1,1 +1,1 @@
-export * from './user-entity.mock'
+export * from "./user-entity.mock";

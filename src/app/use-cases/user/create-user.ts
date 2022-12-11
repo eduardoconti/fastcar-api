@@ -1,35 +1,38 @@
+import { badRequest } from "@/app/errors/errors";
+import { IEncrypter } from "@/app/interfaces";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
+import { IUserRepository, Result } from "@/domain/contracts";
 import { User } from "@/domain/entities";
 import { IUseCase } from "@/domain/interfaces";
-import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
-import { IEncrypter } from "@/app/interfaces";
-import { badRequest } from "@/app/errors/errors";
-import { IUserRepository, Result } from "@/domain/contracts";
 import { Email } from "@/domain/value-objects/user";
 
-export interface ICreateUserUseCase
-  extends IUseCase<CreateUserInputDTO, CreateUserOutputDTO> {}
+export type ICreateUserUseCase = IUseCase<
+CreateUserInputDTO,
+CreateUserOutputDTO
+>;
 export class CreateUserUseCase implements ICreateUserUseCase {
-  constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly encrypter: IEncrypter
-  ) {}
-  async execute(
-    user: CreateUserInputDTO
-  ): Promise<Result<CreateUserOutputDTO>> {
-    const { name, login, password } = user;
+   constructor(
+      private readonly userRepository: IUserRepository,
+      private readonly encrypter: IEncrypter,
+   ) {}
 
-    if (await this.userRepository.findOne({ login: new Email(login) }))
-      return Result.fail(badRequest("This login belongs to a user"));
+   async execute(
+      user: CreateUserInputDTO,
+   ): Promise<Result<CreateUserOutputDTO>> {
+      const { name, login, password } = user;
 
-    const passwordHashResult = await this.encrypter.hash(password);
+      if (await this.userRepository.findOne({ login: new Email(login) }))
+         return Result.fail(badRequest("This login belongs to a user"));
 
-    const userEntity = User.create({
-      name,
-      login,
-      password: passwordHashResult,
-    });
+      const passwordHashResult = await this.encrypter.hash(password);
 
-    await this.userRepository.save(userEntity);
-    return Result.ok({ id: userEntity.id.value, name, login });
-  }
+      const userEntity = User.create({
+         name,
+         login,
+         password: passwordHashResult,
+      });
+
+      await this.userRepository.save(userEntity);
+      return Result.ok({ id: userEntity.id.value, name, login });
+   }
 }

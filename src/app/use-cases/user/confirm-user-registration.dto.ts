@@ -1,4 +1,4 @@
 export type ConfirmUserRegistrationInputDTO = {
-  id: string;
+   id: string;
 };
 export type ConfirmUserRegistrationOutputDTO = void;

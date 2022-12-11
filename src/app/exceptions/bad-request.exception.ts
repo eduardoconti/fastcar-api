@@ -8,5 +8,5 @@ import { BaseException } from "@/domain/exceptions";
  * @extends {ExceptionBase}
  */
 export class BadRequestException extends BaseException {
-  readonly code = Aplication.Status.INVALID_REQUEST;
+   readonly code = Aplication.Status.INVALID_REQUEST;
 }

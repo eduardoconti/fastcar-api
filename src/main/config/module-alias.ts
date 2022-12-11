@@ -1,4 +1,5 @@
-import { addAlias } from 'module-alias'
-import { resolve } from 'path'
+import { resolve } from "path";
 
-addAlias('@', resolve('src'))
+import { addAlias } from "module-alias";
+
+addAlias("@", resolve("src"));

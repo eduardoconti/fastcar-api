@@ -1,1 +1,1 @@
-export * from './node-mailer'
+export * from "./node-mailer";

@@ -1,1 +1,1 @@
-export * from './healt-check-controller.factory'
+export * from "./healt-check-controller.factory";

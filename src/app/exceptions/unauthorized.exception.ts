@@ -8,5 +8,5 @@ import { BaseException } from "@/domain/exceptions";
  * @extends {ExceptionBase}
  */
 export class UnauthorizedException extends BaseException {
-  readonly code = Aplication.Status.UNAUTHORIZED;
+   readonly code = Aplication.Status.UNAUTHORIZED;
 }

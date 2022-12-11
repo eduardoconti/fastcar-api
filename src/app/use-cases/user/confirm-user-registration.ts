@@ -1,37 +1,37 @@
-import { IUseCase } from "@/domain/interfaces";
-import {
-  ConfirmUserRegistrationInputDTO,
-  ConfirmUserRegistrationOutputDTO,
-} from "@/app/use-cases/user";
 import { badRequest } from "@/app/errors/errors";
+import {
+   ConfirmUserRegistrationInputDTO,
+   ConfirmUserRegistrationOutputDTO,
+} from "@/app/use-cases/user";
 import { IUserRepository, Result } from "@/domain/contracts";
+import { IUseCase } from "@/domain/interfaces";
 import { UUID } from "@/domain/value-objects";
 
-export interface IConfirmUserRegistrationUseCase
-  extends IUseCase<
-    ConfirmUserRegistrationInputDTO,
-    ConfirmUserRegistrationOutputDTO
-  > {}
+export type IConfirmUserRegistrationUseCase = IUseCase<
+ConfirmUserRegistrationInputDTO,
+ConfirmUserRegistrationOutputDTO
+>;
 export class ConfirmUserRegistrationUseCase
-  implements IConfirmUserRegistrationUseCase
+implements IConfirmUserRegistrationUseCase
 {
-  constructor(private readonly userRepository: IUserRepository) {}
-  async execute(
-    confirmRegistrationInput: ConfirmUserRegistrationInputDTO
-  ): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
-    const { id } = confirmRegistrationInput;
+   constructor(private readonly userRepository: IUserRepository) {}
 
-    const userEntity = await this.userRepository.findOne({
-      id: new UUID(id),
-    });
+   async execute(
+      confirmRegistrationInput: ConfirmUserRegistrationInputDTO,
+   ): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
+      const { id } = confirmRegistrationInput;
 
-    if (!userEntity) {
-      return Result.fail(badRequest("user not found"));
-    }
+      const userEntity = await this.userRepository.findOne({
+         id: new UUID(id),
+      });
 
-    userEntity.confirmRegistration();
+      if (!userEntity) {
+         return Result.fail(badRequest("user not found"));
+      }
 
-    await this.userRepository.update(userEntity);
-    return Result.ok();
-  }
+      userEntity.confirmRegistration();
+
+      await this.userRepository.update(userEntity);
+      return Result.ok();
+   }
 }

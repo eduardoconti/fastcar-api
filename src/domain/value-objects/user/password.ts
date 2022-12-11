@@ -1,20 +1,20 @@
 import { DomainPrimitive, ValueObject } from "@/domain/contracts/value-object";
 
 export class Password extends ValueObject<string> {
-  public constructor(password: string) {
-    super({ value: password });
-  }
+   public constructor(password: string) {
+      super({ value: password });
+   }
 
-  get value(): string {
-    return this.props.value;
-  }
+   get value(): string {
+      return this.props.value;
+   }
 
-  protected validate({ value }: DomainPrimitive<string>): void {
-    // if (value.length < 6 || value.length > 100) {
-    //   throw new ArgumentInvalidException(
-    //     "password must be greater than 6 chars and less than 100.",
-    //     value
-    //   );
-    // }
-  }
+   protected validate({ value }: DomainPrimitive<string>): void {
+      // if (value.length < 6 || value.length > 100) {
+      //   throw new ArgumentInvalidException(
+      //     "password must be greater than 6 chars and less than 100.",
+      //     value
+      //   );
+      // }
+   }
 }

@@ -1,5 +1,5 @@
 export type VeichleModel = {
-  id: string
-  userId: string
-  value: number
-}
+   id: string;
+   userId: string;
+   value: number;
+};
