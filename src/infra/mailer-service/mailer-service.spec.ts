@@ -3,7 +3,7 @@ import { createTransport } from "nodemailer";
 
 import { Logger } from "../logger";
 
-import { NodeMailer } from "./node-mailer";
+import { MailerService } from "./mailer-service";
 
 jest.mock("nodemailer", () => ({
    createTransport: jest.fn().mockReturnValue({
@@ -12,7 +12,7 @@ jest.mock("nodemailer", () => ({
 }));
 
 type SutTypes = {
-   sut: NodeMailer;
+   sut: MailerService;
    transport: ITransporter;
    logger: ILogger;
 };
@@ -26,7 +26,7 @@ const makeSut = (): SutTypes => {
       },
    });
    const logger = new Logger();
-   const sut = new NodeMailer(transport, logger);
+   const sut = new MailerService(transport, logger);
    return {
       sut,
       transport,
@@ -41,7 +41,7 @@ const makeFakeBody = {
    subject: "",
    to: "fakeTo@gmail.com",
 };
-describe("NodeMailerService", () => {
+describe("NodeMailerServiceFactory", () => {
    beforeEach(() => {
       jest.resetModules();
       jest.clearAllMocks();

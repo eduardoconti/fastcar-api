@@ -2,7 +2,7 @@ import { notFound, unauthorized } from "@app/errors";
 import { IJwtService, ILogger } from "@app/interfaces";
 import { Result } from "@domain/contracts";
 import { BaseException } from "@domain/exceptions";
-import { JwtAdapter } from "@infra/adapters";
+import { JwtService } from "@infra/factories";
 import {
    DuplicatedRouteException,
    ExecuteMiddlewareException,
@@ -19,7 +19,7 @@ export class RouterManager {
 
    private static logger: ILogger = new Logger("RouterManager");
 
-   private static jwtService: IJwtService = new JwtAdapter().adapt();
+   private static jwtService: IJwtService = JwtService.create();
 
    static register(route: Route) {
       if (

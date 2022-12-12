@@ -48,10 +48,6 @@ export class User extends AggregateRoot<UserProps> {
       return userAgg;
    }
 
-   updatePassword(password: string) {
-      this.props.password = new Password(password);
-   }
-
    confirmRegistration(): void {
       this.props.status = new UserStatus(UserStatusEnum.ACTIVATED);
    }

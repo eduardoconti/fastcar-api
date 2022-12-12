@@ -1,9 +1,9 @@
-import { IAdapter, IJwtService } from "@app/interfaces";
+import { IJwtService } from "@app/interfaces";
 import jwt from "jsonwebtoken";
 
 const EXPIRATION = "1d";
-export class JwtAdapter implements IAdapter<IJwtService> {
-   adapt(): IJwtService {
+export class JwtService  {
+   static create(): IJwtService {
       const secret = process.env.JWT_SECRET as string;
       const { sign, verify } = jwt;
       return {

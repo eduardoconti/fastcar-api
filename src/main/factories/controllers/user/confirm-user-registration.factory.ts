@@ -3,9 +3,9 @@ import { ConfirmUserRegistrationUseCaseFactory } from "@main/factories/use-cases
 import { ConfirmUserRegistrationController } from "@presentation/controllers/user";
 
 export class ConfirmUserRegistrationControllerFactory {
-   static build(orm: IOrmClient): ConfirmUserRegistrationController {
+   static create(orm: IOrmClient): ConfirmUserRegistrationController {
       const confirmUserRegistration =
-      ConfirmUserRegistrationUseCaseFactory.build(orm);
+      ConfirmUserRegistrationUseCaseFactory.create(orm);
       return new ConfirmUserRegistrationController(confirmUserRegistration);
    }
 }

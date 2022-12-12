@@ -1,11 +1,11 @@
-import { IAdapter, IEmailService } from "@app/interfaces";
+import { IEmailService } from "@app/interfaces";
+import { MailerService } from "@infra/mailer-service";
 import { createTransport } from "nodemailer";
 
-import { NodeMailer } from "../email-service";
 import { Logger } from "../logger";
 
-export class EmailServiceAdpater implements IAdapter<IEmailService> {
-   adapt(): IEmailService {
+export class NodeMailerServiceFactory {
+   static create(): IEmailService {
       const transporter = createTransport({
          service: "gmail",
          auth: {
@@ -14,6 +14,7 @@ export class EmailServiceAdpater implements IAdapter<IEmailService> {
          },
       });
       const logger = new Logger("EmailService");
-      return new NodeMailer(transporter, logger);
+
+      return new MailerService(transporter, logger);
    }
 }

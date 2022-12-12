@@ -13,7 +13,7 @@ import {
    ListUserRoute,
 } from "@presentation/controllers/user";
 
-import { OrmClientAdapter } from "../infra/adapters";
+import { OrmClientAdapter } from "../infra/factories";
 
 import { SendConfirmationEmailToUserEventHandlerFactory } from "./factories/event-handler";
 
@@ -21,7 +21,7 @@ const orm = new OrmClientAdapter().adapt();
 const logger = new Logger();
 
 // Register domain events handlers
-SendConfirmationEmailToUserEventHandlerFactory.build().listen();
+SendConfirmationEmailToUserEventHandlerFactory.create().listen();
 
 // Register routes
 HealthCheckRouter.create();

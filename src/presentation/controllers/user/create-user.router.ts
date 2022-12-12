@@ -13,7 +13,7 @@ export class CreateUserRoute extends Route {
    protected _controller!: ICreateUserController;
 
    static create({ ormClient }: CreateUserControllerRouterProps) {
-      const controller = CreateUserControllerFactory.build(ormClient);
+      const controller = CreateUserControllerFactory.create(ormClient);
       return new CreateUserRoute({
          method: "POST",
          path: "user",

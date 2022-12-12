@@ -31,7 +31,8 @@
   "scripts": {
     "start:dev": "nodemon",
     "migrate": "npx prisma migrate deploy",
-    "test": "jest --passWithNoTests --no-cache --runInBand --coverage",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:cov": "jest --passWithNoTests --no-cache --runInBand --coverage",
     "lint": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\" "
   },

@@ -7,7 +7,7 @@ export class HealthCheckRouter extends Route {
    protected _controller!: IHealthCheckController;
 
    static create() {
-      const controller = HealthCheckControllerFactory.build();
+      const controller = HealthCheckControllerFactory.create();
       return new HealthCheckRouter({
          method: "GET",
          path: "health",

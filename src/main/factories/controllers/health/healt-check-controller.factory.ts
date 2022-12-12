@@ -1,7 +1,7 @@
 import { HealthCheckController } from "@presentation/controllers/health";
 
 export class HealthCheckControllerFactory {
-   static build(): HealthCheckController {
+   static create(): HealthCheckController {
       return new HealthCheckController();
    }
 }

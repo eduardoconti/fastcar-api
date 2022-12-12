@@ -11,7 +11,7 @@ export class ListUserRoute extends Route {
    protected _controller!: IListUserController;
 
    static create({ ormClient }: ListUserControllerRouterProps) {
-      const controller = ListUserControllerFactory.build(ormClient);
+      const controller = ListUserControllerFactory.create(ormClient);
       return new ListUserRoute({
          method: "GET",
          path: "user",

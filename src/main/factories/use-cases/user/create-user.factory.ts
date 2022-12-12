@@ -1,10 +1,10 @@
 import { CreateUserUseCase } from "@app/use-cases/user";
-import { EncrypterAdapter } from "@infra/adapters";
+import { EncrypterServiceFactory } from "@infra/factories";
 import { IOrmClient } from "@infra/database/orm/interfaces";
 
 export class CreateUserUseCaseFactory {
-   static build(orm: IOrmClient): CreateUserUseCase {
-      const encrypter = new EncrypterAdapter().adapt();
+   static create(orm: IOrmClient): CreateUserUseCase {
+      const encrypter = EncrypterServiceFactory.create();
 
       return new CreateUserUseCase(orm.userRepository, encrypter);
    }

@@ -1,11 +1,11 @@
 import { SendConfirmationEmailToUserEventHandler } from "@app/event-handler";
 import { SendConfirmationEmailService } from "@app/services";
-import { EmailServiceAdpater } from "@infra/adapters/email-service.adapter";
+import { NodeMailerServiceFactory } from "@infra/factories";
 import { Logger } from "@infra/logger";
 
 export class SendConfirmationEmailToUserEventHandlerFactory {
-   static build(): SendConfirmationEmailToUserEventHandler {
-      const emailService = new EmailServiceAdpater().adapt();
+   static create(): SendConfirmationEmailToUserEventHandler {
+      const emailService = NodeMailerServiceFactory.create();
       const sendConfirmationEmailService = new SendConfirmationEmailService(
          emailService,
       );

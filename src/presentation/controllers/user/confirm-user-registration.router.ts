@@ -12,7 +12,7 @@ export class ConfirmUserRegistrationRoute extends Route {
 
    static create({ ormClient }: ConfirmUserRegistrationControllerRouterProps) {
       const controller =
-      ConfirmUserRegistrationControllerFactory.build(ormClient);
+      ConfirmUserRegistrationControllerFactory.create(ormClient);
       return new ConfirmUserRegistrationRoute({
          method: "GET",
          path: "user/:id/confirm",

@@ -11,7 +11,7 @@ export class AuthRouter extends Route {
    protected _controller!: IAuthController;
 
    static create({ ormClient }: CreateAuthRouterProps) {
-      const controller = AuthControllerFactory.build(ormClient);
+      const controller = AuthControllerFactory.create(ormClient);
       return new AuthRouter({
          method: "POST",
          path: "auth",
