@@ -1,10 +1,11 @@
+
+
+import { IUserRepository, QueryParams } from "@domain/contracts";
+import { DomainEvents } from "@domain/domain-events";
+import { User, UserProps } from "@domain/entities";
 import { PrismaClient } from "@prisma/client";
 
 import { UserOrmMapper } from "../mapper";
-
-import { IUserRepository, QueryParams } from "@/domain/contracts";
-import { DomainEvents } from "@/domain/domain-events";
-import { User, UserProps } from "@/domain/entities";
 
 export class UserPrismaRepository implements IUserRepository {
    constructor(private readonly prismaClient: PrismaClient) {}

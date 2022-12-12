@@ -1,4 +1,4 @@
-import { IEmailService, SendEmailProps } from "../interfaces";
+import { IEmailService } from "../interfaces";
 
 import {
    ISendConfirmationEmailService,
@@ -7,7 +7,9 @@ import {
 
 const makeEmailServiceStub = (): IEmailService => {
    class MakeEmailServiceStub implements IEmailService {
-      send(data: SendEmailProps): void {}
+      send(): void {
+         return; 
+      }
    }
    return new MakeEmailServiceStub();
 };

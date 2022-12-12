@@ -1,7 +1,7 @@
-import { ListUserUseCase } from "@/app/use-cases/user";
-import { IUserRepository } from "@/domain/contracts";
-import { User } from "@/domain/entities";
-import { userEntityMock } from "@/domain/entities/mocks";
+import { ListUserUseCase } from "@app/use-cases/user";
+import { IUserRepository } from "@domain/contracts";
+import { User } from "@domain/entities";
+import { userEntityMock } from "@domain/entities/mocks";
 
 const makeUserRepositoryStub = (): IUserRepository => {
    class MakeUserRepositoryStub implements IUserRepository {

@@ -1,11 +1,11 @@
-import { badRequest } from "@/app/errors/errors";
+import { badRequest } from "@app/errors/errors";
 import {
    ConfirmUserRegistrationInputDTO,
    ConfirmUserRegistrationOutputDTO,
-} from "@/app/use-cases/user";
-import { IUserRepository, Result } from "@/domain/contracts";
-import { IUseCase } from "@/domain/interfaces";
-import { UUID } from "@/domain/value-objects";
+} from "@app/use-cases/user";
+import { IUserRepository, Result } from "@domain/contracts";
+import { IUseCase } from "@domain/interfaces";
+import { UUID } from "@domain/value-objects";
 
 export type IConfirmUserRegistrationUseCase = IUseCase<
 ConfirmUserRegistrationInputDTO,

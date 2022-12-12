@@ -1,9 +1,10 @@
+import { UserStatusEnum } from "@domain/value-objects/user";
+import { Logger } from "@infra/logger";
+
 import { ISendConfirmationEmailService } from "../services";
 
 import { SendConfirmationEmailToUserEventHandler } from "./send-confirmation-email-to-user.event-handler";
 
-import { UserStatusEnum } from "@/domain/value-objects/user";
-import { Logger } from "@/infra/logger";
 
 const makeSendConfirmationEmailServiceStub =
   (): ISendConfirmationEmailService => {

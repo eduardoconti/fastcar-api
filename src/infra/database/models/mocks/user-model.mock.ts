@@ -1,6 +1,6 @@
-import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
-import { UserModel } from "@/infra/database/models";
-import { CreateUserControllerInput } from "@/presentation/controllers/user/create-user.controller.dto";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "@app/use-cases/user";
+import { UserModel } from "@infra/database/models";
+import { CreateUserControllerInput } from "@presentation/controllers/user/create-user.controller.dto";
 
 export const userModelMockData: UserModel = {
    id: "58daf3da-aa8d-4dab-b226-b41d10091348",

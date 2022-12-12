@@ -1,8 +1,9 @@
-import { AuthControllerInput, IAuthController } from ".";
 
-import { IOrmClient } from "@/infra/database/orm/interfaces";
-import { ValidateBodyMiddleware, Route } from "@/infra/http/router";
-import { AuthControllerFactory } from "@/main/factories/controllers/auth";
+import { IOrmClient } from "@infra/database/orm/interfaces";
+import { ValidateBodyMiddleware, Route } from "@infra/http/router";
+import { AuthControllerFactory } from "@main/factories/controllers/auth";
+
+import { AuthControllerInput, IAuthController } from ".";
 
 export type CreateAuthRouterProps = {
    ormClient: IOrmClient;

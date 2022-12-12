@@ -1,8 +1,9 @@
-import { UserModel } from "../../models";
 
-import { User } from "@/domain/entities";
-import { DateVO, UUID } from "@/domain/value-objects";
-import { Email, Name, Password, UserStatus } from "@/domain/value-objects/user";
+import { User } from "@domain/entities";
+import { DateVO, UUID } from "@domain/value-objects";
+import { Email, Name, Password, UserStatus } from "@domain/value-objects/user";
+
+import { UserModel } from "../../models";
 
 export class UserOrmMapper {
    static toModel(entity: User): UserModel {

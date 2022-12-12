@@ -1,13 +1,13 @@
-import { User } from "@/domain/entities";
-import { DateVO, UUID } from "@/domain/value-objects";
+import { User } from "@domain/entities";
+import { DateVO, UUID } from "@domain/value-objects";
 import {
    Email,
    Name,
    Password,
    UserStatus,
    UserStatusEnum,
-} from "@/domain/value-objects/user";
-import { userModelMockData } from "@/infra/database/models/mocks";
+} from "@domain/value-objects/user";
+import { userModelMockData } from "@infra/database/models/mocks";
 
 export const userEntityMock = new User({
    id: new UUID("58daf3da-aa8d-4dab-b226-b41d10091348"),

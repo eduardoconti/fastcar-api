@@ -2,20 +2,20 @@ import "./config/module-alias";
 import "reflect-metadata";
 import * as http from "http";
 
-import { OrmClientAdapter } from "../infra/adapters";
-
-import { SendConfirmationEmailToUserEventHandlerFactory } from "./factories/event-handler";
-
-import { Atributes, Http } from "@/infra/http/interfaces";
-import { RouterManager } from "@/infra/http/router/router-manager";
-import { Logger } from "@/infra/logger";
-import { AuthRouter } from "@/presentation/controllers/auth";
-import { HealthCheckRouter } from "@/presentation/controllers/health";
+import { Atributes, Http } from "@infra/http/interfaces";
+import { RouterManager } from "@infra/http/router/router-manager";
+import { Logger } from "@infra/logger";
+import { AuthRouter } from "@presentation/controllers/auth";
+import { HealthCheckRouter } from "@presentation/controllers/health";
 import {
    ConfirmUserRegistrationRoute,
    CreateUserRoute,
    ListUserRoute,
-} from "@/presentation/controllers/user";
+} from "@presentation/controllers/user";
+
+import { OrmClientAdapter } from "../infra/adapters";
+
+import { SendConfirmationEmailToUserEventHandlerFactory } from "./factories/event-handler";
 
 const orm = new OrmClientAdapter().adapt();
 const logger = new Logger();

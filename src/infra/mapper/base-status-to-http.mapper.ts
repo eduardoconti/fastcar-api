@@ -1,6 +1,7 @@
+import { Aplication } from "@domain/enums";
+
 import { Http } from "../http/interfaces";
 
-import { Aplication } from "@/domain/enums";
 
 export class BaseStatusToHttpMapper {
    static map(status?: string): number {

@@ -1,15 +1,16 @@
-import { CreateUserController } from "./create-user.controller";
-
 import {
    CreateUserInputDTO,
    CreateUserOutputDTO,
    ICreateUserUseCase,
-} from "@/app/use-cases/user";
-import { Result } from "@/domain/contracts";
+} from "@app/use-cases/user";
+import { Result } from "@domain/contracts";
 import {
    ceateUserControllerInput,
    userModelMockData,
-} from "@/infra/database/models/mocks";
+} from "@infra/database/models/mocks";
+
+import { CreateUserController } from "./create-user.controller";
+
 
 const makeCreateUserUseCaseStub = (): ICreateUserUseCase => {
    class CreateUserUseCaseStub implements ICreateUserUseCase {

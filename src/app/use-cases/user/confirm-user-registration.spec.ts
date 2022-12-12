@@ -1,16 +1,16 @@
-import { badRequest } from "@/app/errors/errors";
-import { ConfirmUserRegistrationUseCase } from "@/app/use-cases/user";
-import { IUserRepository } from "@/domain/contracts";
-import { User } from "@/domain/entities";
-import { userEntityMock } from "@/domain/entities/mocks";
-import { DateVO, UUID } from "@/domain/value-objects";
+import { badRequest } from "@app/errors/errors";
+import { ConfirmUserRegistrationUseCase } from "@app/use-cases/user";
+import { IUserRepository } from "@domain/contracts";
+import { User } from "@domain/entities";
+import { userEntityMock } from "@domain/entities/mocks";
+import { DateVO, UUID } from "@domain/value-objects";
 import {
    Email,
    Name,
    Password,
    UserStatus,
    UserStatusEnum,
-} from "@/domain/value-objects/user";
+} from "@domain/value-objects/user";
 
 const makeUserRepositoryStub = (): IUserRepository => {
    class MakeUserRepositoryStub implements IUserRepository {

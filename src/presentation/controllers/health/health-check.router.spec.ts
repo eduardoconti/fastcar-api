@@ -1,12 +1,13 @@
+import { Result } from "@domain/contracts";
+import { Http } from "@infra/http/interfaces";
+import { RouterManager } from "@infra/http/router/router-manager";
+
 import {
    HealtCheckOutput,
    IHealthCheckController,
 } from "./health-check.controller";
 import { HealthCheckRouter } from "./health-check.router";
 
-import { Result } from "@/domain/contracts";
-import { Http } from "@/infra/http/interfaces";
-import { RouterManager } from "@/infra/http/router/router-manager";
 
 const makeHealthCheckControllerStub = (): IHealthCheckController => {
    class HealthCheckControllerStub implements IHealthCheckController {

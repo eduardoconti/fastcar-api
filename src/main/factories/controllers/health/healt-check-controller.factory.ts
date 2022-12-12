@@ -1,4 +1,4 @@
-import { HealthCheckController } from "@/presentation/controllers/health";
+import { HealthCheckController } from "@presentation/controllers/health";
 
 export class HealthCheckControllerFactory {
    static build(): HealthCheckController {

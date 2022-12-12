@@ -1,4 +1,4 @@
-import { AuthUseCase } from "@/app/use-cases/auth";
+import { AuthUseCase } from "@app/use-cases/auth";
 
 export const authInputMock: AuthUseCase.Input = {
    login: "fakeLogin@123.com",

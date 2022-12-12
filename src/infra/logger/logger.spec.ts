@@ -1,4 +1,4 @@
-import { Logger } from "@/infra/logger";
+import { Logger } from "@infra/logger";
 
 interface SutTypes {
    sut: Logger;

@@ -1,12 +1,13 @@
-import { ListUserController } from "./list-user.controller";
-
 import {
    CreateUserInputDTO,
    IListUserUseCase,
    ListUser,
-} from "@/app/use-cases/user";
-import { Result } from "@/domain/contracts";
-import { userModelMockData } from "@/infra/database/models/mocks";
+} from "@app/use-cases/user";
+import { Result } from "@domain/contracts";
+import { userModelMockData } from "@infra/database/models/mocks";
+
+import { ListUserController } from "./list-user.controller";
+
 
 const makeListUserUseCaseStub = (): IListUserUseCase => {
    class CreateUserUseCaseStub implements IListUserUseCase {

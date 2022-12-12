@@ -13,7 +13,11 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   moduleNameMapper: {
-    '@/(.+)': '<rootDir>/src/$1',
+    "@app/(.*)": "<rootDir>/src/app/$1",
+    "@domain/(.*)": "<rootDir>/src/domain/$1",
+    "@infra/(.*)": "<rootDir>/src/infra/$1",
+    "@main/(.*)": "<rootDir>/src/main/$1",
+    "@presentation/(.*)": "<rootDir>/src/presentation/$1"
   },
   testMatch: ['**/*.spec.ts'],
   roots: ['<rootDir>/src'],

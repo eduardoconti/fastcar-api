@@ -1,21 +1,21 @@
-import { unauthorized } from "@/app/errors/errors";
-import { IEncrypter, IJwtService } from "@/app/interfaces";
-import { AuthUseCase } from "@/app/use-cases/auth";
-import { IUserRepository, QueryParams } from "@/domain/contracts";
-import { User, UserProps } from "@/domain/entities";
-import { userEntityMock } from "@/domain/entities/mocks";
+import { unauthorized } from "@app/errors/errors";
+import { IEncrypter, IJwtService } from "@app/interfaces";
+import { AuthUseCase } from "@app/use-cases/auth";
+import { IUserRepository } from "@domain/contracts";
+import { User } from "@domain/entities";
+import { userEntityMock } from "@domain/entities/mocks";
 import {
    authInputMock,
    authOutputMock,
-} from "@/presentation/controllers/mocks";
+} from "@presentation/controllers/mocks";
 
 const makeJwtServiceStub = (): IJwtService => {
    class JwtServiceStub implements IJwtService {
-      sign<T = any>(payload: T): string {
+      sign<T = any>(): string {
          return "jwt token";
       }
 
-      verify(token: string): boolean {
+      verify(): boolean {
          return true;
       }
    }
@@ -24,21 +24,21 @@ const makeJwtServiceStub = (): IJwtService => {
 
 const makeUserRepositoryStub = (): IUserRepository => {
    class MakeUserRepositoryStub implements IUserRepository {
-      save(entity: User): Promise<User> {
+      save(): Promise<User> {
          userEntityMock.confirmRegistration();
          return Promise.resolve(userEntityMock);
       }
 
-      findOne(params: QueryParams<UserProps>): Promise<User | undefined> {
+      findOne(): Promise<User | undefined> {
          userEntityMock.confirmRegistration();
          return Promise.resolve(userEntityMock);
       }
 
-      findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
+      findMany(): Promise<User[] | undefined> {
          return Promise.resolve([userEntityMock]);
       }
 
-      update(entity: User): Promise<User> {
+      update(): Promise<User> {
          userEntityMock.confirmRegistration();
          return Promise.resolve(userEntityMock);
       }

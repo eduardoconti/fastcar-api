@@ -1,10 +1,12 @@
+
+import { IOrmClient } from "@infra/database/orm/interfaces";
+import { Route } from "@infra/http/router/route";
+import { ValidateBodyMiddleware } from "@infra/http/router/validate-body.middleware";
+import { CreateUserControllerFactory } from "@main/factories/controllers/user";
+
 import { ICreateUserController } from "./create-user.controller";
 import { CreateUserControllerInput } from "./create-user.controller.dto";
 
-import { IOrmClient } from "@/infra/database/orm/interfaces";
-import { Route } from "@/infra/http/router/route";
-import { ValidateBodyMiddleware } from "@/infra/http/router/validate-body.middleware";
-import { CreateUserControllerFactory } from "@/main/factories/controllers/user";
 
 export type CreateUserControllerRouterProps = {
    ormClient: IOrmClient;

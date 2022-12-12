@@ -1,10 +1,10 @@
+import { IUserRepository, QueryParams } from "@domain/contracts";
+import { User, UserProps } from "@domain/entities";
 import { DataSource, Repository } from "typeorm";
 
 import { UserModel } from "../../models";
 import { UserOrmMapper } from "../mapper";
 
-import { IUserRepository, QueryParams } from "@/domain/contracts";
-import { User, UserProps } from "@/domain/entities";
 
 export class UserTypeORMRepository implements IUserRepository {
    protected ormRepository: Repository<UserModel>;

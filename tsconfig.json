@@ -8,28 +8,29 @@
     "skipLibCheck": true,
     "incremental": true,
     "outDir": "dist",
-    "rootDirs": [
-      "src",
-      "tests"
-    ],
     "sourceMap": true,
     "moduleResolution": "node",
-    "baseUrl": "src",
+    "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "*"
+      "@domain/*":[
+        "src/domain/*"
       ],
-      "@/tests/*": [
-        "../tests/*"
+      "@app/*":[
+        "src/app/*"
+      ],
+      "@presentation/*":[
+        "src/presentation/*"
+      ],
+      "@infra/*":[
+        "src/infra/*"
+      ],
+      "@main/*":[
+        "src/main/*"
       ]
     },
     "noImplicitOverride": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  },
-  "include": [
-    "src",
-    "tests"
-  ]
+  }
 }

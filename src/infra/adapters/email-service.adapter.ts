@@ -1,9 +1,9 @@
+import { IAdapter, IEmailService } from "@app/interfaces";
 import { createTransport } from "nodemailer";
 
 import { NodeMailer } from "../email-service";
 import { Logger } from "../logger";
 
-import { IAdapter, IEmailService } from "@/app/interfaces";
 
 export class EmailServiceAdpater implements IAdapter<IEmailService> {
    adapt(): IEmailService {

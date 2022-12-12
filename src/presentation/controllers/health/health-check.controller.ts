@@ -1,5 +1,5 @@
-import { IController } from "@/app/interfaces";
-import { Result } from "@/domain/contracts";
+import { IController } from "@app/interfaces";
+import { Result } from "@domain/contracts";
 
 export type HealtCheckOutput = {
    description: string;

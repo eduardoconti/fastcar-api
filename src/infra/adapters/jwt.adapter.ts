@@ -1,6 +1,6 @@
+import { IAdapter, IJwtService } from "@app/interfaces";
 import jwt from "jsonwebtoken";
 
-import { IAdapter, IJwtService } from "@/app/interfaces";
 
 const EXPIRATION = "1d";
 export class JwtAdapter implements IAdapter<IJwtService> {

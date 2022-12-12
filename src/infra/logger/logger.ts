@@ -1,4 +1,4 @@
-import { ILogger } from "@/app/interfaces";
+import { ILogger } from "@app/interfaces";
 
 const TERMINAL_RED_COLOR = "\x1b[31m%s\x1b[0m";
 const TERMINAL_GREEN_COLOR = "\x1b[32m%s\x1b[0m";

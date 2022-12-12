@@ -1,4 +1,4 @@
-import { DomainPrimitive, ValueObject } from "@/domain/contracts/value-object";
+import { DomainPrimitive, ValueObject } from "@domain/contracts/value-object";
 
 export class Password extends ValueObject<string> {
    public constructor(password: string) {

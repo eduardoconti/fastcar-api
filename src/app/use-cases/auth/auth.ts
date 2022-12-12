@@ -1,8 +1,8 @@
-import { badRequest, unauthorized } from "@/app/errors/errors";
-import { IEncrypter, IJwtService } from "@/app/interfaces";
-import { IUserRepository, Result } from "@/domain/contracts";
-import { IUseCase } from "@/domain/interfaces";
-import { Email } from "@/domain/value-objects/user";
+import { badRequest, unauthorized } from "@app/errors/errors";
+import { IEncrypter, IJwtService } from "@app/interfaces";
+import { IUserRepository, Result } from "@domain/contracts";
+import { IUseCase } from "@domain/interfaces";
+import { Email } from "@domain/value-objects/user";
 
 export type IAuthUseCase = IUseCase<AuthUseCase.Input, AuthUseCase.Output>;
 export class AuthUseCase implements IAuthUseCase {

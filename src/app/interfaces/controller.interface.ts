@@ -1,4 +1,4 @@
-import { Result } from "@/domain/contracts";
+import { Result } from "@domain/contracts";
 
 export interface ControllerRequest<B = any, P = any, A = any> {
    body?: B;

@@ -1,10 +1,10 @@
-import { badRequest } from "@/app/errors/errors";
-import { IEncrypter } from "@/app/interfaces";
-import { CreateUserInputDTO, CreateUserOutputDTO } from "@/app/use-cases/user";
-import { IUserRepository, Result } from "@/domain/contracts";
-import { User } from "@/domain/entities";
-import { IUseCase } from "@/domain/interfaces";
-import { Email } from "@/domain/value-objects/user";
+import { badRequest } from "@app/errors/errors";
+import { IEncrypter } from "@app/interfaces";
+import { CreateUserInputDTO, CreateUserOutputDTO } from "@app/use-cases/user";
+import { IUserRepository, Result } from "@domain/contracts";
+import { User } from "@domain/entities";
+import { IUseCase } from "@domain/interfaces";
+import { Email } from "@domain/value-objects/user";
 
 export type ICreateUserUseCase = IUseCase<
 CreateUserInputDTO,

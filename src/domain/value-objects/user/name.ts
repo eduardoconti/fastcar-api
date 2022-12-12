@@ -1,5 +1,5 @@
-import { DomainPrimitive, ValueObject } from "@/domain/contracts/value-object";
-import { ArgumentInvalidException } from "@/domain/exceptions";
+import { DomainPrimitive, ValueObject } from "@domain/contracts/value-object";
+import { ArgumentInvalidException } from "@domain/exceptions";
 
 export class Name extends ValueObject<string> {
    public constructor(name: string) {

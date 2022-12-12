@@ -1,18 +1,19 @@
+
+import { notFound, unauthorized } from "@app/errors";
+import { IJwtService, ILogger } from "@app/interfaces";
+import { Result } from "@domain/contracts";
+import { BaseException } from "@domain/exceptions";
+import { JwtAdapter } from "@infra/adapters";
+import {
+   DuplicatedRouteException,
+   ExecuteMiddlewareException,
+} from "@infra/exceptions";
+import { Logger } from "@infra/logger";
+
 import { Http } from "../interfaces";
 
 import { HttpResponseHandler } from "./http-response-handler";
 import { Route } from "./route";
-
-import { notFound, unauthorized } from "@/app/errors";
-import { IJwtService, ILogger } from "@/app/interfaces";
-import { Result } from "@/domain/contracts";
-import { BaseException } from "@/domain/exceptions";
-import { JwtAdapter } from "@/infra/adapters";
-import {
-   DuplicatedRouteException,
-   ExecuteMiddlewareException,
-} from "@/infra/exceptions";
-import { Logger } from "@/infra/logger";
 
 export class RouterManager {
    private static routes: Route[] = [];

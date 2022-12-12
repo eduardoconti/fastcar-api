@@ -1,6 +1,7 @@
+import { IController } from "@app/interfaces";
+
 import { Http } from "./http";
 
-import { IController } from "@/app/interfaces";
 
 export interface IRouter {
    routes?: IRoute[];

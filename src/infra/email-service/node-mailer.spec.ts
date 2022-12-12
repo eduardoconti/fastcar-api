@@ -1,10 +1,10 @@
+import { ILogger } from "@app/interfaces";
 import { createTransport, Transporter } from "nodemailer";
 
 import { Logger } from "../logger";
 
 import { NodeMailer } from "./node-mailer";
 
-import { ILogger } from "@/app/interfaces";
 
 jest.mock("nodemailer", () => ({
    createTransport: jest.fn().mockReturnValue({

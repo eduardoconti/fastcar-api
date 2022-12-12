@@ -1,8 +1,9 @@
+import { DomainEventHandler } from "@domain/domain-events";
+import { UserRegisteredDomainEvent } from "@domain/events";
+
 import { ILogger } from "../interfaces";
 import { ISendConfirmationEmailService } from "../services";
 
-import { DomainEventHandler } from "@/domain/domain-events";
-import { UserRegisteredDomainEvent } from "@/domain/events";
 
 export class SendConfirmationEmailToUserEventHandler extends DomainEventHandler {
    constructor(

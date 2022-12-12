@@ -1,12 +1,13 @@
+import { AuthUseCase, IAuthUseCase } from "@app/use-cases/auth";
+import { Result } from "@domain/contracts";
+import { Http } from "@infra/http/interfaces";
+import { RouterManager } from "@infra/http/router/router-manager";
+
 import { authInputMock, authOutputMock } from "../mocks";
 
 import { AuthControllerRequest, IAuthController } from "./auth.controller";
 import { AuthRouter } from "./auth.router";
 
-import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth";
-import { Result } from "@/domain/contracts";
-import { Http } from "@/infra/http/interfaces";
-import { RouterManager } from "@/infra/http/router/router-manager";
 
 const makeAuthControllerStub = (): IAuthController => {
    class AuthControllerStub implements IAuthController {

@@ -1,15 +1,14 @@
+import { AuthUseCase, IAuthUseCase } from "@app/use-cases/auth";
+import { Result } from "@domain/contracts";
+
 import { authInputMock, authOutputMock } from "../mocks";
 
 import { AuthController } from "./auth.controller";
 
-import { AuthUseCase, IAuthUseCase } from "@/app/use-cases/auth";
-import { Result } from "@/domain/contracts";
 
 const makeAuthUseCaseStub = (): IAuthUseCase => {
    class AuthUseCaseStub implements IAuthUseCase {
-      async execute(
-         user: AuthUseCase.Input,
-      ): Promise<Result<AuthUseCase.Output>> {
+      async execute(): Promise<Result<AuthUseCase.Output>> {
          return Result.ok(authOutputMock);
       }
    }

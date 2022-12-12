@@ -1,10 +1,10 @@
+import { InvalidRequestBodyException } from "@app/exceptions";
+import { Result } from "@domain/contracts";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 
 import { Http, IMiddleware } from "../interfaces";
 
-import { InvalidRequestBodyException } from "@/app/exceptions";
-import { Result } from "@/domain/contracts";
 
 export class ValidateBodyMiddleware implements IMiddleware {
    constructor(private readonly type: any) {}

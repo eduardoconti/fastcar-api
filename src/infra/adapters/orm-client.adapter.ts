@@ -1,3 +1,6 @@
+import { IAdapter, ILogger } from "@app/interfaces";
+import { UserMemoryRepository } from "@infra/database/orm/memory";
+import { Logger } from "@infra/logger";
 import { PrismaClient } from "@prisma/client";
 
 import { IOrmClient } from "../database/orm/interfaces";
@@ -5,9 +8,6 @@ import { UserPrismaRepository } from "../database/orm/prisma";
 import { AppDataSource, UserTypeORMRepository } from "../database/orm/typeorm";
 import { DataBaseException } from "../exceptions";
 
-import { IAdapter, ILogger } from "@/app/interfaces";
-import { UserMemoryRepository } from "@/infra/database/orm/memory";
-import { Logger } from "@/infra/logger";
 
 const DATABASE_CONNECTION_MESSAGE = "Database connection initialized";
 type OrmSlug = "prisma" | "typeorm" | "memory";

@@ -1,5 +1,5 @@
-import { Aplication } from "@/domain/enums";
-import { BaseException } from "@/domain/exceptions";
+import { Aplication } from "@domain/enums";
+import { BaseException } from "@domain/exceptions";
 
 /**
  * Used to indicate that an argument was not provided (is empty object/array, null of undefined).

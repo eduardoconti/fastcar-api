@@ -1,14 +1,16 @@
-import { Atributes, Http, IMiddleware } from "../interfaces";
 
-import { RouterManager } from "./router-manager";
 
-import { IController } from "@/app/interfaces";
-import { Guard, Result } from "@/domain/contracts";
-import { BaseException } from "@/domain/exceptions";
+import { IController } from "@app/interfaces";
+import { Guard, Result } from "@domain/contracts";
+import { BaseException } from "@domain/exceptions";
 import {
    HandleControllerException,
    InvalidRouteException,
-} from "@/infra/exceptions";
+} from "@infra/exceptions";
+
+import { Atributes, Http, IMiddleware } from "../interfaces";
+
+import { RouterManager } from "./router-manager";
 
 export type CreateRouteProps = {
    path: string;

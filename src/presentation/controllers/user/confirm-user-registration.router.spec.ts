@@ -1,10 +1,11 @@
+import { ConfirmUserRegistrationOutputDTO } from "@app/use-cases/user";
+import { Result } from "@domain/contracts";
+import { Http } from "@infra/http/interfaces";
+import { RouterManager } from "@infra/http/router/router-manager";
+
 import { IConfirmUserRegistrationController } from "./confirm-user-registration.controller";
 import { ConfirmUserRegistrationRoute } from "./confirm-user-registration.router";
 
-import { ConfirmUserRegistrationOutputDTO } from "@/app/use-cases/user";
-import { Result } from "@/domain/contracts";
-import { Http } from "@/infra/http/interfaces";
-import { RouterManager } from "@/infra/http/router/router-manager";
 
 const makeConfirmUserRegistrationControllerStub =
   (): IConfirmUserRegistrationController => {

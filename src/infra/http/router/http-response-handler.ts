@@ -1,13 +1,14 @@
-import { Http } from "../interfaces";
 
-import { ILogger } from "@/app/interfaces";
-import { Guard, Result } from "@/domain/contracts";
-import { BaseException } from "@/domain/exceptions";
-import { Logger } from "@/infra/logger";
+import { ILogger } from "@app/interfaces";
+import { Guard, Result } from "@domain/contracts";
+import { BaseException } from "@domain/exceptions";
+import { Logger } from "@infra/logger";
 import {
    BaseErrorToProblemDetailsMapper,
    BaseStatusToHttpMapper,
-} from "@/infra/mapper";
+} from "@infra/mapper";
+
+import { Http } from "../interfaces";
 
 export class HttpResponseHandler {
    private static logger: ILogger = new Logger("HttpResponseHandler");

@@ -1,7 +1,8 @@
-import { IHealthCheckController } from "./health-check.controller";
 
-import { Route } from "@/infra/http/router/route";
-import { HealthCheckControllerFactory } from "@/main/factories/controllers/health";
+import { Route } from "@infra/http/router/route";
+import { HealthCheckControllerFactory } from "@main/factories/controllers/health";
+
+import { IHealthCheckController } from "./health-check.controller";
 
 export class HealthCheckRouter extends Route {
    protected _controller!: IHealthCheckController;

@@ -1,8 +1,10 @@
+
+import { IOrmClient } from "@infra/database/orm/interfaces";
+import { Route } from "@infra/http/router/route";
+import { ConfirmUserRegistrationControllerFactory } from "@main/factories/controllers/user";
+
 import { IConfirmUserRegistrationController } from "./confirm-user-registration.controller";
 
-import { IOrmClient } from "@/infra/database/orm/interfaces";
-import { Route } from "@/infra/http/router/route";
-import { ConfirmUserRegistrationControllerFactory } from "@/main/factories/controllers/user";
 
 export type ConfirmUserRegistrationControllerRouterProps = {
    ormClient: IOrmClient;

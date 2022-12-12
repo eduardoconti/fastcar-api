@@ -1,7 +1,8 @@
-import { ListUser } from "./list-user.dto";
 
-import { IUserRepository, Result } from "@/domain/contracts";
-import { IUseCase } from "@/domain/interfaces";
+import { IUserRepository, Result } from "@domain/contracts";
+import { IUseCase } from "@domain/interfaces";
+
+import { ListUser } from "./list-user.dto";
 
 export type IListUserUseCase = IUseCase<ListUser.Input, ListUser.Output[]>;
 export class ListUserUseCase implements IListUserUseCase {

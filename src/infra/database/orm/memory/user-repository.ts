@@ -1,8 +1,9 @@
-import { UserOrmMapper } from "../mapper";
 
-import { IUserRepository, QueryParams } from "@/domain/contracts";
-import { User, UserProps } from "@/domain/entities";
-import { UserModel } from "@/infra/database/models";
+import { IUserRepository, QueryParams } from "@domain/contracts";
+import { User, UserProps } from "@domain/entities";
+import { UserModel } from "@infra/database/models";
+
+import { UserOrmMapper } from "../mapper";
 
 const users: UserModel[] = [];
 export class UserMemoryRepository implements IUserRepository {

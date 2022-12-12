@@ -1,6 +1,6 @@
+import { IAdapter, IEncrypter } from "@app/interfaces";
 import * as bcrypt from "bcrypt";
 
-import { IAdapter, IEncrypter } from "@/app/interfaces";
 
 const SALT = 15;
 export class EncrypterAdapter implements IAdapter<IEncrypter> {

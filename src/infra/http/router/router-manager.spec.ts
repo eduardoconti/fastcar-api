@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+
+
+import { badRequest } from "@app/errors";
+import { ControllerRequest, IController } from "@app/interfaces";
+import { Result } from "@domain/contracts";
+import { ArgumentInvalidException } from "@domain/exceptions";
+import {
+   DuplicatedRouteException,
+   InvalidRouteException,
+} from "@infra/exceptions";
+
 import { Atributes, Http } from "../interfaces";
 
 import { HttpResponseHandler } from "./http-response-handler";
 import { Route } from "./route";
 import { RouterManager } from "./router-manager";
-
-import { badRequest } from "@/app/errors";
-import { ControllerRequest, IController } from "@/app/interfaces";
-import { Result } from "@/domain/contracts";
-import { ArgumentInvalidException } from "@/domain/exceptions";
-import {
-   DuplicatedRouteException,
-   InvalidRouteException,
-} from "@/infra/exceptions";
 
 class RouteStub extends Route {
    protected _controller!: IController<any>;

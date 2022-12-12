@@ -1,6 +1,6 @@
-import { CreateUserUseCase } from "@/app/use-cases/user";
-import { EncrypterAdapter } from "@/infra/adapters";
-import { IOrmClient } from "@/infra/database/orm/interfaces";
+import { CreateUserUseCase } from "@app/use-cases/user";
+import { EncrypterAdapter } from "@infra/adapters";
+import { IOrmClient } from "@infra/database/orm/interfaces";
 
 export class CreateUserUseCaseFactory {
    static build(orm: IOrmClient): CreateUserUseCase {

@@ -1,13 +1,13 @@
-import { badRequest } from "@/app/errors/errors";
-import { IEncrypter } from "@/app/interfaces";
-import { CreateUserUseCase } from "@/app/use-cases/user";
-import { IUserRepository } from "@/domain/contracts";
-import { User } from "@/domain/entities";
-import { userEntityMock } from "@/domain/entities/mocks";
+import { badRequest } from "@app/errors/errors";
+import { IEncrypter } from "@app/interfaces";
+import { CreateUserUseCase } from "@app/use-cases/user";
+import { IUserRepository } from "@domain/contracts";
+import { User } from "@domain/entities";
+import { userEntityMock } from "@domain/entities/mocks";
 import {
    createUserDtoMock,
    createUserOutputMock,
-} from "@/infra/database/models/mocks";
+} from "@infra/database/models/mocks";
 
 const makeUserRepositoryStub = (): IUserRepository => {
    class MakeUserRepositoryStub implements IUserRepository {
