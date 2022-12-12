@@ -1,19 +1,12 @@
-import {
-   CreateUserInputDTO,
-   IListUserUseCase,
-   ListUser,
-} from "@app/use-cases/user";
+import { IListUserUseCase, ListUserOutput } from "@app/use-cases/user";
 import { Result } from "@domain/contracts";
 import { userModelMockData } from "@infra/database/models/mocks";
 
 import { ListUserController } from "./list-user.controller";
 
-
 const makeListUserUseCaseStub = (): IListUserUseCase => {
    class CreateUserUseCaseStub implements IListUserUseCase {
-      async execute(
-         user: CreateUserInputDTO,
-      ): Promise<Result<ListUser.Output[]>> {
+      async execute(): Promise<Result<ListUserOutput[]>> {
          return Result.ok([userModelMockData]);
       }
    }

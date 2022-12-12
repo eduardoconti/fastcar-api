@@ -1,4 +1,3 @@
-import { Aplication } from "../enums";
 import { ArgumentInvalidException, BaseException } from "../exceptions";
 
 export class Result<T = any> {

@@ -4,14 +4,11 @@ import { AuthUseCase } from "@app/use-cases/auth";
 import { IUserRepository } from "@domain/contracts";
 import { User } from "@domain/entities";
 import { userEntityMock } from "@domain/entities/mocks";
-import {
-   authInputMock,
-   authOutputMock,
-} from "@presentation/controllers/mocks";
+import { authInputMock, authOutputMock } from "@presentation/controllers/mocks";
 
 const makeJwtServiceStub = (): IJwtService => {
    class JwtServiceStub implements IJwtService {
-      sign<T = any>(): string {
+      sign(): string {
          return "jwt token";
       }
 
@@ -48,11 +45,11 @@ const makeUserRepositoryStub = (): IUserRepository => {
 
 const makeEncryptStub = (): IEncrypter => {
    class MakeEncryptStub implements IEncrypter {
-      async hash(text: string, salt: number): Promise<string> {
+      async hash(): Promise<string> {
          return Promise.resolve("hash");
       }
 
-      async compare(text: string, compare: string): Promise<boolean> {
+      async compare(): Promise<boolean> {
          return Promise.resolve(true);
       }
    }

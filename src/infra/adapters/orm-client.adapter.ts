@@ -8,7 +8,6 @@ import { UserPrismaRepository } from "../database/orm/prisma";
 import { AppDataSource, UserTypeORMRepository } from "../database/orm/typeorm";
 import { DataBaseException } from "../exceptions";
 
-
 const DATABASE_CONNECTION_MESSAGE = "Database connection initialized";
 type OrmSlug = "prisma" | "typeorm" | "memory";
 export class OrmClientAdapter implements IAdapter<IOrmClient> {

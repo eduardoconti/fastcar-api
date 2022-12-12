@@ -5,7 +5,6 @@ import { ISendConfirmationEmailService } from "../services";
 
 import { SendConfirmationEmailToUserEventHandler } from "./send-confirmation-email-to-user.event-handler";
 
-
 const makeSendConfirmationEmailServiceStub =
   (): ISendConfirmationEmailService => {
      class MakeSendConfirmationEmailServiceStub

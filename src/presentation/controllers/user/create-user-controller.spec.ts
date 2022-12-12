@@ -1,8 +1,4 @@
-import {
-   CreateUserInputDTO,
-   CreateUserOutputDTO,
-   ICreateUserUseCase,
-} from "@app/use-cases/user";
+import { CreateUserOutputDTO, ICreateUserUseCase } from "@app/use-cases/user";
 import { Result } from "@domain/contracts";
 import {
    ceateUserControllerInput,
@@ -11,12 +7,9 @@ import {
 
 import { CreateUserController } from "./create-user.controller";
 
-
 const makeCreateUserUseCaseStub = (): ICreateUserUseCase => {
    class CreateUserUseCaseStub implements ICreateUserUseCase {
-      async execute(
-         user: CreateUserInputDTO,
-      ): Promise<Result<CreateUserOutputDTO>> {
+      async execute(): Promise<Result<CreateUserOutputDTO>> {
          return Result.ok({
             id: "",
             name: "",

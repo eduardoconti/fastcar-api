@@ -4,7 +4,6 @@ import { createTransport } from "nodemailer";
 import { NodeMailer } from "../email-service";
 import { Logger } from "../logger";
 
-
 export class EmailServiceAdpater implements IAdapter<IEmailService> {
    adapt(): IEmailService {
       const transporter = createTransport({

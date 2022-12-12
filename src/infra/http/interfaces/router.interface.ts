@@ -1,11 +1,15 @@
 import { IController } from "@app/interfaces";
 
-import { Http } from "./http";
-
+import {
+   HttpAuthenticationType,
+   HttpMethods,
+   HttpRequest,
+   HttpResponse,
+} from "./http";
 
 export interface IRouter {
    routes?: IRoute[];
-   execute(request: Http.Request, response: Http.Response): Promise<void>;
+   execute(request: HttpRequest, response: HttpResponse): Promise<void>;
    post<R>(routeParams: RouteParams<R>): void;
    get<R>(routeParams: RouteParams<R>): void;
 }
@@ -13,9 +17,9 @@ export interface IRouter {
 export interface IRoute<C = any> {
    controller: IController<C>;
    path: string;
-   method: Http.Methods;
+   method: HttpMethods;
    middleware?: any[];
-   auth?: Http.AuthenticationType;
+   auth?: HttpAuthenticationType;
    atributes?: Atributes;
 }
 

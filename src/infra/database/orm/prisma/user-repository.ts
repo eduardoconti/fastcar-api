@@ -1,5 +1,3 @@
-
-
 import { IUserRepository, QueryParams } from "@domain/contracts";
 import { DomainEvents } from "@domain/domain-events";
 import { User, UserProps } from "@domain/entities";

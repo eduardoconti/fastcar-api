@@ -4,7 +4,7 @@ import { IUserRepository, Result } from "@domain/contracts";
 import { IUseCase } from "@domain/interfaces";
 import { Email } from "@domain/value-objects/user";
 
-export type IAuthUseCase = IUseCase<AuthUseCase.Input, AuthUseCase.Output>;
+export type IAuthUseCase = IUseCase<AuthUseCaseInput, AuthUseCaseOutput>;
 export class AuthUseCase implements IAuthUseCase {
    constructor(
       private readonly jwtService: IJwtService,
@@ -12,9 +12,7 @@ export class AuthUseCase implements IAuthUseCase {
       private readonly encripter: IEncrypter,
    ) {}
 
-   async execute(
-      request: AuthUseCase.Input,
-   ): Promise<Result<AuthUseCase.Output>> {
+   async execute(request: AuthUseCaseInput): Promise<Result<AuthUseCaseOutput>> {
       const user = await this.userRepository.findOne({
          login: new Email(request.login),
       });
@@ -35,22 +33,20 @@ export class AuthUseCase implements IAuthUseCase {
          return Result.fail(unauthorized("Falha de autenticação!"));
 
       return Result.ok({
-         token: await this.jwtService.sign<AuthUseCase.TokenPayload>({
+         token: await this.jwtService.sign<TokenPayload>({
             userId: user.id.value,
          }),
       });
    }
 }
 
-export namespace AuthUseCase {
-   export type Input = {
-      login: string;
-      password: string;
-   };
+export type AuthUseCaseInput = {
+   login: string;
+   password: string;
+};
 
-   export type Output = { token: string };
+export type AuthUseCaseOutput = { token: string };
 
-   export type TokenPayload = {
-      userId: string;
-   };
-}
+export type TokenPayload = {
+   userId: string;
+};

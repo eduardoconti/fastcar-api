@@ -9,7 +9,6 @@ export type HealtCheckOutput = {
 
 export type IHealthCheckController = IController<HealtCheckOutput>;
 export class HealthCheckController implements IHealthCheckController {
-
    handle(): Result<HealtCheckOutput> {
       return Result.ok({
          description: "Fastcar",

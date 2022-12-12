@@ -5,7 +5,6 @@ import { Logger } from "../logger";
 
 import { NodeMailer } from "./node-mailer";
 
-
 jest.mock("nodemailer", () => ({
    createTransport: jest.fn().mockReturnValue({
       sendMail: jest.fn().mockResolvedValue(null),

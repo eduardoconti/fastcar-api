@@ -1,5 +1,3 @@
-
-
 import { IController } from "@app/interfaces";
 import { Guard, Result } from "@domain/contracts";
 import { BaseException } from "@domain/exceptions";
@@ -8,15 +6,22 @@ import {
    InvalidRouteException,
 } from "@infra/exceptions";
 
-import { Atributes, Http, IMiddleware } from "../interfaces";
+import {
+   Atributes,
+   HttpAuthenticationType,
+   HttpMethods,
+   HttpRequest,
+   HttpResponse,
+   IMiddleware,
+} from "../interfaces";
 
 import { RouterManager } from "./router-manager";
 
 export type CreateRouteProps = {
    path: string;
-   method: Http.Methods;
+   method: HttpMethods;
    controller: IController;
-   auth?: Http.AuthenticationType;
+   auth?: HttpAuthenticationType;
    middlewares?: IMiddleware[];
 };
 export abstract class Route {
@@ -64,7 +69,7 @@ export abstract class Route {
       }
    }
 
-   async handleController(req: Http.Request): Promise<Result> {
+   async handleController(req: HttpRequest): Promise<Result> {
       try {
          return await this._controller.handle({
             body: req?.body,
@@ -116,8 +121,8 @@ export abstract class Route {
    }
 
    async executeMiddlewares(
-      req: Http.Request,
-      res: Http.Response,
+      req: HttpRequest,
+      res: HttpResponse,
    ): Promise<Result<any>[]> {
       if (!this._middlewares) {
          return [Result.ok()];

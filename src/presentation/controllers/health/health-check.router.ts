@@ -1,4 +1,3 @@
-
 import { Route } from "@infra/http/router/route";
 import { HealthCheckControllerFactory } from "@main/factories/controllers/health";
 

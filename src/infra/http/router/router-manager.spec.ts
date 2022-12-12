@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-
-
 import { badRequest } from "@app/errors";
 import { ControllerRequest, IController } from "@app/interfaces";
 import { Result } from "@domain/contracts";
@@ -10,7 +8,7 @@ import {
    InvalidRouteException,
 } from "@infra/exceptions";
 
-import { Atributes, Http } from "../interfaces";
+import { Atributes, HttpRequest, HttpResponse } from "../interfaces";
 
 import { HttpResponseHandler } from "./http-response-handler";
 import { Route } from "./route";
@@ -129,7 +127,7 @@ describe("test router manager", () => {
             const result = await route.handleController({
                pathName: "/teste",
                method: "PUT",
-            } as Http.Request);
+            } as HttpRequest);
             expect(result).toBeDefined();
             expect(result.isSuccess).toBeTruthy();
          });
@@ -145,7 +143,7 @@ describe("test router manager", () => {
             const result = await route.handleController({
                pathName: "/auth",
                method: "GET",
-            } as Http.Request);
+            } as HttpRequest);
             expect(result).toBeDefined();
             expect(result.isSuccess).toBeTruthy();
          });
@@ -163,7 +161,7 @@ describe("test router manager", () => {
                method: "POST",
                body: { teste: "fakebody" },
                params,
-            } as Http.Request);
+            } as HttpRequest);
             expect(route.atributes).toEqual(["id"]);
             expect(result).toBeDefined();
             expect(result.isSuccess).toBeTruthy();
@@ -186,7 +184,7 @@ describe("test router manager", () => {
                pathName: "/teste/123/fake/12-45-67/teste/1234-asdf-126",
                method: "POST",
                body: { teste: "fakebody" },
-            } as Http.Request);
+            } as HttpRequest);
             expect(route.atributes).toEqual(["id", "fakeId", "testeId"]);
             expect(result).toBeDefined();
             expect(result.isSuccess).toBeTruthy();
@@ -211,7 +209,7 @@ describe("test router manager", () => {
                pathName: "/teste",
                method: "PUT",
                body: {},
-            } as Http.Request);
+            } as HttpRequest);
             expect(result).toBeDefined();
             expect(result.isFailure).toBeTruthy();
          });
@@ -229,7 +227,7 @@ describe("test router manager", () => {
                pathName: "/teste",
                method: "DELETE",
                body: {},
-            } as Http.Request);
+            } as HttpRequest);
             expect(result).toBeDefined();
             expect(result.isFailure).toBeTruthy();
          });
@@ -258,12 +256,12 @@ describe("test router manager", () => {
                      pathName: "/teste",
                      method: "PUT",
                      on: () => {},
-                  } as unknown as Http.Request,
+                  } as unknown as HttpRequest,
                   {
                      write: () => {},
                      writeHead: () => {},
                      end: () => {},
-                  } as unknown as Http.Response,
+                  } as unknown as HttpResponse,
                ),
          ).not.toThrow();
       });
@@ -283,12 +281,12 @@ describe("test router manager", () => {
                      method: "PUT",
                      on: () => {},
                      headers,
-                  } as unknown as Http.Request,
+                  } as unknown as HttpRequest,
                   {
                      write: () => {},
                      writeHead: () => {},
                      end: () => {},
-                  } as unknown as Http.Response,
+                  } as unknown as HttpResponse,
                ),
          ).not.toThrowError();
       });
@@ -311,12 +309,12 @@ describe("test router manager", () => {
                   on: () => {},
                   headers,
                   body: { teste: "123" },
-               } as unknown as Http.Request,
+               } as unknown as HttpRequest,
                {
                   write: () => {},
                   writeHead: () => {},
                   end: () => {},
-               } as unknown as Http.Response,
+               } as unknown as HttpResponse,
                Result.ok(""),
             ),
          ).not.toThrowError();
@@ -331,12 +329,12 @@ describe("test router manager", () => {
                   on: () => {},
                   headers,
                   body: { teste: "123" },
-               } as unknown as Http.Request,
+               } as unknown as HttpRequest,
                {
                   write: () => {},
                   writeHead: () => {},
                   end: () => {},
-               } as unknown as Http.Response,
+               } as unknown as HttpResponse,
                Result.ok(),
             ),
          ).not.toThrowError();
@@ -350,12 +348,12 @@ describe("test router manager", () => {
                   method: "GET",
                   on: () => {},
                   headers,
-               } as unknown as Http.Request,
+               } as unknown as HttpRequest,
                {
                   write: () => {},
                   writeHead: () => {},
                   end: () => {},
-               } as unknown as Http.Response,
+               } as unknown as HttpResponse,
                Result.ok(),
             ),
          ).not.toThrowError();
@@ -370,12 +368,12 @@ describe("test router manager", () => {
                   on: () => {},
                   headers,
                   body: { teste: "123" },
-               } as unknown as Http.Request,
+               } as unknown as HttpRequest,
                {
                   write: () => {},
                   writeHead: () => {},
                   end: () => {},
-               } as unknown as Http.Response,
+               } as unknown as HttpResponse,
                Result.fail(badRequest("")),
             ),
          ).not.toThrowError();

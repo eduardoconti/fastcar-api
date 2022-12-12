@@ -1,14 +1,22 @@
-
 import { IUserRepository, Result } from "@domain/contracts";
 import { IUseCase } from "@domain/interfaces";
 
-import { ListUser } from "./list-user.dto";
+export type ListUserInput = {
+   id?: string;
+   name?: string;
+   login?: string;
+};
+export type ListUserOutput = {
+   id: string;
+   name: string;
+   login: string;
+};
 
-export type IListUserUseCase = IUseCase<ListUser.Input, ListUser.Output[]>;
+export type IListUserUseCase = IUseCase<ListUserInput, ListUserOutput[]>;
 export class ListUserUseCase implements IListUserUseCase {
    constructor(private readonly userRepository: IUserRepository) {}
 
-   async execute(): Promise<Result<ListUser.Output[]>> {
+   async execute(): Promise<Result<ListUserOutput[]>> {
       const users = await this.userRepository.findMany();
 
       return Result.ok(

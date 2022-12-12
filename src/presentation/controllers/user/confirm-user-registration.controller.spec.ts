@@ -1,25 +1,17 @@
 import {
-   ConfirmUserRegistrationInputDTO,
    ConfirmUserRegistrationOutputDTO,
    IConfirmUserRegistrationUseCase,
 } from "@app/use-cases/user";
 import { Result } from "@domain/contracts";
-import {
-   ceateUserControllerInput,
-   userModelMockData,
-} from "@infra/database/models/mocks";
 
 import { ConfirmUserRegistrationController } from "./confirm-user-registration.controller";
-
 
 const makeConfirmUserRegistrationUseCaseStub =
   (): IConfirmUserRegistrationUseCase => {
      class ConfirmUserRegistrationUseCaseStub
      implements IConfirmUserRegistrationUseCase
      {
-        async execute(
-           user: ConfirmUserRegistrationInputDTO,
-        ): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
+        async execute(): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
            return Result.ok();
         }
      }

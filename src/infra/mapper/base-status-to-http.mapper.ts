@@ -1,23 +1,21 @@
-import { Aplication } from "@domain/enums";
-
-import { Http } from "../http/interfaces";
-
+import { AplicationStatus } from "@domain/enums";
+import { HttpStatusCode } from "@infra/http/interfaces";
 
 export class BaseStatusToHttpMapper {
    static map(status?: string): number {
       switch (status) {
-         case Aplication.Status.OK:
-            return Http.StatusCode.OK;
-         case Aplication.Status.UNAUTHORIZED:
-            return Http.StatusCode.UNAUTHORIZED;
-         case Aplication.Status.NOT_FOUND:
-            return Http.StatusCode.NOT_FOUND;
-         case Aplication.Status.INVALID_REQUEST:
-            return Http.StatusCode.BAD_REQUEST;
-         case Aplication.Status.INTERNAL_ERROR:
-            return Http.StatusCode.INTERNAL_SERVER_ERROR;
+         case AplicationStatus.OK:
+            return HttpStatusCode.OK;
+         case AplicationStatus.UNAUTHORIZED:
+            return HttpStatusCode.UNAUTHORIZED;
+         case AplicationStatus.NOT_FOUND:
+            return HttpStatusCode.NOT_FOUND;
+         case AplicationStatus.INVALID_REQUEST:
+            return HttpStatusCode.BAD_REQUEST;
+         case AplicationStatus.INTERNAL_ERROR:
+            return HttpStatusCode.INTERNAL_SERVER_ERROR;
          default:
-            return Http.StatusCode.INTERNAL_SERVER_ERROR;
+            return HttpStatusCode.INTERNAL_SERVER_ERROR;
       }
    }
 }

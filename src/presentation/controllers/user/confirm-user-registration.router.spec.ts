@@ -1,11 +1,10 @@
 import { ConfirmUserRegistrationOutputDTO } from "@app/use-cases/user";
 import { Result } from "@domain/contracts";
-import { Http } from "@infra/http/interfaces";
+import { HttpRequest } from "@infra/http/interfaces";
 import { RouterManager } from "@infra/http/router/router-manager";
 
 import { IConfirmUserRegistrationController } from "./confirm-user-registration.controller";
 import { ConfirmUserRegistrationRoute } from "./confirm-user-registration.router";
-
 
 const makeConfirmUserRegistrationControllerStub =
   (): IConfirmUserRegistrationController => {
@@ -46,7 +45,7 @@ describe("confirmUserRegistration router", () => {
       const { sut } = makeSut();
       const result = await sut.handleController({
          pathName: "health",
-      } as Http.Request);
+      } as HttpRequest);
 
       expect(result).toBeDefined();
       expect(result.isSuccess).toBeTruthy();

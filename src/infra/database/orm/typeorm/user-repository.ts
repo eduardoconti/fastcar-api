@@ -5,7 +5,6 @@ import { DataSource, Repository } from "typeorm";
 import { UserModel } from "../../models";
 import { UserOrmMapper } from "../mapper";
 
-
 export class UserTypeORMRepository implements IUserRepository {
    protected ormRepository: Repository<UserModel>;
 

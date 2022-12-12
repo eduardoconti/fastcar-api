@@ -1,4 +1,3 @@
-
 import { IOrmClient } from "@infra/database/orm/interfaces";
 import { ValidateBodyMiddleware, Route } from "@infra/http/router";
 import { AuthControllerFactory } from "@main/factories/controllers/auth";

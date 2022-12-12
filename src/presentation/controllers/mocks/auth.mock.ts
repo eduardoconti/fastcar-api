@@ -1,14 +1,18 @@
-import { AuthUseCase } from "@app/use-cases/auth";
+import {
+   AuthUseCaseInput,
+   AuthUseCaseOutput,
+   TokenPayload,
+} from "@app/use-cases/auth";
 
-export const authInputMock: AuthUseCase.Input = {
+export const authInputMock: AuthUseCaseInput = {
    login: "fakeLogin@123.com",
    password: "fakePassword",
 };
 
-export const authOutputMock: AuthUseCase.Output = {
+export const authOutputMock: AuthUseCaseOutput = {
    token: "jwt token",
 };
 
-export const tokenPayloadMock: AuthUseCase.TokenPayload = {
+export const tokenPayloadMock: TokenPayload = {
    userId: "fakeUuid",
 };

@@ -1,4 +1,3 @@
-
 import { ControllerRequest, IController } from "@app/interfaces";
 import { CreateUserOutputDTO, ICreateUserUseCase } from "@app/use-cases/user";
 

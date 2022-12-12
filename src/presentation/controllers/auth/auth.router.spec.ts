@@ -1,19 +1,16 @@
-import { AuthUseCase, IAuthUseCase } from "@app/use-cases/auth";
+import { AuthUseCaseOutput } from "@app/use-cases/auth";
 import { Result } from "@domain/contracts";
-import { Http } from "@infra/http/interfaces";
+import { HttpRequest } from "@infra/http/interfaces";
 import { RouterManager } from "@infra/http/router/router-manager";
 
 import { authInputMock, authOutputMock } from "../mocks";
 
-import { AuthControllerRequest, IAuthController } from "./auth.controller";
+import { IAuthController } from "./auth.controller";
 import { AuthRouter } from "./auth.router";
-
 
 const makeAuthControllerStub = (): IAuthController => {
    class AuthControllerStub implements IAuthController {
-      async handle(
-         input: AuthControllerRequest,
-      ): Promise<Result<AuthUseCase.Output>> {
+      async handle(): Promise<Result<AuthUseCaseOutput>> {
          return Result.ok(authOutputMock);
       }
    }
@@ -48,7 +45,7 @@ describe("auth router", () => {
       const result = await sut.handleController({
          body: authInputMock,
          pathName: "auth",
-      } as Http.Request);
+      } as HttpRequest);
 
       expect(result).toBeDefined();
       expect(result.isSuccess).toBeTruthy();

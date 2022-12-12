@@ -1,4 +1,3 @@
-
 import { ILogger } from "@app/interfaces";
 import { Guard, Result } from "@domain/contracts";
 import { BaseException } from "@domain/exceptions";
@@ -8,20 +7,20 @@ import {
    BaseStatusToHttpMapper,
 } from "@infra/mapper";
 
-import { Http } from "../interfaces";
+import { HttpRequest, HttpResponse, HttpStatusCode } from "../interfaces";
 
 export class HttpResponseHandler {
    private static logger: ILogger = new Logger("HttpResponseHandler");
 
-   static send(request: Http.Request, response: Http.Response, result: Result) {
+   static send(request: HttpRequest, response: HttpResponse, result: Result) {
       if (result.isSuccess) {
-         let statusCode = Http.StatusCode.OK;
-         if (request.method === "POST") statusCode = Http.StatusCode.CREATED;
+         let statusCode = HttpStatusCode.OK;
+         if (request.method === "POST") statusCode = HttpStatusCode.CREATED;
          if (request.method === "GET" && Guard.isEmpty(result.getValue()))
-            statusCode = Http.StatusCode.NO_CONTENT;
+            statusCode = HttpStatusCode.NO_CONTENT;
 
          response.writeHead(statusCode, { "Content-Type": "application/json" });
-         if (statusCode !== Http.StatusCode.NO_CONTENT) {
+         if (statusCode !== HttpStatusCode.NO_CONTENT) {
             response.write(JSON.stringify(result.getValue()));
          }
          this.logger.info(

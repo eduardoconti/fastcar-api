@@ -1,4 +1,3 @@
-
 import { notFound, unauthorized } from "@app/errors";
 import { IJwtService, ILogger } from "@app/interfaces";
 import { Result } from "@domain/contracts";
@@ -10,7 +9,7 @@ import {
 } from "@infra/exceptions";
 import { Logger } from "@infra/logger";
 
-import { Http } from "../interfaces";
+import { HttpMethods, HttpRequest, HttpResponse } from "../interfaces";
 
 import { HttpResponseHandler } from "./http-response-handler";
 import { Route } from "./route";
@@ -34,8 +33,8 @@ export class RouterManager {
       this.logger.system(`route: ${route.method} ${route.path} | ${route.regex}`);
    }
 
-   static async execute(request: Http.Request, response: Http.Response) {
-      const method = request.method as Http.Methods;
+   static async execute(request: HttpRequest, response: HttpResponse) {
+      const method = request.method as HttpMethods;
       const route = this.findRoute(request.pathName, method);
       if (!route) {
          return HttpResponseHandler.send(
@@ -83,7 +82,7 @@ export class RouterManager {
 
    private static verifyAccessControl(
       route: Route,
-      request: Http.Request,
+      request: HttpRequest,
    ): Result {
       if (route?.authenticationType) {
          if (!request.headers.authorization) {

@@ -2,7 +2,6 @@ import { BaseException } from "@domain/exceptions";
 
 import { BaseStatusToHttpMapper } from "./base-status-to-http.mapper";
 
-
 export class BaseErrorToProblemDetailsMapper {
    static map(baseError: BaseException) {
       const errorProps = baseError.toJSON();

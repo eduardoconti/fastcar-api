@@ -1,5 +1,5 @@
 import { Result } from "@domain/contracts";
-import { Http } from "@infra/http/interfaces";
+import { HttpRequest } from "@infra/http/interfaces";
 import { RouterManager } from "@infra/http/router/router-manager";
 
 import {
@@ -7,7 +7,6 @@ import {
    IHealthCheckController,
 } from "./health-check.controller";
 import { HealthCheckRouter } from "./health-check.router";
-
 
 const makeHealthCheckControllerStub = (): IHealthCheckController => {
    class HealthCheckControllerStub implements IHealthCheckController {
@@ -49,7 +48,7 @@ describe("healthCheck router", () => {
       const { sut } = makeSut();
       const result = await sut.handleController({
          pathName: "health",
-      } as Http.Request);
+      } as HttpRequest);
 
       expect(result).toBeDefined();
       expect(result.isSuccess).toBeTruthy();

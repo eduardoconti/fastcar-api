@@ -1,10 +1,8 @@
-
 import { IOrmClient } from "@infra/database/orm/interfaces";
 import { Route } from "@infra/http/router/route";
 import { ListUserControllerFactory } from "@main/factories/controllers/user";
 
 import { IListUserController } from "./list-user.controller";
-
 
 export type ListUserControllerRouterProps = {
    ormClient: IOrmClient;

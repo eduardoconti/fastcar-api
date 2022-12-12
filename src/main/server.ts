@@ -2,7 +2,7 @@ import "./config/module-alias";
 import "reflect-metadata";
 import * as http from "http";
 
-import { Atributes, Http } from "@infra/http/interfaces";
+import { Atributes, HttpRequest, HttpResponse } from "@infra/http/interfaces";
 import { RouterManager } from "@infra/http/router/router-manager";
 import { Logger } from "@infra/logger";
 import { AuthRouter } from "@presentation/controllers/auth";
@@ -31,10 +31,10 @@ CreateUserRoute.create({ ormClient: orm });
 ListUserRoute.create({ ormClient: orm });
 
 const server = http.createServer(
-   async (req: http.IncomingMessage, res: Http.Response) => {
+   async (req: http.IncomingMessage, res: HttpResponse) => {
       await insertBodyInRequest(req);
       insertUrlParamsInRequest(req);
-      await RouterManager.execute(req as Http.Request, res);
+      await RouterManager.execute(req as HttpRequest, res);
    },
 );
 

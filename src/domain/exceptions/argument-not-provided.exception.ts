@@ -1,4 +1,4 @@
-import { Aplication } from "../enums";
+import { AplicationStatus } from "../enums";
 
 import { BaseException } from "./base.exception";
 
@@ -9,5 +9,5 @@ import { BaseException } from "./base.exception";
  * @extends {BaseException}
  */
 export class ArgumentNotProvidedException extends BaseException {
-   readonly code = Aplication.Status.INTERNAL_ERROR;
+   readonly code = AplicationStatus.INTERNAL_ERROR;
 }

@@ -32,7 +32,8 @@
     "start:dev": "nodemon",
     "migrate": "npx prisma migrate deploy",
     "test": "jest --passWithNoTests --no-cache --runInBand --coverage",
-    "lint": "eslint . --ext .ts --fix"
+    "lint": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" "
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

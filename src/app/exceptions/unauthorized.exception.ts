@@ -1,4 +1,4 @@
-import { Aplication } from "@domain/enums";
+import { AplicationStatus } from "@domain/enums";
 import { BaseException } from "@domain/exceptions";
 
 /**
@@ -8,5 +8,5 @@ import { BaseException } from "@domain/exceptions";
  * @extends {ExceptionBase}
  */
 export class UnauthorizedException extends BaseException {
-   readonly code = Aplication.Status.UNAUTHORIZED;
+   readonly code = AplicationStatus.UNAUTHORIZED;
 }

@@ -8,7 +8,7 @@ import {
 const makeEmailServiceStub = (): IEmailService => {
    class MakeEmailServiceStub implements IEmailService {
       send(): void {
-         return; 
+         return;
       }
    }
    return new MakeEmailServiceStub();

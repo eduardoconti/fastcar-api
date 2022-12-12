@@ -1,7 +1,6 @@
 import { IEmailService, ILogger, SendEmailProps } from "@app/interfaces";
 import { Transporter } from "nodemailer";
 
-
 export class NodeMailer implements IEmailService {
    constructor(
       private readonly transporter: Transporter,
