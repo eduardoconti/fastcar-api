@@ -1,14 +1,14 @@
 import { badRequest } from "@app/errors/errors";
 import { IEncrypter } from "@app/interfaces";
-import { CreateUserInputDTO, CreateUserOutputDTO } from "@app/use-cases/user";
+import { CreateUserInput, CreateUserOutput } from "@app/use-cases/user";
 import { IUserRepository, Result } from "@domain/contracts";
 import { User } from "@domain/entities";
 import { IUseCase } from "@domain/interfaces";
 import { Email } from "@domain/value-objects/user";
 
 export type ICreateUserUseCase = IUseCase<
-CreateUserInputDTO,
-CreateUserOutputDTO
+CreateUserInput,
+CreateUserOutput
 >;
 export class CreateUserUseCase implements ICreateUserUseCase {
    constructor(
@@ -17,8 +17,8 @@ export class CreateUserUseCase implements ICreateUserUseCase {
    ) {}
 
    async execute(
-      user: CreateUserInputDTO,
-   ): Promise<Result<CreateUserOutputDTO>> {
+      user: CreateUserInput,
+   ): Promise<Result<CreateUserOutput>> {
       const { name, login, password } = user;
 
       if (await this.userRepository.findOne({ login: new Email(login) }))

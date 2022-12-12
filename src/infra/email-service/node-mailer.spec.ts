@@ -1,5 +1,5 @@
-import { ILogger } from "@app/interfaces";
-import { createTransport, Transporter } from "nodemailer";
+import { ILogger, ITransporter } from "@app/interfaces";
+import { createTransport } from "nodemailer";
 
 import { Logger } from "../logger";
 
@@ -13,7 +13,7 @@ jest.mock("nodemailer", () => ({
 
 type SutTypes = {
    sut: NodeMailer;
-   transport: Transporter;
+   transport: ITransporter;
    logger: ILogger;
 };
 

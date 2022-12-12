@@ -1,9 +1,9 @@
-export type CreateUserInputDTO = {
+export type CreateUserInput = {
    name: string;
    login: string;
    password: string;
 };
-export type CreateUserOutputDTO = {
+export type CreateUserOutput = {
    id: string;
    name: string;
    login: string;
