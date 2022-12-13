@@ -19,7 +19,7 @@ implements ISendConfirmationEmailService
       props: SendConfirmationEmailProps,
    ): Promise<void> {
       const { userEmail, userName, userId } = props;
-      await this.emailService.send({
+      this.emailService.send({
          to: userEmail,
          from: process.env.MAILER_USER as string,
          subject: "Email Confirmation",

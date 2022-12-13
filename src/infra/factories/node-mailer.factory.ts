@@ -1,5 +1,5 @@
 import { IEmailService } from "@app/interfaces";
-import { MailerService } from "@infra/mailer-service";
+import { MailerService } from "@infra/mailer";
 import { createTransport } from "nodemailer";
 
 import { Logger } from "../logger";

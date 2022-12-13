@@ -64,7 +64,7 @@ describe("Create user useCase", () => {
       const { sut, userRepositoryStub, encryptUseCaseStub } = makeSut();
 
       jest.spyOn(userRepositoryStub, "findOne").mockResolvedValue(undefined);
-      jest.spyOn(encryptUseCaseStub, "hash").mockResolvedValue("$%asdf/123");
+      jest.spyOn(encryptUseCaseStub, "hash").mockResolvedValue("$2b$15$Bw53kdeH0qaruPI0g8pieuNMqr7f72DX6.Ls0U/cGsxeBGL7Evct2");
       jest.spyOn(userRepositoryStub, "save").mockResolvedValue(userEntityMock);
 
       const result = await sut.execute(createUserDtoMock);

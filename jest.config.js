@@ -7,7 +7,6 @@ module.exports = {
     '!<rootDir>/src/main/config/**',
     '!<rootDir>/src/main/server.ts',
     '!<rootDir>/src/**/*.dto.ts',
-    '!<rootDir>/src/infra/adapters/**',
     '!<rootDir>/src/domain/types/**'
   ],
   coverageDirectory: 'coverage',

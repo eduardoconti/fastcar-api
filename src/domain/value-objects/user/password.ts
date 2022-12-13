@@ -11,9 +11,9 @@ export class Password extends ValueObject<string> {
    }
 
    protected validate({ value }: DomainPrimitive<string>): void {
-      if (value.length < 6) {
+      if (!value.match(/^\$2[ayb]\$.{56}$/)) {
          throw new ArgumentInvalidException(
-            "password must be greater than 6 chars",
+            "invalid password hash",
             value,
          );
       }

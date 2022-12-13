@@ -2,11 +2,11 @@ import { notFound, unauthorized } from "@app/errors";
 import { IJwtService, ILogger } from "@app/interfaces";
 import { Result } from "@domain/contracts";
 import { BaseException } from "@domain/exceptions";
-import { JwtService } from "@infra/factories";
 import {
    DuplicatedRouteException,
    ExecuteMiddlewareException,
 } from "@infra/exceptions";
+import { JwtServiceFactory } from "@infra/factories";
 import { Logger } from "@infra/logger";
 
 import { HttpMethods, HttpRequest, HttpResponse } from "../interfaces";
@@ -19,7 +19,7 @@ export class RouterManager {
 
    private static logger: ILogger = new Logger("RouterManager");
 
-   private static jwtService: IJwtService = JwtService.create();
+   private static jwtService: IJwtService = JwtServiceFactory.create();
 
    static register(route: Route) {
       if (
