@@ -2,6 +2,7 @@ import { IController } from "@app/interfaces";
 import { Guard, Result } from "@domain/contracts";
 import { BaseException } from "@domain/exceptions";
 import {
+   ExecuteMiddlewareException,
    HandleControllerException,
    InvalidRouteException,
 } from "@infra/exceptions";
@@ -51,21 +52,27 @@ export abstract class Route {
       RouterManager.register(this);
    }
 
-   private setControler(controller: IController) {
-      this._controller = controller;
-   }
+   async executeMiddlewares(
+      req: HttpRequest,
+      res: HttpResponse,
+   ): Promise<Result<any>> {
+      if (!this._middlewares) {
+         return Result.ok();
+      }
 
-   private validate(props: CreateRouteProps) {
-      const { path } = props;
-      if (
-         !Guard.isEmpty(
-            path.match(/^\/|[0-9]|[$%?!@()-+*\\]|[/]{2,}|[^\w]$|[:]{2,}/g),
-         )
-      ) {
-         throw new InvalidRouteException({
-            route: this.constructor.name,
-            path,
-         });
+      try {
+         const results = await Promise.all(
+            this._middlewares?.map(e => {
+               const result = e.execute(req, res);
+               return result;
+            }),
+         );
+         return Result.combine(results);
+      } catch (error: any) {
+         if (error instanceof BaseException) {
+            return Result.fail(error);
+         }
+         return Result.fail(new ExecuteMiddlewareException(error));
       }
    }
 
@@ -83,21 +90,6 @@ export abstract class Route {
 
          return Result.fail(new HandleControllerException(error));
       }
-   }
-
-   private buildRegexToMatchRoute(path: string) {
-      const arrayPath = path.split("/");
-      let result = "";
-      arrayPath.forEach((pathName, i) => {
-         if (!Guard.isEmpty(pathName.match(/^:/g))) {
-            result += "([a-zA-Z0-9-]+)";
-            this._atributes?.push(pathName.replace(":", ""));
-         } else {
-            result += `${pathName}\\b`;
-         }
-         if (i < arrayPath.length - 1) result += "/";
-      });
-      this._regex = new RegExp(`${result}$`, "gm");
    }
 
    get method(): string {
@@ -120,22 +112,6 @@ export abstract class Route {
       return this._atributes;
    }
 
-   async executeMiddlewares(
-      req: HttpRequest,
-      res: HttpResponse,
-   ): Promise<Result<any>[]> {
-      if (!this._middlewares) {
-         return [Result.ok()];
-      }
-
-      return await Promise.all(
-         this._middlewares?.map(e => {
-            const result = e.execute(req, res);
-            return result;
-         }),
-      );
-   }
-
    private extractAtributesFromPath(urlPath: string): Atributes | undefined {
       const regexResult = this._regex.exec(urlPath);
       if (!regexResult) return;
@@ -144,5 +120,38 @@ export abstract class Route {
          atributes[atribute] = regexResult[i + 1];
       });
       return atributes;
+   }
+
+   private setControler(controller: IController) {
+      this._controller = controller;
+   }
+
+   private validate(props: CreateRouteProps) {
+      const { path } = props;
+      if (
+         !Guard.isEmpty(
+            path.match(/^\/|[0-9]|[$%?!@()-+*\\]|[/]{2,}|[^\w]$|[:]{2,}/g),
+         )
+      ) {
+         throw new InvalidRouteException({
+            route: this.constructor.name,
+            path,
+         });
+      }
+   }
+
+   private buildRegexToMatchRoute(path: string) {
+      const arrayPath = path.split("/");
+      let result = "";
+      arrayPath.forEach((pathName, i) => {
+         if (!Guard.isEmpty(pathName.match(/^:/g))) {
+            result += "([a-zA-Z0-9-]+)";
+            this._atributes?.push(pathName.replace(":", ""));
+         } else {
+            result += `${pathName}\\b`;
+         }
+         if (i < arrayPath.length - 1) result += "/";
+      });
+      this._regex = new RegExp(`${result}$`, "gm");
    }
 }

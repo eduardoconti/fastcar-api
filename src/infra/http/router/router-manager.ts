@@ -1,10 +1,8 @@
 import { notFound, unauthorized } from "@app/errors";
 import { IJwtService, ILogger } from "@app/interfaces";
 import { Result } from "@domain/contracts";
-import { BaseException } from "@domain/exceptions";
 import {
    DuplicatedRouteException,
-   ExecuteMiddlewareException,
 } from "@infra/exceptions";
 import { JwtServiceFactory } from "@infra/factories";
 import { Logger } from "@infra/logger";
@@ -43,33 +41,21 @@ export class RouterManager {
             Result.fail(notFound("Rout not found!")),
          );
       }
+
       const accessResult = this.verifyAccessControl(route, request);
       if (accessResult.isFailure)
          return HttpResponseHandler.send(request, response, accessResult);
 
-      try {
-         const resultMiddlewares = await route.executeMiddlewares(
-            request,
-            response,
-         );
-         if (resultMiddlewares) {
-            const combine = Result.combine(resultMiddlewares);
-            if (combine.isFailure)
-               return HttpResponseHandler.send(request, response, combine);
-         }
-      } catch (error: any) {
-         if (error instanceof BaseException) {
-            return HttpResponseHandler.send(request, response, Result.fail(error));
-         }
-         return HttpResponseHandler.send(
-            request,
-            response,
-            Result.fail(new ExecuteMiddlewareException(error)),
-         );
-      }
+      const resultMiddlewares = await route.executeMiddlewares(
+         request,
+         response,
+      );
 
-      const result = await route.handleController(request);
-      return HttpResponseHandler.send(request, response, result);
+      if (resultMiddlewares.isFailure)
+         return HttpResponseHandler.send(request, response, resultMiddlewares);
+         
+      const resultController = await route.handleController(request);
+      return HttpResponseHandler.send(request, response, resultController);
    }
 
    private static findRoute(path: string, method: string): Route | undefined {
