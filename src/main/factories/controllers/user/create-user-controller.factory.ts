@@ -1,10 +1,8 @@
-import { IOrmClient } from "@infra/database/orm/interfaces";
-import { CreateUserUseCaseFactory } from "@main/factories/use-cases/user";
+import { ICommandBus } from "@domain/interfaces";
 import { CreateUserController } from "@presentation/controllers/user";
 
 export class CreateUserControllerFactory {
-   static create(orm: IOrmClient): CreateUserController {
-      const createUserUseCase = CreateUserUseCaseFactory.create(orm);
-      return new CreateUserController(createUserUseCase);
+   static create(commandBus: ICommandBus): CreateUserController {
+      return new CreateUserController(commandBus);
    }
 }

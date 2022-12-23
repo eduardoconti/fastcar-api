@@ -15,8 +15,7 @@ export class HttpResponseHandler {
    static send(request: HttpRequest, response: HttpResponse, result: Result) {
       if (result.isSuccess) {
          let statusCode = HttpStatusCode.OK;
-         if (request.method === "POST") statusCode = HttpStatusCode.CREATED;
-         if (request.method === "GET" && Guard.isEmpty(result.getValue()))
+         if (Guard.isEmpty(result.getValue()))
             statusCode = HttpStatusCode.NO_CONTENT;
 
          response.writeHead(statusCode, { "Content-Type": "application/json" });

@@ -15,7 +15,7 @@ export class SendConfirmationEmailToUserEventHandler extends DomainEventHandler 
    async handle(event: UserRegisteredDomainEvent): Promise<void> {
       this.logger.info(JSON.stringify(event));
       const { login, name, aggregateId } = event;
-      await this.emailService.sendConfirmationEmail({
+      this.emailService.sendConfirmationEmail({
          userEmail: login,
          userName: name,
          userId: aggregateId,
