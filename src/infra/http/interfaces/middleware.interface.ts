@@ -1,7 +1,7 @@
-import { Result } from "@domain/contracts";
+import { Result } from '@domain/contracts';
 
-import { HttpRequest, HttpResponse } from "./http";
+import { HttpRequest, HttpResponse } from './http';
 
 export interface IMiddleware {
-   execute(req: HttpRequest, res: HttpResponse): Promise<Result>;
+  execute(req: HttpRequest, res: HttpResponse): Promise<Result>;
 }

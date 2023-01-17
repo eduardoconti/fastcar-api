@@ -1,10 +1,10 @@
-import { ICommand } from "@domain/interfaces";
-import * as nanoid from "nanoid";
+import { ICommand } from '@domain/interfaces';
+import * as nanoid from 'nanoid';
 
 export abstract class Command implements ICommand {
-   public guid: string;
+  public guid: string;
 
-   constructor(guid?: string) {
-      this.guid = guid || nanoid.nanoid();
-   }
+  constructor(guid?: string) {
+    this.guid = guid || nanoid.nanoid();
+  }
 }

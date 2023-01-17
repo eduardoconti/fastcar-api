@@ -1,3 +1,2 @@
-export * from "./auth.controller";
-export * from "./auth.router";
-export * from "./auth-input.dto";
+export * from './auth.controller';
+export * from './auth-input.dto';

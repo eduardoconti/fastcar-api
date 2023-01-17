@@ -1,1 +1,1 @@
-export * from "./send-confirmation-email-to-user-event-handler.factory";
+export * from './send-confirmation-email-to-user-event-handler.factory';

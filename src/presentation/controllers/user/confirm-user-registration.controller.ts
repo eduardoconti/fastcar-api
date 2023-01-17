@@ -1,33 +1,22 @@
-import { ControllerRequest, IController } from "@app/interfaces";
 import {
-   ConfirmUserRegistrationInputDTO,
-   ConfirmUserRegistrationOutputDTO,
-   IConfirmUserRegistrationUseCase,
-} from "@app/use-cases/user";
+  ConfirmUserRegistrationUseCase,
+  IConfirmUserRegistrationUseCase,
+} from '@app/use-cases/user';
+import { Controller, Get, HttpCode, Inject, Param } from '@nestjs/common';
 
-export type IConfirmUserRegistrationController =
-  IController<ConfirmUserRegistrationOutputDTO>;
-export class ConfirmUserRegistrationController
-implements IConfirmUserRegistrationController
-{
-   constructor(
-      private readonly confirmUserRegistration: IConfirmUserRegistrationUseCase,
-   ) {}
+@Controller('user')
+export class ConfirmUserRegistrationController {
+  constructor(
+    @Inject(ConfirmUserRegistrationUseCase)
+    private readonly confirmUserRegistration: IConfirmUserRegistrationUseCase,
+  ) {}
 
-   async handle(
-      request: Required<
-      Pick<
-      ControllerRequest<
-      undefined,
-      undefined,
-      ConfirmUserRegistrationInputDTO
-      >,
-      "atributes"
-      >
-      >,
-   ) {
-      return await this.confirmUserRegistration.execute({
-         id: request.atributes.id,
-      });
-   }
+  @Get(':id/confirm')
+  @HttpCode(204)
+  async handle(@Param('id') id: string) {
+    const result = await this.confirmUserRegistration.execute({
+      id,
+    });
+    return result.getValue();
+  }
 }

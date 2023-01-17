@@ -1,1 +1,1 @@
-export * from "./orm-client.interface";
+export * from './orm-client.interface';

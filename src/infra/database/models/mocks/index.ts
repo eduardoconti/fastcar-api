@@ -1,1 +1,1 @@
-export * from "./user-model.mock";
+export * from './user-model.mock';

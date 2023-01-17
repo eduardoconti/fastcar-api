@@ -1,37 +1,43 @@
-import { badRequest } from "@app/errors/errors";
+import { badRequest } from '@app/errors/errors';
 import {
-   ConfirmUserRegistrationInputDTO,
-   ConfirmUserRegistrationOutputDTO,
-} from "@app/use-cases/user";
-import { IUserRepository, Result } from "@domain/contracts";
-import { IUseCase } from "@domain/interfaces";
-import { UUID } from "@domain/value-objects";
+  ConfirmUserRegistrationInputDTO,
+  ConfirmUserRegistrationOutputDTO,
+} from '@app/use-cases/user';
+import { IUserRepository, Result } from '@domain/contracts';
+import { IUseCase } from '@domain/interfaces';
+import { UUID } from '@domain/value-objects';
+import { UserPrismaRepository } from '@infra/database/orm/prisma';
+import { Inject, Injectable } from '@nestjs/common';
 
 export type IConfirmUserRegistrationUseCase = IUseCase<
-ConfirmUserRegistrationInputDTO,
-ConfirmUserRegistrationOutputDTO
+  ConfirmUserRegistrationInputDTO,
+  ConfirmUserRegistrationOutputDTO
 >;
+@Injectable()
 export class ConfirmUserRegistrationUseCase
-implements IConfirmUserRegistrationUseCase
+  implements IConfirmUserRegistrationUseCase
 {
-   constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject(UserPrismaRepository)
+    private readonly userRepository: IUserRepository,
+  ) {}
 
-   async execute(
-      confirmRegistrationInput: ConfirmUserRegistrationInputDTO,
-   ): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
-      const { id } = confirmRegistrationInput;
+  async execute(
+    confirmRegistrationInput: ConfirmUserRegistrationInputDTO,
+  ): Promise<Result<ConfirmUserRegistrationOutputDTO>> {
+    const { id } = confirmRegistrationInput;
 
-      const userEntity = await this.userRepository.findOne({
-         id: new UUID(id),
-      });
+    const userEntity = await this.userRepository.findOne({
+      id: new UUID(id),
+    });
 
-      if (!userEntity) {
-         return Result.fail(badRequest("user not found"));
-      }
+    if (!userEntity) {
+      return Result.fail(badRequest('user not found'));
+    }
 
-      userEntity.confirmRegistration();
+    userEntity.confirmRegistration();
 
-      await this.userRepository.update(userEntity);
-      return Result.ok();
-   }
+    await this.userRepository.update(userEntity);
+    return Result.ok();
+  }
 }

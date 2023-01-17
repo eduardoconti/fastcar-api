@@ -1,19 +1,30 @@
-import { IController } from "@app/interfaces";
-import { AuthUseCaseOutput, IAuthUseCase } from "@app/use-cases/auth";
-import { Result } from "@domain/contracts";
+import { IController } from '@app/interfaces';
+import {
+  AuthUseCase,
+  AuthUseCaseOutput,
+  IAuthUseCase,
+} from '@app/use-cases/auth';
+import { Result } from '@domain/contracts';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 
-import { AuthControllerInput } from "./auth-input.dto";
+import { AuthControllerInput } from './auth-input.dto';
 
 export type IAuthController = IController<AuthUseCaseOutput>;
-export type AuthControllerRequest = {
-   body: AuthControllerInput;
-};
-export class AuthController implements IAuthController {
-   constructor(private readonly authUseCase: IAuthUseCase) {}
+@Controller('auth')
+export class AuthController {
+  constructor(
+    @Inject(AuthUseCase)
+    private readonly authUseCase: IAuthUseCase,
+  ) {}
 
-   async handle(
-      request: AuthControllerRequest,
-   ): Promise<Result<AuthUseCaseOutput>> {
-      return await this.authUseCase.execute(request.body);
-   }
+  @Post()
+  async handle(
+    @Body() request: AuthControllerInput,
+  ): Promise<AuthUseCaseOutput> {
+    const result = await this.authUseCase.execute(request);
+    if (result.isFailure) {
+      throw result.error;
+    }
+    return result.getValue() as AuthUseCaseOutput;
+  }
 }

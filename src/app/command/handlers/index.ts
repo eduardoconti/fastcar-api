@@ -1,1 +1,1 @@
-export * from "./register-user.command-handler";
+export * from './register-user.command-handler';

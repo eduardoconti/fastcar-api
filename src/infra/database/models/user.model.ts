@@ -1,39 +1,39 @@
-import { Entity, PrimaryColumn, Column } from "typeorm";
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
-import { VeichleModel } from "./veichle.model";
+import { VeichleModel } from './veichle.model';
 
-@Entity({ schema: "fastcar", name: "User" })
+@Entity({ schema: 'fastcar', name: 'User' })
 export class UserModel {
-   @PrimaryColumn("uuid")
-      id!: string;
+  @PrimaryColumn('uuid')
+  id!: string;
 
-   @Column()
-      name!: string;
+  @Column()
+  name!: string;
 
-   @Column()
-      login!: string;
+  @Column()
+  login!: string;
 
-   @Column()
-      password!: string;
+  @Column()
+  password!: string;
 
-   @Column({
-      name: "createdAt",
-      type: "timestamp",
-      default: () => "CURRENT_TIMESTAMP",
-   })
-      createdAt!: Date;
+  @Column({
+    name: 'createdAt',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt!: Date;
 
-   @Column({
-      name: "updatedAt",
-      type: "timestamp",
-      default: () => "CURRENT_TIMESTAMP",
-   })
-      updatedAt?: Date;
+  @Column({
+    name: 'updatedAt',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt?: Date;
 
-   veichles?: VeichleModel[];
+  veichles?: VeichleModel[];
 
-   @Column()
-      status!: UserStatus;
+  @Column()
+  status!: UserStatus;
 }
 
-type UserStatus = "ACTIVATED" | "DISABLED";
+type UserStatus = 'ACTIVATED' | 'DISABLED';

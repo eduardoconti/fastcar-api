@@ -1,19 +1,18 @@
-import { IController } from "@app/interfaces";
-import { Result } from "@domain/contracts";
+import { Controller, Get } from '@nestjs/common';
 
 export type HealtCheckOutput = {
-   description: string;
-   version: string;
-   env: string;
+  description: string;
+  version: string;
+  env: string;
 };
-
-export type IHealthCheckController = IController<HealtCheckOutput>;
-export class HealthCheckController implements IHealthCheckController {
-   handle(): Result<HealtCheckOutput> {
-      return Result.ok({
-         description: "Fastcar",
-         version: "1.0.0",
-         env: process.env.NODE_ENV as string,
-      });
-   }
+@Controller('health')
+export class HealthCheckController {
+  @Get()
+  handle(): HealtCheckOutput {
+    return {
+      description: 'Fastcar',
+      version: '1.0.0',
+      env: process.env.NODE_ENV as string,
+    };
+  }
 }

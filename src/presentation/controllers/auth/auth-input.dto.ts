@@ -1,9 +1,9 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
 export class AuthControllerInput {
-   @IsString()
-      login!: string;
+  @IsString()
+  login!: string;
 
-   @IsString()
-      password!: string;
+  @IsString()
+  password!: string;
 }

@@ -1,1 +1,1 @@
-export * from "./send-confirmation-email.service";
+export * from './send-confirmation-email.service';

@@ -1,1 +1,1 @@
-export * from "./user-orm.mapper";
+export * from './user-orm.mapper';

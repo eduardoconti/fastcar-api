@@ -1,6 +1,6 @@
-import { AplicationStatus } from "../enums";
+import { AplicationStatus } from '../enums';
 
-import { BaseException } from "./base.exception";
+import { BaseException } from './base.exception';
 
 /**
  * Used to indicate that an argument was not provided (is empty object/array, null of undefined).
@@ -9,5 +9,5 @@ import { BaseException } from "./base.exception";
  * @extends {BaseException}
  */
 export class ArgumentNotProvidedException extends BaseException {
-   readonly code = AplicationStatus.INTERNAL_ERROR;
+  readonly code = AplicationStatus.INTERNAL_ERROR;
 }

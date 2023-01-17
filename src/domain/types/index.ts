@@ -1,1 +1,1 @@
-export * from "./deep-partial.type";
+export * from './deep-partial.type';

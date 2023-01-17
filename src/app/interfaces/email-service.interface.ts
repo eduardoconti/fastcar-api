@@ -1,20 +1,20 @@
 export type SendEmailProps = {
-   from: string;
-   to: string;
-   subject: string;
-   body: string;
-   context: string;
+  from: string;
+  to: string;
+  subject: string;
+  body: string;
+  context: string;
 };
 export interface IEmailService {
-   send(data: SendEmailProps): void;
+  send(data: SendEmailProps): void;
 }
 
 export type SendMailTransporterProps = {
-   from: string;
-   to: string;
-   subject: string;
-   html: string;
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
 };
 export interface ITransporter {
-   sendMail(data: SendMailTransporterProps): void;
+  sendMail(data: SendMailTransporterProps): void;
 }

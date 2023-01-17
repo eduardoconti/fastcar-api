@@ -1,3 +1,3 @@
 export interface ICommand {
-   guid: string;
+  guid: string;
 }

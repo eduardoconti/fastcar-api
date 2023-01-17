@@ -1,17 +1,18 @@
-import { RegisterUserCommand } from "@app/command/commands";
-import { IController } from "@app/interfaces";
-import { ICommandBus } from "@domain/interfaces";
+import { CreateUserUseCase, ICreateUserUseCase } from '@app/use-cases/user';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 
-import { CreateUserControllerInput } from "./create-user.controller.dto";
+import { CreateUserControllerInput } from './create-user.controller.dto';
 
-export type ICreateUserController = IController;
-export class CreateUserController implements ICreateUserController {
-   constructor(private readonly commandBus: ICommandBus) {}
+@Controller('user')
+export class CreateUserController {
+  constructor(
+    @Inject(CreateUserUseCase)
+    private readonly createUserUseCase: ICreateUserUseCase,
+  ) {}
 
-   async handle(request: { body: CreateUserControllerInput }) {
-      const { body } = request;
-      return await this.commandBus.send(
-         new RegisterUserCommand(body.name, body.login, body.password),
-      );
-   }
+  @Post()
+  async handle(@Body() request: CreateUserControllerInput) {
+    const result = await this.createUserUseCase.execute(request);
+    return result.getValue();
+  }
 }
