@@ -1,7 +1,5 @@
 import { Entity, PrimaryColumn, Column } from 'typeorm';
 
-import { VeichleModel } from './veichle.model';
-
 @Entity({ schema: 'fastcar', name: 'User' })
 export class UserModel {
   @PrimaryColumn('uuid')
@@ -29,8 +27,6 @@ export class UserModel {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt?: Date;
-
-  veichles?: VeichleModel[];
 
   @Column()
   status!: UserStatus;

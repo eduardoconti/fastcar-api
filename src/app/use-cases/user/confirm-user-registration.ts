@@ -1,13 +1,14 @@
 import { badRequest } from '@app/errors/errors';
-import {
-  ConfirmUserRegistrationInputDTO,
-  ConfirmUserRegistrationOutputDTO,
-} from '@app/use-cases/user';
 import { IUserRepository, Result } from '@domain/contracts';
 import { IUseCase } from '@domain/interfaces';
 import { UUID } from '@domain/value-objects';
 import { UserPrismaRepository } from '@infra/database/orm/prisma';
 import { Inject, Injectable } from '@nestjs/common';
+
+export type ConfirmUserRegistrationInputDTO = {
+  id: string;
+};
+export type ConfirmUserRegistrationOutputDTO = void;
 
 export type IConfirmUserRegistrationUseCase = IUseCase<
   ConfirmUserRegistrationInputDTO,

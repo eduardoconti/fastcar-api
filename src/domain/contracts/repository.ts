@@ -1,3 +1,4 @@
+import { Vehicle, VehicleProps } from '@domain/entities/vehicle';
 import { User, UserProps } from '../entities';
 import { DeepPartial } from '../types';
 import { ID } from '../value-objects/id.value-object';
@@ -72,4 +73,10 @@ export interface IUserRepository
     IFindOne<User, UserProps>,
     IFindMany<User, UserProps> {
   update(user: User): Promise<User> | User;
+}
+
+export interface IVehicleRepository
+  extends ISave<Vehicle>,
+    IFindOne<Vehicle, VehicleProps> {
+  update(user: Vehicle): Promise<Vehicle> | Vehicle;
 }

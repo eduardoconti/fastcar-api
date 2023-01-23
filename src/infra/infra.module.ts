@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { UserPrismaRepository } from './database/orm/prisma';
+import {
+  UserPrismaRepository,
+  VehiclePrismaRepository,
+} from './database/orm/prisma';
 import { PrismaService } from './database/orm/prisma/prisma.service';
 import { EncrypterService } from './encrypter';
 import { JwtService } from './jwt';
@@ -12,7 +15,13 @@ import { JwtService } from './jwt';
     EncrypterService,
     PrismaClient,
     PrismaService,
+    VehiclePrismaRepository,
   ],
-  exports: [JwtService, UserPrismaRepository, EncrypterService],
+  exports: [
+    JwtService,
+    UserPrismaRepository,
+    EncrypterService,
+    VehiclePrismaRepository,
+  ],
 })
 export class InfraModule {}

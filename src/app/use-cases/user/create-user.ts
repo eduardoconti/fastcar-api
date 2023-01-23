@@ -1,6 +1,5 @@
 import { badRequest } from '@app/errors/errors';
 import { IEncrypter } from '@app/interfaces';
-import { CreateUserInput, CreateUserOutput } from '@app/use-cases/user';
 import { IUserRepository, Result } from '@domain/contracts';
 import { User } from '@domain/entities';
 import { IUseCase } from '@domain/interfaces';
@@ -8,6 +7,17 @@ import { Email } from '@domain/value-objects/user';
 import { UserPrismaRepository } from '@infra/database/orm/prisma';
 import { EncrypterService } from '@infra/encrypter';
 import { Inject, Injectable } from '@nestjs/common';
+
+export type CreateUserInput = {
+  name: string;
+  login: string;
+  password: string;
+};
+export type CreateUserOutput = {
+  id: string;
+  name: string;
+  login: string;
+};
 
 export type ICreateUserUseCase = IUseCase<CreateUserInput, CreateUserOutput>;
 @Injectable()

@@ -1,5 +1,9 @@
-export type VeichleModel = {
+export type VehicleModel = {
   id: string;
-  userId: string;
-  value: number;
+  ownerId: string;
+  price: number;
+  model: string;
+  status: string;
+  createdAt: Date;
+  updatedAt?: Date;
 };

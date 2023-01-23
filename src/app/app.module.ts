@@ -5,10 +5,21 @@ import {
   ConfirmUserRegistrationUseCase,
   CreateUserUseCase,
 } from './use-cases/user';
+import { RegisterVehicleUseCase } from './use-cases/vehicle';
 
 @Module({
   imports: [InfraModule],
-  providers: [AuthUseCase, CreateUserUseCase, ConfirmUserRegistrationUseCase],
-  exports: [AuthUseCase, CreateUserUseCase, ConfirmUserRegistrationUseCase],
+  providers: [
+    AuthUseCase,
+    CreateUserUseCase,
+    ConfirmUserRegistrationUseCase,
+    RegisterVehicleUseCase,
+  ],
+  exports: [
+    AuthUseCase,
+    CreateUserUseCase,
+    ConfirmUserRegistrationUseCase,
+    RegisterVehicleUseCase,
+  ],
 })
 export class AppModule {}
