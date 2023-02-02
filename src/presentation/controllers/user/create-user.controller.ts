@@ -13,6 +13,9 @@ export class CreateUserController {
   @Post()
   async handle(@Body() request: CreateUserControllerInput) {
     const result = await this.createUserUseCase.execute(request);
+    if (result.isFailure) {
+      throw result.error;
+    }
     return result.getValue();
   }
 }

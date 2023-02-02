@@ -34,23 +34,49 @@ export class Vehicle extends AggregateRoot<VehicleProps> {
     });
   }
 
-  rent(initialDate: Date, finalDate: Date) {
+  reserve(initialDate: Date, finalDate: Date) {
+    if (this.isDisabled()) {
+      throw new ArgumentInvalidException('the vehicle is disabled!');
+    }
+
     if (this.isRented()) {
       throw new ArgumentInvalidException('the vehicle is already rented!');
     }
 
-    if (this.isDisabled()) {
-      throw new ArgumentInvalidException('the vehicle is disabled!');
-    }
     this.props.rentalInformation = {
-      status: 'RENTED',
+      status: 'RESERVED',
       initialDate: new DateVO(initialDate),
       finalDate: new DateVO(finalDate),
     };
   }
 
+  rent() {
+    if (this.isDisabled()) {
+      throw new ArgumentInvalidException('the vehicle is disabled!');
+    }
+
+    if (this.isRented()) {
+      throw new ArgumentInvalidException('the vehicle is already rented!');
+    }
+
+    if (!this.isReserved() || !this.props.rentalInformation) {
+      throw new ArgumentInvalidException('the vehicle is not reserved!');
+    }
+    this.props.rentalInformation.status = 'RENTED';
+  }
+
   isRented() {
-    return this.props?.rentalInformation?.status === 'RENTED';
+    return (
+      this.props.rentalInformation &&
+      this.props.rentalInformation.status === 'RENTED'
+    );
+  }
+
+  isReserved() {
+    return (
+      this.props.rentalInformation &&
+      this.props.rentalInformation.status === 'RESERVED'
+    );
   }
 
   isDisabled() {

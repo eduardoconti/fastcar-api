@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TerminusModule } from '@nestjs/terminus';
 import { PrismaClient } from '@prisma/client';
 import {
   UserPrismaRepository,
@@ -9,6 +10,7 @@ import { EncrypterService } from './encrypter';
 import { JwtService } from './jwt';
 
 @Module({
+  imports: [TerminusModule],
   providers: [
     JwtService,
     UserPrismaRepository,
@@ -22,6 +24,7 @@ import { JwtService } from './jwt';
     UserPrismaRepository,
     EncrypterService,
     VehiclePrismaRepository,
+    TerminusModule,
   ],
 })
 export class InfraModule {}

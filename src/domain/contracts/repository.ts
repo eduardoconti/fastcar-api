@@ -1,5 +1,10 @@
 import { Vehicle, VehicleProps } from '@domain/entities/vehicle';
-import { User, UserProps } from '../entities';
+import {
+  RentalAgreement,
+  RentalAgreementProps,
+  User,
+  UserProps,
+} from '../entities';
 import { DeepPartial } from '../types';
 import { ID } from '../value-objects/id.value-object';
 
@@ -79,4 +84,10 @@ export interface IVehicleRepository
   extends ISave<Vehicle>,
     IFindOne<Vehicle, VehicleProps> {
   update(user: Vehicle): Promise<Vehicle> | Vehicle;
+}
+
+export interface IRentalAgreementRepository
+  extends ISave<RentalAgreement>,
+    IFindOne<RentalAgreement, RentalAgreementProps> {
+  update(user: RentalAgreement): Promise<RentalAgreement> | RentalAgreement;
 }

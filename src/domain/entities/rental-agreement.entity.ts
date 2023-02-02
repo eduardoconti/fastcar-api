@@ -3,6 +3,8 @@ import { DateVO, UUID } from '@domain/value-objects';
 
 type Vehicle = {
   price: number;
+  ownerId: string;
+  id: string;
 };
 
 export type RentalAgreementStatus = 'OPEN' | 'CLOSE';
@@ -13,12 +15,16 @@ export type RentalAgreementProps = {
   paymentStatus: RentalPaymentStatus;
   initialDate: DateVO;
   finalDate: DateVO;
+  status: RentalAgreementStatus;
+  value: number;
 };
 export type RentalAgreementPrimitiveProps = {
   hirer: string;
   paymentStatus: string;
   initialDate: Date;
   finalDate: Date;
+  status: string;
+  value: number;
 };
 export class RentalAgreement extends AggregateRoot<RentalAgreementProps> {
   protected readonly _id!: UUID;
@@ -38,6 +44,7 @@ export class RentalAgreement extends AggregateRoot<RentalAgreementProps> {
         vehicle,
         hirer: new UUID(props.hirer),
         paymentStatus: 'PENDING',
+        status: 'OPEN',
       },
     });
   }

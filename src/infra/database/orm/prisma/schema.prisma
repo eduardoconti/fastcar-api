@@ -9,12 +9,12 @@ generator client {
 
 model user {
   id              String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   login           String            @unique
   name            String
   password        String
   status          userStatus
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
   vehicle         vehicle[]
   rentalAgreement rentalAgreement[]
 }
@@ -25,14 +25,15 @@ enum userStatus {
 }
 
 model vehicle {
-  id        String        @id
-  model     String
-  ownerId   String
-  owner     user          @relation(fields: [ownerId], references: [id])
-  price     Int
-  status    vehicleStatus
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id              String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  model           String
+  ownerId         String
+  price           Int
+  status          vehicleStatus
+  rentalAgreement rentalAgreement[]
+  owner           user              @relation(fields: [ownerId], references: [id])
 }
 
 enum vehicleStatus {
@@ -43,13 +44,18 @@ enum vehicleStatus {
 }
 
 model rentalAgreement {
-  id            String        @id
-  hirerId       String
-  hirer         user          @relation(fields: [hirerId], references: [id])
-  paymentStatus paymentStatus
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  id                    String                @id
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  hirerId               String
+  paymentStatus         paymentStatus
   rentalAgreementStatus rentalAgreementStatus
+  initialDate           DateTime
+  finalDate             DateTime
+  value                 Int
+  vehicleId             String
+  hirer                 user                  @relation(fields: [hirerId], references: [id])
+  vehicle               vehicle               @relation(fields: [vehicleId], references: [id])
 }
 
 enum paymentStatus {

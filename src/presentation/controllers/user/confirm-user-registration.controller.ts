@@ -17,6 +17,9 @@ export class ConfirmUserRegistrationController {
     const result = await this.confirmUserRegistration.execute({
       id,
     });
+    if (result.isFailure) {
+      throw result.error;
+    }
     return result.getValue();
   }
 }

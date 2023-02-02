@@ -6,4 +6,5 @@ export type VehicleModel = {
   status: string;
   createdAt: Date;
   updatedAt?: Date;
+  rentalAgreement: any;
 };

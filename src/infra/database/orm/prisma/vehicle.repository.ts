@@ -12,8 +12,17 @@ export class VehiclePrismaRepository implements IVehicleRepository {
   async findOne(
     params: QueryParams<VehicleProps>,
   ): Promise<Vehicle | undefined> {
-    const vehicle = await this.prismaClient.vehicle.findUnique({
+    const vehicle = await this.prismaClient.vehicle.findFirst({
       where: { id: params.id?.value },
+      include: {
+        rentalAgreement: {
+          where: {
+            finalDate: {
+              lte: new Date(),
+            },
+          },
+        },
+      },
     });
     if (vehicle) return VehicleOrmMapper.toEntity(vehicle);
   }
@@ -25,16 +34,6 @@ export class VehiclePrismaRepository implements IVehicleRepository {
 
     await DomainEvents.publishEvents(entity.id);
     return entity;
-  }
-
-  async findMany(
-    params?: QueryParams<VehicleProps>,
-  ): Promise<Vehicle[] | undefined> {
-    const vehicles = await this.prismaClient.vehicle.findMany({
-      where: { ownerId: params?.owner?.value },
-    });
-    if (vehicles)
-      return vehicles.map((vehicle) => VehicleOrmMapper.toEntity(vehicle));
   }
 
   async update(entity: Vehicle): Promise<Vehicle> {

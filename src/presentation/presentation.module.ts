@@ -1,5 +1,7 @@
 import { AppModule } from '@app/app.module';
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { TerminusModule } from '@nestjs/terminus';
 import { AuthController } from './controllers/auth';
 import { HealthCheckController } from './controllers/health';
 import {
@@ -14,6 +16,6 @@ import {
     ConfirmUserRegistrationController,
     HealthCheckController,
   ],
-  imports: [AppModule],
+  imports: [AppModule, TerminusModule, HttpModule],
 })
 export class PresentationModule {}

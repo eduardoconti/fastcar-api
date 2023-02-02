@@ -1,34 +1,35 @@
 import { badRequest } from '@app/errors';
 import { IVehicleRepository, Result } from '@domain/contracts';
-import { Vehicle } from '@domain/entities/vehicle';
 import { IUseCase } from '@domain/interfaces';
 import { UUID } from '@domain/value-objects';
 import { VehiclePrismaRepository } from '@infra/database/orm/prisma';
 import { Inject } from '@nestjs/common';
 
-export type RentVehicleUseCaseInput = {
+export type GenerateRentalAgreementUseCaseInput = {
   vehicleId: string;
   hirerId: string;
   initialDate: Date;
   finalDate: Date;
 };
-export type RentVehicleUseCaseOutput = {
+export type GenerateRentalAgreementUseCaseOutput = {
   vehicleId: string;
 };
 
-export type IRentVehicleUseCase = IUseCase<
-  RentVehicleUseCaseInput,
-  RentVehicleUseCaseOutput
+export type IGenerateRentalAgreementUseCase = IUseCase<
+  GenerateRentalAgreementUseCaseInput,
+  GenerateRentalAgreementUseCaseOutput
 >;
-export class RentVehicleUseCase implements IRentVehicleUseCase {
+export class GenerateRentalAgreementUseCase
+  implements IGenerateRentalAgreementUseCase
+{
   constructor(
     @Inject(VehiclePrismaRepository)
     private readonly vehicleRepository: IVehicleRepository,
   ) {}
 
   async execute(
-    request: RentVehicleUseCaseInput,
-  ): Promise<Result<RentVehicleUseCaseOutput>> {
+    request: GenerateRentalAgreementUseCaseInput,
+  ): Promise<Result<GenerateRentalAgreementUseCaseOutput>> {
     const vehicle = await this.vehicleRepository.findOne({
       id: new UUID(request.vehicleId),
     });
@@ -36,8 +37,11 @@ export class RentVehicleUseCase implements IRentVehicleUseCase {
       return Result.fail(badRequest('Vehicle not found!'));
     }
 
-    vehicle.rent(request.initialDate, request.finalDate);
-    await this.vehicleRepository.save(vehicle);
+    const rentalValue = vehicle.calculateRentValue(
+      request.initialDate,
+      request.finalDate,
+    );
+    //await this.vehicleRepository.save(vehicle);
     return Result.ok({
       vehicleId: vehicle.id.value,
     });

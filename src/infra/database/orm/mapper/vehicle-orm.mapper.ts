@@ -7,7 +7,7 @@ export class VehicleOrmMapper {
     const {
       createdAt,
       updatedAt,
-      props: { price, model, status, owner },
+      props: { price, model, status, owner, rentalInformation },
       id,
     } = entity;
     return {
@@ -18,6 +18,7 @@ export class VehicleOrmMapper {
       model,
       updatedAt: updatedAt.value,
       createdAt: createdAt.value,
+      rentalAgreement: rentalInformation,
     };
   }
 
