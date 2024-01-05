@@ -6,7 +6,7 @@ export type SendEmailProps = {
    context: string;
 };
 export interface IEmailService {
-   send(data: SendEmailProps): void;
+   send(data: SendEmailProps): Promise<void>;
 }
 
 export type SendMailTransporterProps = {

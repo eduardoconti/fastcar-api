@@ -6,5 +6,7 @@ COPY package*.json ./
 RUN yarn
 COPY . .
 
+RUN yarn build
+
 EXPOSE ${PORT}
-CMD [ "node", "dist/main.ts" ]
+CMD [ "node", "dist/main/server.ts" ]

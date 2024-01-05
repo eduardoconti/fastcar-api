@@ -5,9 +5,9 @@ const EXPIRATION = "1d";
 
 
 export class JwtService implements IJwtService {
-   sign<T>(payload: T) {
+   sign<T extends object >(payload: T) {
       const SECRET = process.env.JWT_SECRET as string;
-      return jwt.sign(payload as object, SECRET, {
+      return jwt.sign(payload, SECRET, {
          expiresIn: EXPIRATION,
       });
    }

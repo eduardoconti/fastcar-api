@@ -1,0 +1,24 @@
+config:
+  target: 'http://localhost:3006'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+      name: ramp up
+    - duration: 60
+      arrivalRate: 50
+      name: sustain
+  plugins:
+    ensure: {}
+    apdex: {}
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 200
+  ensure:
+      thresholds:
+        - http.response_time.p99: 200
+        - http.response_time.p95: 175
+scenarios:
+  - flow:
+      - get:
+          url: '/health'

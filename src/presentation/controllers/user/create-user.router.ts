@@ -18,7 +18,6 @@ export class CreateUserRoute extends Route {
          method: "POST",
          path: "user",
          controller,
-         auth: "bearer",
          middlewares: [new ValidateBodyMiddleware(CreateUserControllerInput)],
       });
    }

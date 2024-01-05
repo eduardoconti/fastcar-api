@@ -6,23 +6,21 @@ export class MailerService implements IEmailService {
       private readonly logger: ILogger,
    ) {}
 
-   send(data: SendEmailProps): void {
+   async send(data: SendEmailProps): Promise<void> {
       const { from, to, subject, body } = data;
+
       this.logger.info(
          `sending email ${data.context}: ${JSON.stringify({
             to,
             from,
          })}`,
       );
-      try {
-         this.transporter.sendMail({
-            from,
-            to,
-            subject,
-            html: body,
-         });
-      } catch (error: any) {
-         this.logger.error(error);
-      }
+    
+      await Promise.resolve(this.transporter.sendMail({
+         from,
+         to,
+         subject,
+         html: body,
+      })).catch((error) => this.logger.error(error));
    }
 }
