@@ -24,9 +24,10 @@ export class UserTypeORMRepository implements IUserRepository {
       return entity;
    }
 
-   async findMany(params: QueryParams<UserProps>): Promise<User[] | undefined> {
+   async findMany(params?: QueryParams<UserProps>): Promise<User[] | undefined> {
+
       const users = await this.ormRepository.find({
-         where: { id: params.id?.value, login: params?.login?.value },
+         where: { id: params?.id?.value, login: params?.login?.value },
       });
       if (users)
          return users.map(user => {

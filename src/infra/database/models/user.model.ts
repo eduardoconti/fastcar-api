@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column } from "typeorm";
 
 import { VeichleModel } from "./veichle.model";
 
-@Entity({ schema: "fastcar", name: "User" })
+@Entity({ schema: "fastcar", name: "user" })
 export class UserModel {
    @PrimaryColumn("uuid")
       id!: string;
