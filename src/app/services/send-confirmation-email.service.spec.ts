@@ -7,10 +7,11 @@ import {
 
 const makeEmailServiceStub = (): IEmailService => {
    class MakeEmailServiceStub implements IEmailService {
-      send(): void {
+      async send(): Promise<void> {
          return;
       }
    }
+   
    return new MakeEmailServiceStub();
 };
 
@@ -43,7 +44,7 @@ describe("SendConfirmationEmailService", () => {
       const { sut, emailServiceStub } = makeSut();
       process.env.HOST = "localhost";
       process.env.MAILER_USER = "fake@email.com";
-      jest.spyOn(emailServiceStub, "send").mockReturnValue();
+      jest.spyOn(emailServiceStub, "send").mockResolvedValue();
       await sut.sendConfirmationEmail({
          userName: "fakeUserName",
          userEmail: "fake@email.com",

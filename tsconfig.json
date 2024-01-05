@@ -9,6 +9,7 @@
     "incremental": true,
     "outDir": "dist",
     "sourceMap": true,
+    "rootDir": "./",
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
@@ -31,6 +32,10 @@
     "noImplicitOverride": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  }
+    "experimentalDecorators": true,
+  },
+  "ts-node": {
+    "files": true
+  },
+  "exclude": ["dist", "**/*spec.ts"]
 }

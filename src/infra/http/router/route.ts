@@ -28,17 +28,17 @@ export type CreateRouteProps = {
 export abstract class Route {
    protected abstract _controller: IController;
 
-   protected _method!: string;
+   private _method!: string;
 
-   protected _regex!: RegExp;
+   private _regex!: RegExp;
 
-   protected _path!: string;
+   private _path!: string;
 
-   protected _authenticationType?: string;
+   private _authenticationType?: string;
 
-   protected _atributes?: string[];
+   private _atributes?: string[];
 
-   protected _middlewares?: IMiddleware[];
+   private _middlewares?: IMiddleware[];
 
    constructor(props: CreateRouteProps) {
       this.validate(props);

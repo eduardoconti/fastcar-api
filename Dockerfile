@@ -9,4 +9,4 @@ COPY . .
 RUN yarn build
 
 EXPOSE ${PORT}
-CMD [ "node", "dist/main/server.ts" ]
+CMD [ "yarn", "start:prod" ]
